@@ -73,4 +73,14 @@ export const templates: Template[] = [
       desktop: { url: "/mock/templates/iced-coffee-desktop.png", width: 636, height: 2000 },
     },
   },
+  {
+    id: "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c08",
+    name: "Plates",
+    description: "Warm peach page, round plate photos, one orange accent",
+    category: "FOOD_BEVERAGES",
+    thumbnailUrl: "/mock/templates/plates.png",
+    previews: {
+      desktop: { url: "/mock/templates/plates-desktop.png", width: 724, height: 1782 },
+    },
+  },
 ];

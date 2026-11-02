@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Breadcrumb } from "@/components/common/breadcrumb";
 import { PageHeader } from "@/components/common/page-header";
 import { PillSelect } from "@/components/common/filter-select";
 import { SearchInput } from "@/components/common/search-input";
@@ -46,8 +45,6 @@ export function TemplatesView({
 
   return (
     <>
-      <Breadcrumb current="Templates" />
-
       <section className="relative h-[357px] shrink-0 overflow-hidden rounded-[28px] border border-border bg-linear-to-b from-[#fbfcff] to-[#f1f5fd]">
         {/* Dot grid, fading out toward every edge (mask is a gradient, so no box edge is ever visible). */}
         <div

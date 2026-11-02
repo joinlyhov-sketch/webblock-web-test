@@ -17,7 +17,7 @@ export function useAdminNotifications(notifications: AdminNotification[]) {
     createdAt: n.createdAt,
     timeLabel: formatTimeAgo(n.createdAt),
     href: n.link,
-    avatar: <Avatar variant="solid" name={n.actorName} src={n.actorAvatarUrl} className="size-10 text-xs ring-0" />,
+    avatar: <Avatar variant="solid" name={n.actorName} src={n.actorAvatarUrl} className="size-10 text-[13px] ring-0" />,
   }));
 
   return useNotifications(entries, {

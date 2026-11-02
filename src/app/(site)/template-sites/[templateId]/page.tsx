@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CleanMonoSite, EverydayStoreSite, IcedCoffeeSite, JacketsSite, KeyboardsSite, SweetPastelSite, WarmBoldSite } from "@/features/template-sites";
+import { CleanMonoSite, EverydayStoreSite, IcedCoffeeSite, JacketsSite, KeyboardsSite, PlatesSite, SweetPastelSite, WarmBoldSite } from "@/features/template-sites";
 import { getTemplateSiteView } from "@/features/templates";
 import { ApiError } from "@/lib/api/errors";
 
@@ -28,5 +28,7 @@ export default async function TemplateSitePage({ params }: { params: Promise<{ t
       return <KeyboardsSite content={site.content} />;
     case "iced-coffee":
       return <IcedCoffeeSite content={site.content} />;
+    case "plates":
+      return <PlatesSite content={site.content} />;
   }
 }

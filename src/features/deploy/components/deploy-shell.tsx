@@ -1,7 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import Link from "next/link";
-import { ArrowLeft, Element3 } from "iconsax-reactjs";
-import { Button } from "@/components/ui/button";
+import { Element3 } from "iconsax-reactjs";
 import { cn } from "@/lib/utils";
 
 // Floating cubes: position in %, size in px, rotation (deg), rise/fall (px) and phase (s).
@@ -19,17 +17,14 @@ const CUBES = [
 
 /**
  * Full-screen frame of the Deploy screens (Figma "13 First Deploy", "15 Deploying"): the website chip
- * top-right, "Back to editor" top-left (every state, so the page is never a dead end) and a soft dotted
+ * top-right and a soft dotted
  * backdrop. The page never needs a sidebar.
  */
 export function DeployShell({
   siteName,
-  backHref,
   children,
 }: {
   siteName: string;
-  /** The editor of this website. A running deploy keeps going after the owner leaves. */
-  backHref: string;
   children: ReactNode;
 }) {
   return (
@@ -61,12 +56,7 @@ export function DeployShell({
         ))}
       </div>
       <header className="absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-4 px-5 pt-5">
-        <Button asChild variant="secondary" size="sm" className="bg-background shadow-card">
-          <Link href={backHref}>
-            <ArrowLeft aria-hidden /> Back to editor
-          </Link>
-        </Button>
-        <div className="flex items-center gap-2.5 rounded-2xl bg-background py-2 pr-4 pl-2 shadow-card">
+        <div className="ml-auto flex items-center gap-2.5 rounded-2xl bg-background py-2 pr-4 pl-2 shadow-card">
           <span className="flex size-8 items-center justify-center rounded-[10px] bg-primary text-primary-foreground [&_svg]:size-4">
             <Element3 aria-hidden />
           </span>

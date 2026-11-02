@@ -100,28 +100,18 @@ export function StructurePanel({
       >
         <section className="p-4">
           <div className="flex items-center gap-2.5">
+            <h2 className="flex-1 font-sans whitespace-nowrap text-[13px] font-semibold text-foreground">Page structure</h2>
+            <span className="min-w-0 truncate text-[11px] font-medium text-placeholder">Drag to reorder</span>
             <Button
               variant="ghost"
               size="icon-sm"
               aria-label="Hide page panel"
               aria-expanded
               title="Hide page panel"
-              className="-ml-1.5 size-7 [&_svg]:size-4"
+              className="size-7 [&_svg]:size-4"
               onClick={() => onOpenChange(false)}
             >
               <SidebarLeft />
-            </Button>
-            <h2 className="-ml-1.5 flex-1 font-sans whitespace-nowrap text-[13px] font-semibold text-foreground">Page structure</h2>
-            <span className="min-w-0 truncate text-[11px] font-medium text-placeholder">Drag to reorder</span>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              aria-label="Add a section"
-              title="Add a section"
-              className="size-6"
-              onClick={() => document.getElementById("add-block-list")?.querySelector<HTMLElement>("button")?.focus()}
-            >
-              <Add />
             </Button>
           </div>
 

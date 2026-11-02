@@ -2,14 +2,14 @@ import { Marquee } from "@/components/common/motion";
 import { BrowserMock, showcaseTemplates, TemplateThumb } from "./template-mock";
 
 /** The template shown in the hero's browser window. */
-const heroTemplate = showcaseTemplates.find((t) => t.slug === "cold-brew-co") ?? showcaseTemplates[0];
+const heroTemplate = showcaseTemplates.find((t) => t.slug === "plates") ?? showcaseTemplates[0];
 
-// Three passes of the seven templates so one marquee copy is wider than an ultra-wide screen.
+// Three passes of the templates so one marquee copy is wider than an ultra-wide screen.
 const marqueeTemplates = [...showcaseTemplates, ...showcaseTemplates, ...showcaseTemplates];
 
 /**
  * "Websites built with WebBlock": a slow marquee of template thumbnails (pauses on hover) with the
- * Café cream site (Cold Brew Co) in a browser window overlapping the bottom of its cards from md up.
+ * Plates site in a browser window overlapping the bottom of its cards from md up.
  */
 export function HeroShowcase() {
   return (

@@ -4,7 +4,7 @@ import type { EverydayStoreContent } from "./everyday-store";
 import type { SweetPastelContent } from "./sweet-pastel";
 import type { WarmBoldContent } from "./warm-bold";
 
-export type TemplateSiteSlug = "everyday-store" | "sweet-pastel" | "warm-bold" | "clean-mono" | "jackets" | "keyboards" | "iced-coffee";
+export type TemplateSiteSlug = "everyday-store" | "sweet-pastel" | "warm-bold" | "clean-mono" | "jackets" | "keyboards" | "iced-coffee" | "plates";
 
 /** A product as shown on a template website: name, price, image, category only. */
 export type SiteProduct = {
@@ -39,4 +39,5 @@ export type TemplateSite =
   /** Built on the editor's own site blocks, so its content is the template's starting page. */
   | { slug: "jackets"; content: PageData }
   | { slug: "keyboards"; content: PageData }
-  | { slug: "iced-coffee"; content: PageData };
+  | { slug: "iced-coffee"; content: PageData }
+  | { slug: "plates"; content: PageData };

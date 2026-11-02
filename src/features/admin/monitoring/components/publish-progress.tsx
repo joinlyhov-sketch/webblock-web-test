@@ -34,12 +34,13 @@ export function PublishProgress({
               className={cn(
                 "size-[7px] shrink-0 rounded-full border-[1.5px]",
                 STEP_TONE[step.status].dot,
+                step.status === "RUNNING" && "motion-safe:animate-pulse",
               )}
             />
           </Fragment>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-[13px] text-muted-foreground">
         {run.currentStep} / {run.steps.length} ·{" "}
         {STAGE_LABEL[stageOfStep(run.currentStep)]}
       </p>

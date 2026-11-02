@@ -113,7 +113,7 @@ export function WebsitesView({
             {owner && websites.items[0] && (
               <Link
                 href={tableHref(searchParams, { owner: null, page: null })}
-                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-soft px-3 text-xs font-medium text-brand-strong hover:bg-brand/20"
+                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-soft px-3 text-[13px] font-medium text-brand-strong hover:bg-brand/20"
               >
                 Owner: {websites.items[0].ownerName}
                 <Add
@@ -193,7 +193,7 @@ export function WebsitesView({
                   <span className="block max-w-[260px] truncate font-semibold text-foreground group-hover:text-primary">
                     {w.name}
                   </span>
-                  <span className="block max-w-[260px] truncate text-[13px] text-muted-foreground">
+                  <span className="block max-w-[260px] truncate text-sm text-muted-foreground">
                     {w.domain}
                   </span>
                 </span>
@@ -392,7 +392,7 @@ export function WebsiteDetail({
               ))}
             </ul>
           ) : (
-            <p className="py-6 text-center text-[13px] text-muted-foreground">
+            <p className="py-6 text-center text-sm text-muted-foreground">
               Never deployed.
             </p>
           )}

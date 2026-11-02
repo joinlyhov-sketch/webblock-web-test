@@ -1,6 +1,5 @@
 import { ArrowRight2, Headphone, Lamp, Sms } from "iconsax-reactjs";
 import { Accordion } from "@/components/common/accordion";
-import { Breadcrumb } from "@/components/common/breadcrumb";
 import { PageHeader } from "@/components/common/page-header";
 import { siteConfig } from "@/config/site";
 import type { SupportView as SupportData } from "../service";
@@ -11,8 +10,6 @@ import { SupportForm } from "./support-form";
 export function SupportView({ data }: { data: SupportData }) {
   return (
     <>
-      <Breadcrumb current="Contact Support" />
-
       <div className="grid items-start gap-x-14 gap-y-6 xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex flex-col gap-5">
           <section className="bg-dots relative flex min-h-[196px] items-center gap-2 overflow-clip rounded-[20px] border border-border bg-linear-[157deg] from-hero-from from-0% to-hero-to to-[76.923%] py-[18px] pr-10 pl-9 shadow-support">

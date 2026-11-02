@@ -20,9 +20,7 @@ export function AdminSidebar({ user }: { user: SidebarUser }) {
 
   return (
     <SidebarShell
-      label="Admin Portal"
       homeHref="/admin"
-      compact
       narrow={narrow}
       collapsed={collapsed}
       onToggleCollapsed={toggle}

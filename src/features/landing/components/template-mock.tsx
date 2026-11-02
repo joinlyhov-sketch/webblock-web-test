@@ -63,6 +63,13 @@ export const showcaseTemplates = [
     domain: "coldbrewco.webblock.com",
     image: { src: "/landing/templates/cold-brew-co-home.webp", width: 2560, height: 1584 },
   },
+  {
+    slug: "plates",
+    name: "Plates",
+    style: "Peach plates",
+    domain: "plates.webblock.com",
+    image: { src: "/landing/templates/plates-home.webp", width: 2560, height: 1584 },
+  },
 ] as const satisfies readonly ShowcaseTemplate[];
 
 /**

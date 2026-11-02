@@ -83,12 +83,12 @@ export function EditPlanDialog({
             plan={plan.code}
             dot={false}
             className={cn(
-              "h-6 px-2.5 text-[11px] font-semibold tracking-wide uppercase",
+              "h-6 px-2.5 text-xs font-semibold tracking-wide uppercase",
               PLAN_LABEL[plan.code],
             )}
           />
           {plan.mostPopular && (
-            <span className="inline-flex h-6 items-center rounded-full bg-gold-strong px-2.5 text-[11px] font-medium text-primary-foreground">
+            <span className="inline-flex h-6 items-center rounded-full bg-gold-strong px-2.5 text-xs font-medium text-primary-foreground">
               Most popular
             </span>
           )}
@@ -97,7 +97,7 @@ export function EditPlanDialog({
         <h2 className="mt-3 text-lg leading-6 font-semibold tracking-[-0.2px] text-foreground">
           Edit {plan.name} plan
         </h2>
-        <p className="mt-0.5 text-xs text-muted-foreground">
+        <p className="mt-0.5 text-[13px] text-muted-foreground">
           {plan.subscriberCount.toLocaleString("en-US")} subscribers
         </p>
 
@@ -154,13 +154,13 @@ export function EditPlanDialog({
                   maxLength={7}
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="h-9 rounded-lg pl-[22px] text-[13px]"
+                  className="h-9 rounded-lg pl-[22px] text-sm"
                 />
               </div>
             )}
           </Field>
           {priceChanged && !errors?.priceMonthly && (
-            <p className="-mt-2 text-[11px] text-brand" aria-live="polite">
+            <p className="-mt-2 text-xs text-brand" aria-live="polite">
               Unsaved · was {formatPrice(plan.priceMonthly, "USD")} (
               {diff > 0 ? "+" : "−"}
               {formatPrice(Math.abs(diff).toFixed(2), "USD")})
@@ -177,7 +177,7 @@ export function EditPlanDialog({
                 {...props}
                 inputMode="numeric"
                 maxLength={6}
-                className="h-9 rounded-lg text-[13px]"
+                className="h-9 rounded-lg text-sm"
                 defaultValue={values?.websiteLimit ?? plan.websiteLimit}
               />
             )}
@@ -192,7 +192,7 @@ export function EditPlanDialog({
                 {...props}
                 inputMode="numeric"
                 maxLength={6}
-                className="h-9 rounded-lg text-[13px]"
+                className="h-9 rounded-lg text-sm"
                 defaultValue={
                   values?.redeploysPerMonth ?? plan.redeploysPerMonth
                 }
@@ -209,7 +209,7 @@ export function EditPlanDialog({
                 {...props}
                 inputMode="numeric"
                 maxLength={6}
-                className="h-9 rounded-lg text-[13px]"
+                className="h-9 rounded-lg text-sm"
                 defaultValue={values?.productLimit ?? plan.productLimit}
               />
             )}
@@ -223,7 +223,7 @@ export function EditPlanDialog({
               <Input
                 {...props}
                 maxLength={60}
-                className="h-9 rounded-lg text-[13px]"
+                className="h-9 rounded-lg text-sm"
                 defaultValue={values?.monitoring ?? plan.monitoring}
               />
             )}
@@ -275,7 +275,7 @@ function Field({
     <div className="space-y-1">
       <label
         htmlFor={id}
-        className="block text-xs font-semibold text-foreground"
+        className="block text-[13px] font-semibold text-foreground"
       >
         {label}
       </label>
@@ -286,7 +286,7 @@ function Field({
         "aria-describedby": errors?.length ? errorId : undefined,
       })}
       {errors?.length ? (
-        <p id={errorId} className="text-xs text-danger">
+        <p id={errorId} className="text-[13px] text-danger">
           {errors[0]}
         </p>
       ) : null}

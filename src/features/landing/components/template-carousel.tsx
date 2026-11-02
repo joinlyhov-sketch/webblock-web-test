@@ -22,8 +22,8 @@ const items: Carousel3DItem[] = showcaseTemplates.map((template) => ({
   aspect: template.image.width / template.image.height,
 }));
 
-/** Kiln Coffee starts in the middle, as in the Figma fan. */
-const START = showcaseTemplates.findIndex((template) => template.slug === "kiln-coffee");
+/** Plates starts in the middle of the fan. */
+const START = showcaseTemplates.findIndex((template) => template.slug === "plates");
 
 /**
  * The templates as a 3D ring. Clicking a card (or dragging) turns it to the front; the style

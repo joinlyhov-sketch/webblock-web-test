@@ -3,7 +3,7 @@
 // The one Puck config, shared by the editor, the preview and the published site, so a saved page
 // always renders the same everywhere. Blocks are template-agnostic: each one renders the design of
 // the template stored in the root props (`templateId`).
-import type { ComponentType } from "react";
+import { useMemo, type ComponentType } from "react";
 import type { Config, CustomField, Field, Fields } from "@puckeditor/core";
 import type { ZodType } from "zod";
 import type {
@@ -128,6 +128,9 @@ const productFields: Field = {
   ...meta({ group: "Products" }),
 };
 
+/** The most products an All products block shows in the editor canvas, even if its page size is larger. */
+const EDITOR_ALL_PRODUCTS_LIMIT = 8;
+
 /** Renders the current template's design for a block. */
 function TemplateBlock({
   name,
@@ -142,23 +145,33 @@ function TemplateBlock({
   const Design = templateDesigns[site.templateId][name] as ComponentType<{
     isEditing: boolean;
   }>;
-  // A product block without products (e.g. just dragged in) shows sample products in the editor, so the
-  // owner sees the real layout instead of an empty box. The preview and the live site stay as they are.
-  // Product Cards gets one featured row (as many as its columns); All products a full, paged catalogue.
-  if (isEditing && isProductBlock(name) && isEmptyProducts(props)) {
-    const sample =
-      name === "ProductCards"
-        ? { ...props, products: SAMPLE_FEATURED.slice(0, columnsOf(props)) }
-        : { ...props, products: SAMPLE_CATALOGUE, categories: SAMPLE_CATEGORIES };
-    return <Design {...sample} isEditing={isEditing} />;
+  // Product blocks in the editor canvas only show what the block itself shows at a glance: one row for
+  // Product Cards (as many as its columns) and one page for All products (its "Products per page", at most EDITOR_ALL_PRODUCTS_LIMIT), however
+  // many products the owner has in the portal. The preview and the live site get the full list, and the
+  // saved page is untouched (the portal's products are filled in again when it is served and deployed).
+  // Lists are memoised so the block gets the same array between renders.
+  const products = productsOf(props);
+  const limit = name === "AllProducts" ? Math.min(pageSizeOf(props), EDITOR_ALL_PRODUCTS_LIMIT) : columnsOf(props);
+  const shown = useMemo(() => products.slice(0, limit), [products, limit]);
+  const featured = useMemo(() => SAMPLE_FEATURED.slice(0, limit), [limit]);
+  if (isEditing && isProductBlock(name)) {
+    // A block without products (e.g. just dragged in) shows sample ones, so the owner sees the real layout.
+    if (products.length === 0) {
+      const sample =
+        name === "ProductCards"
+          ? { ...props, products: featured }
+          : { ...props, products: SAMPLE_CATALOGUE, categories: SAMPLE_CATEGORIES };
+      return <Design {...sample} isEditing={isEditing} />;
+    }
+    return <Design {...{ ...props, products: shown }} isEditing={isEditing} />;
   }
   return <Design {...props} isEditing={isEditing} />;
 }
 
 const isProductBlock = (name: BlockName): name is "ProductCards" | "AllProducts" =>
   name === "ProductCards" || name === "AllProducts";
-const isEmptyProducts = (props: object) =>
-  !("products" in props) || !Array.isArray(props.products) || props.products.length === 0;
+const productsOf = (props: object): unknown[] => ("products" in props && Array.isArray(props.products) ? props.products : []);
+const pageSizeOf = (props: object) => ("pageSize" in props ? Number(props.pageSize) || 8 : 8);
 const columnsOf = (props: object) => ("columns" in props ? Number(props.columns) || 3 : 3);
 
 function render(name: BlockName) {
@@ -271,7 +284,7 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           },
           defaultItemProps: { imageUrl: null },
           max: 4,
-          ...meta({ group: "Image", templates: ["sweet-pastel", "jackets", "iced-coffee"] }),
+          ...meta({ group: "Image", templates: ["sweet-pastel", "jackets", "iced-coffee", "plates"] }),
         },
         highlights: {
           type: "array",
@@ -282,13 +295,13 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           max: 3,
           ...meta({
             group: "Extras",
-            templates: ["sweet-pastel", "warm-bold", "clean-mono", "jackets", "iced-coffee"],
+            templates: ["sweet-pastel", "warm-bold", "clean-mono", "jackets", "iced-coffee", "plates"],
           }),
         },
         badge: text("Badge", {
           group: "Extras",
           optional: true,
-          templates: ["warm-bold", "clean-mono", "jackets", "iced-coffee"],
+          templates: ["warm-bold", "clean-mono", "jackets", "iced-coffee", "plates"],
         }),
         ...layoutFields,
       },
@@ -414,7 +427,7 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
         body: textarea("Your story"),
         caption: text("Caption", {
           optional: true,
-          templates: ["warm-bold", "clean-mono", "jackets", "keyboards", "iced-coffee"],
+          templates: ["warm-bold", "clean-mono", "jackets", "keyboards", "iced-coffee", "plates"],
         }),
         stats: {
           type: "array",

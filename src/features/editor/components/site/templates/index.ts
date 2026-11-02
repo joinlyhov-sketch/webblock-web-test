@@ -4,6 +4,7 @@ import { everydayStore } from "./everyday-store";
 import { icedCoffee } from "./iced-coffee";
 import { jackets } from "./jackets";
 import { keyboards } from "./keyboards";
+import { plates } from "./plates";
 import { sweetPastel } from "./sweet-pastel";
 import type { TemplateDesign } from "./types";
 import { warmBold } from "./warm-bold";
@@ -17,4 +18,5 @@ export const templateDesigns = {
   jackets,
   keyboards,
   "iced-coffee": icedCoffee,
+  plates,
 } satisfies Record<TemplateKey, TemplateDesign>;

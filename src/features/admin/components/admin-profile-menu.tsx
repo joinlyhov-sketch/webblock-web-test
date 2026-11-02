@@ -38,7 +38,7 @@ export function AdminProfileMenu({ profile }: { profile: AdminProfile }) {
           <Avatar variant="solid"
             name={profile.fullName}
             src={profile.avatarUrl}
-            className="size-10 text-xs"
+            className="size-10 text-[13px]"
           />
         </button>
       </PopoverTrigger>
@@ -143,10 +143,10 @@ function ProfileRow({
         {icon}
       </span>
       <div className="min-w-0 flex-1 text-left">
-        <p className="text-[11px] leading-4 text-muted-foreground">{label}</p>
+        <p className="text-xs leading-4 text-muted-foreground">{label}</p>
         <p
           className={cn(
-            "truncate text-[13px] leading-5 font-medium text-foreground select-all",
+            "truncate text-sm leading-5 font-medium text-foreground select-all",
             mono && "tabular-nums tracking-wide",
           )}
           title={value}

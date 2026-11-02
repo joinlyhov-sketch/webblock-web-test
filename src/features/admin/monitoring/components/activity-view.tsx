@@ -144,7 +144,7 @@ export function ActivityView({
                 <span className="block max-w-[300px] truncate font-semibold text-foreground">
                   {a.targetName}
                 </span>
-                <span className="block max-w-[300px] truncate text-[13px] text-muted-foreground">
+                <span className="block max-w-[300px] truncate text-sm text-muted-foreground">
                   {a.targetDetail}
                 </span>
               </span>

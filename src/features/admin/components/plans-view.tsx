@@ -89,7 +89,7 @@ export function PlansView({
 
       <Link
         href="/admin/subscriptions"
-        className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-foreground-soft hover:text-primary"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground-soft hover:text-primary"
       >
         <ArrowLeft aria-hidden className="size-4" />
         All subscriptions
@@ -155,7 +155,7 @@ function PlanCard({
       <div className="flex h-[26px] items-center justify-between">
         <span
           className={cn(
-            "rounded-full px-2.5 py-1 text-xs font-bold tracking-[0.72px] uppercase",
+            "rounded-full px-2.5 py-1 text-[13px] font-bold tracking-[0.72px] uppercase",
             trial
               ? "border border-primary/35 bg-primary-soft text-primary"
               : theme?.pill,
@@ -164,7 +164,7 @@ function PlanCard({
           {plan.name}
         </span>
         {plan.mostPopular && (
-          <span className="rounded-full bg-tier-pro-accent px-2.5 py-1 text-xs font-medium text-primary-foreground">
+          <span className="rounded-full bg-tier-pro-accent px-2.5 py-1 text-[13px] font-medium text-primary-foreground">
             Most popular
           </span>
         )}
@@ -183,7 +183,7 @@ function PlanCard({
             </span>
           )}
         </p>
-        <p className="text-[13px] leading-[19.5px] text-muted-foreground">
+        <p className="text-sm leading-[19.5px] text-muted-foreground">
           {plan.trialDays
             ? `${plan.trialDays}-day trial`
             : `${count.format(plan.subscriberCount)} subscribers`}

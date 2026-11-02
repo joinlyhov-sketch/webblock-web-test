@@ -2,7 +2,7 @@
 import type { Data } from "@puckeditor/core";
 import type { Currency } from "@/lib/format";
 
-/** The seven website designs. Each block renders a different design per template. */
+/** The eight website designs. Each block renders a different design per template. */
 export type TemplateKey =
   | "everyday-store"
   | "sweet-pastel"
@@ -10,7 +10,8 @@ export type TemplateKey =
   | "clean-mono"
   | "jackets"
   | "keyboards"
-  | "iced-coffee";
+  | "iced-coffee"
+  | "plates";
 
 /** Whole-site visual style, chosen in "Layout & Design · Visual style". `original` = the template's own. */
 export type PaletteKey = "original" | "lavender" | "bakery" | "sage";

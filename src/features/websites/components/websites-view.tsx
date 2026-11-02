@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { SearchNormal1 } from "iconsax-reactjs";
-import { Breadcrumb } from "@/components/common/breadcrumb";
 import type { PlanTier } from "@/components/common/plan-badge";
 import { EmptyState } from "@/components/common/empty-state";
 import { PageHeader } from "@/components/common/page-header";
@@ -102,19 +101,17 @@ export function WebsitesView({
   return (
     <>
       <div className="relative z-[5]">
-        <Breadcrumb current="My Websites" />
-        <div className="absolute -top-2.5 right-0">
+        <PageHeader
+          className="mb-0"
+          title="My Websites"
+          description="Pick a website to edit it, manage it or deploy changes."
+        />
+        <div className="absolute top-0 right-0">
           <NotificationBell
             items={notifications.items.map((n) => ({ ...n, timeLabel: shortTime(n.createdAt) }))}
           />
         </div>
       </div>
-
-      <PageHeader
-        className="mb-0"
-        title="My Websites"
-        description="Pick a website to edit it, manage it or deploy changes."
-      />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SegmentedTabs

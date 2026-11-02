@@ -3,6 +3,7 @@ import { everydayStoreContent } from "@/mocks/template-sites/everyday-store";
 import { sweetPastelContent } from "@/mocks/template-sites/sweet-pastel";
 import { warmBoldContent } from "@/mocks/template-sites/warm-bold";
 import { icedCoffeePage } from "@/mocks/template-pages/iced-coffee";
+import { platesPage } from "@/mocks/template-pages/plates";
 import { jacketsPage } from "@/mocks/template-pages/jackets";
 import { keyboardsPage } from "@/mocks/template-pages/keyboards";
 import type { TemplateSite } from "@/features/template-sites/types";
@@ -16,4 +17,5 @@ export const templateSites: Record<string, TemplateSite> = {
   "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c05": { slug: "jackets", content: jacketsPage },
   "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c06": { slug: "keyboards", content: keyboardsPage },
   "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c07": { slug: "iced-coffee", content: icedCoffeePage },
+  "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c08": { slug: "plates", content: platesPage },
 };

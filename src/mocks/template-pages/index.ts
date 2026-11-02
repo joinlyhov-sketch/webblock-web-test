@@ -4,6 +4,7 @@ import { everydayStorePage } from "./everyday-store";
 import { icedCoffeePage } from "./iced-coffee";
 import { jacketsPage } from "./jackets";
 import { keyboardsPage } from "./keyboards";
+import { platesPage } from "./plates";
 import { sweetPastelPage } from "./sweet-pastel";
 import { warmBoldPage } from "./warm-bold";
 
@@ -16,4 +17,5 @@ export const templatePages: Record<TemplateKey, PageData> = {
   jackets: jacketsPage,
   keyboards: keyboardsPage,
   "iced-coffee": icedCoffeePage,
+  plates: platesPage,
 };

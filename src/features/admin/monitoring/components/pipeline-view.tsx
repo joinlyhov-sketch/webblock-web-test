@@ -14,6 +14,7 @@ import { tableHref, type SearchParams } from "@/lib/table-query";
 import type { LogLine, PipelineRun, PipelineStage } from "../types";
 import { PublishFlowSheet } from "./publish-flow-sheet";
 import { PublishProgress } from "./publish-progress";
+import { RowPending } from "./row-pending";
 import { RowsMenu } from "./rows-menu";
 import { STAGE_LABEL } from "./stage";
 
@@ -114,10 +115,11 @@ export function PipelineView({
                   <span className="block truncate font-semibold text-foreground group-hover:text-primary">
                     {r.websiteName}
                   </span>
-                  <span className="block truncate text-[13px] text-muted-foreground">
+                  <span className="block truncate text-sm text-muted-foreground">
                     {r.domain}
                   </span>
                 </span>
+                <RowPending />
               </Link>
             ),
           },

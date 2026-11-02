@@ -20,15 +20,16 @@ export default async function AdminPipelinePage({ searchParams }: { searchParams
   const query = await searchParams;
   const websiteId = typeof query.run === "string" && query.run ? query.run : null;
 
+  // The run and its logs are fetched side by side (logs only matter once the site is live).
   const [runs, detail] = await Promise.all([
     listPipelineRuns({ stage: STAGES.find((s) => s === query.stage) }, parseTableQuery(query)),
     websiteId
-      ? getPipelineRun(websiteId).then(async (run) => ({
-          run,
-          logs: run.live
-            ? await listLiveLogs(websiteId, { level: LEVELS.find((l) => l === query.log) }, { page: 0, size: 6 })
-            : null,
-        })).catch(nullIfNotFound)
+      ? Promise.all([
+          getPipelineRun(websiteId),
+          listLiveLogs(websiteId, { level: LEVELS.find((l) => l === query.log) }, { page: 0, size: 6 }),
+        ])
+          .then(([run, logs]) => ({ run, logs: run.live ? logs : null }))
+          .catch(nullIfNotFound)
       : null,
   ]);
 

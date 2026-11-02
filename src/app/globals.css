@@ -855,6 +855,35 @@
   --site-radius-image: 18px;
   --site-radius-button: 999px;
 }
+[data-site-template="plates"] {
+  /* Warm peach page, near-black ink, one orange accent. Tints sit behind the plate photos while they load. */
+  --site-bg: #faf4ee;
+  --site-alt: #fdebdf;
+  --site-surface: #ffffff;
+  --site-ink: #1a1613;
+  --site-muted: #6f655d;
+  --site-subtle: #a39a91;
+  --site-border: #f0e4d9;
+  --site-accent: #ff6a2e;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #ffe3d3;
+  --site-tint-1: #f3ece5;
+  --site-tint-2: #f3ece5;
+  --site-tint-3: #f3ece5;
+  --site-tint-4: #f3ece5;
+  --site-success: #3f9b2a;
+  --site-success-soft: #e6f5d9;
+  --site-map-land: #efe6db;
+  --site-map-park: #cde5bd;
+  --site-map-road: #ffffff;
+  --site-map-pin: #ff6a2e;
+  --site-font-heading: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --site-font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-radius-card: 22px;
+  --site-radius-image: 18px;
+  --site-radius-button: 999px;
+}
 /* @site-templates:end */
 
 /* Visual style → Color palette (accent only, so each template keeps its own backgrounds). */

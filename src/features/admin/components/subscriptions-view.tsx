@@ -206,7 +206,7 @@ export function SubscriptionsView({
                   <span className="block max-w-[240px] truncate font-semibold text-foreground group-hover:text-primary">
                     {s.userName}
                   </span>
-                  <span className="block max-w-[240px] truncate text-[13px] text-muted-foreground">
+                  <span className="block max-w-[240px] truncate text-sm text-muted-foreground">
                     {s.websiteName}
                   </span>
                 </span>
@@ -370,7 +370,7 @@ export function SubscriptionDetail({
         </DetailCard>
         <DetailCard title="Payment history" icon={<Wallet2 />} aside={`${payments.items.length} payments`}>
           {payments.items.length ? (
-            <ul className="divide-y divide-border text-[13px]">
+            <ul className="divide-y divide-border text-sm">
               {payments.items.map((p) => (
                 <li
                   key={p.id}
@@ -404,7 +404,7 @@ export function SubscriptionDetail({
               ))}
             </ul>
           ) : (
-            <p className="py-6 text-center text-[13px] text-muted-foreground">
+            <p className="py-6 text-center text-sm text-muted-foreground">
               No payments yet — free trials aren&apos;t billed.
             </p>
           )}

@@ -36,8 +36,11 @@ const columns = z.enum(["2", "3", "4"]);
 const id = z.string().min(1).max(100);
 
 const product = z.object({
-  name: text(80).min(1, "Every product needs a name."),
-  description: text(160),
+  // Product limits match the Owner Portal form (PRODUCT_LIMITS in features/products/schemas.ts): whatever a
+  // product allows there must also save here, since the owner's products are copied into these blocks.
+  name: text(120).min(1, "Every product needs a name."),
+  // Some templates (e.g. Keyboards) also append spec chips after a "|" in the description.
+  description: text(300),
   price: z
     .string()
     .regex(/^\d{1,9}(\.\d{1,2})?$/, "Prices are numbers like 6.00."),
@@ -134,6 +137,7 @@ export const siteRootSchema = z.object({
     "jackets",
     "keyboards",
     "iced-coffee",
+    "plates",
   ]),
   businessName: text(60).min(1, "Add your business name."),
   statusText: text(60),

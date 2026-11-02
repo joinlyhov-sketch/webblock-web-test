@@ -31,7 +31,7 @@ export function DetailHero({
           {title}
         </h2>
         {subtitle && (
-          <p className="truncate text-[13px] text-muted-foreground">
+          <p className="truncate text-sm text-muted-foreground">
             {subtitle}
           </p>
         )}
@@ -40,7 +40,7 @@ export function DetailHero({
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand-soft bg-background px-3 py-1 text-[13px] font-medium text-brand hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none"
+            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand-soft bg-background px-3 py-1 text-sm font-medium text-brand hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none"
           >
             <span className="truncate">{link.label}</span>
             <ExportSquare aria-hidden className="size-3.5 shrink-0" />
@@ -99,7 +99,7 @@ export function HeroChip({
   children: ReactNode;
 }) {
   return (
-    <span className="inline-flex h-7 max-w-full items-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-xs font-medium text-foreground-soft [&_svg]:size-3.5 [&_svg]:shrink-0">
+    <span className="inline-flex h-7 max-w-full items-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-[13px] font-medium text-foreground-soft [&_svg]:size-3.5 [&_svg]:shrink-0">
       {icon}
       <span className="truncate">{children}</span>
     </span>
@@ -133,7 +133,7 @@ export function DetailSection({
           {title}
         </h3>
         {aside && (
-          <span className="text-xs text-muted-foreground">{aside}</span>
+          <span className="text-[13px] text-muted-foreground">{aside}</span>
         )}
       </header>
       {children}
@@ -166,11 +166,11 @@ export function DetailCard({
         >
           {icon}
         </span>
-        <h3 className="flex-1 text-[13px] font-bold text-foreground">
+        <h3 className="flex-1 text-sm font-bold text-foreground">
           {title}
         </h3>
         {aside && (
-          <span className="text-xs text-muted-foreground">{aside}</span>
+          <span className="text-[13px] text-muted-foreground">{aside}</span>
         )}
       </header>
       {/* Same inset as the header, so every divider line in the card stops short of the edges. */}
@@ -210,12 +210,12 @@ export function InfoTile({
       >
         {icon}
       </span>
-      <div className="min-w-0 text-[13px] leading-5">
+      <div className="min-w-0 text-sm leading-5">
         <dt className="text-muted-foreground">{label}</dt>
         <dd className={cn("truncate font-semibold", tone?.text ?? "text-foreground")}>
           {value}
         </dd>
-        {hint && <dd className="truncate text-xs text-placeholder">{hint}</dd>}
+        {hint && <dd className="truncate text-[13px] text-placeholder">{hint}</dd>}
       </div>
     </div>
   );

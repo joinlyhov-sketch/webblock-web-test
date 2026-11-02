@@ -210,7 +210,7 @@ export function UsersView({
                   <span className="block max-w-[260px] truncate font-semibold text-foreground group-hover:text-primary">
                     {u.fullName}
                   </span>
-                  <span className="block max-w-[260px] truncate text-[13px] text-muted-foreground">
+                  <span className="block max-w-[260px] truncate text-sm text-muted-foreground">
                     {u.email}
                   </span>
                 </span>
@@ -329,7 +329,7 @@ function UserDetail({
             <h2 className="truncate text-[22px] leading-[30px] font-semibold tracking-[-0.17px] text-foreground">
               {user.fullName}
             </h2>
-            <p className="truncate text-[13px] text-muted-foreground">
+            <p className="truncate text-sm text-muted-foreground">
               {user.email}
             </p>
             <div className="flex flex-wrap items-center gap-1.5 pt-2">
@@ -385,10 +385,10 @@ function UserDetail({
                         className="h-8 w-10 rounded-lg"
                       />
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-bold text-foreground">
+                        <span className="block truncate text-sm font-bold text-foreground">
                           {w.name}
                         </span>
-                        <span className="block truncate text-[13px] text-muted-foreground">
+                        <span className="block truncate text-sm text-muted-foreground">
                           {published ? w.domain : "Not deployed"}
                         </span>
                       </span>
@@ -403,7 +403,7 @@ function UserDetail({
               })}
             </ul>
           ) : (
-            <p className="py-6 text-center text-[13px] text-muted-foreground">
+            <p className="py-6 text-center text-sm text-muted-foreground">
               No websites yet.
             </p>
           )}

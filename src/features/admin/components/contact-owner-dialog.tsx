@@ -91,7 +91,7 @@ function ContactOwnerForm({ website, onDone }: { website: ContactOwnerWebsite; o
         </span>
         <div className="relative min-w-0 pr-8">
           <h2 className="truncate text-[15px] leading-5 font-semibold text-foreground">Email {website.ownerName}</h2>
-          <p className="flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+          <p className="flex items-center gap-1.5 truncate text-[13px] text-muted-foreground">
             <span
               aria-hidden
               className={cn(
@@ -126,7 +126,7 @@ function ContactOwnerForm({ website, onDone }: { website: ContactOwnerWebsite; o
           className="h-10 rounded-full text-sm"
         />
         {errors?.subject && (
-          <p id="contact-subject-error" className="mt-1.5 px-1 text-xs text-danger">
+          <p id="contact-subject-error" className="mt-1.5 px-1 text-[13px] text-danger">
             {errors.subject[0]}
           </p>
         )}
@@ -148,7 +148,7 @@ function ContactOwnerForm({ website, onDone }: { website: ContactOwnerWebsite; o
           className="min-h-24 py-2.5 text-sm leading-6"
         />
         {errors?.message && (
-          <p id="contact-message-error" className="mt-1.5 px-1 text-xs text-danger">
+          <p id="contact-message-error" className="mt-1.5 px-1 text-[13px] text-danger">
             {errors.message[0]}
           </p>
         )}
