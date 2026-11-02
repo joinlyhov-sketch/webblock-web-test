@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Data access for plans and KHQR payments. Mock now, Spring later: only these function bodies change.
 // The backend owns the payment status (PENDING -> PAID or EXPIRED). The frontend only creates an
 // order, then reads the status; it never decides that a payment went through.
@@ -16,10 +17,10 @@ import {
 
 const DAY_MS = 24 * 3_600_000;
 
-export async function listPlans(): Promise<BillingPlan[]> {
+export const listPlans = mockApi(async function listPlans(): Promise<BillingPlan[]> {
   await delay(80);
   return billingPlans;
-}
+});
 
 function reference(id: string): string {
   const hex = id.replace(/-/g, "").toUpperCase();
@@ -64,7 +65,7 @@ async function nextPeriodStart(userId: string, kind: PaymentKind, from: number):
 }
 
 /** Creates a pending order with a QR code that is valid for 10 minutes. */
-export async function createPayment(userId: string, body: CreatePaymentBody): Promise<PaymentOrder> {
+export const createPayment = mockApi(async function createPayment(userId: string, body: CreatePaymentBody): Promise<PaymentOrder> {
   await delay(200);
   const plan = billingPlans.find((p) => p.code === body.plan);
   if (!plan) {
@@ -85,20 +86,20 @@ export async function createPayment(userId: string, body: CreatePaymentBody): Pr
   };
   await saveMockPayment(entry);
   return paymentFrom(entry);
-}
+});
 
 /** Confirms or expires every open payment of the user, so the billing history is always up to date. */
-export async function settlePendingPayments(userId: string): Promise<void> {
-  // Account reads restore the demo subscription/history from the same session snapshots.
+export const settlePendingPayments = mockApi(async function settlePendingPayments(userId: string): Promise<void> {
+  // Account reads settle the shared server records and update subscription/history together.
   await getSubscription(userId);
-}
+});
 
-export async function getPayment(userId: string, orderId: string): Promise<PaymentOrder> {
+export const getPayment = mockApi(async function getPayment(userId: string, orderId: string): Promise<PaymentOrder> {
   await delay(120);
   const entry = await entryFor(userId, orderId);
   await settlePendingPayments(userId);
   return paymentFrom(entry);
-}
+});
 
 export type MockOutcome = "pay" | "expire" | "expiring";
 
@@ -106,7 +107,7 @@ export type MockOutcome = "pay" | "expire" | "expiring";
  * MOCK ONLY (no Spring equivalent): lets a developer see every payment state without waiting.
  * "pay" confirms now, "expire" ends the code now, "expiring" leaves 45 seconds on the clock.
  */
-export async function mockSimulatePayment(
+export const mockSimulatePayment = mockApi(async function mockSimulatePayment(
   userId: string,
   orderId: string,
   outcome: MockOutcome,
@@ -124,4 +125,4 @@ export async function mockSimulatePayment(
     entry.expiresAt = new Date(now + 45_000).toISOString();
   }
   overrideMockPayment(entry);
-}
+});

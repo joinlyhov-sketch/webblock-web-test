@@ -36,7 +36,10 @@ Never create top-level `src/actions/`, `src/service/`, `src/types/` or `src/comp
   - `async`, with a short delay (200–400 ms) so loading states are visible.
   - Lists return `Page<T>` from `@/lib/api/types` (`{ items, page, size, totalItems }`), never a bare array.
   - Not found / failure → `throw new ApiError({ title, status, detail })` from `@/lib/api/errors`.
-  - Writes mutate the in-memory mock array (resets on server restart — that's fine).
+  - Mutable data uses `mockCollection` from `@/lib/mock-state`; never put it on `globalThis` or in browser cookies.
+  - Wrap asynchronous mock API operations and composing services with `mockApi` so nested changes share one isolated, durable snapshot.
+  - Synchronous internal helpers run inside their caller's `mockApi` operation. Keep fixture definitions outside request operations.
+  - Vercel requires a server-only PostgreSQL `DATABASE_URL`; local development uses the gitignored `.data` file.
 - No mappers, no view models, no silent fallbacks for missing fields. Return data as-is.
 - When Spring is ready, only the function bodies change (openapi-fetch call). Nothing else.
 

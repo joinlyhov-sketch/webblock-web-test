@@ -44,31 +44,41 @@ Open <http://localhost:3000>.
 There is no real login yet. On `/sign-in`, use the **Enter as User** or **Enter as Admin** buttons.
 They set a mock session cookie (`wb_role`) and take you to `/websites` or `/admin`.
 
-### Mock billing on Vercel
+### Shared demo data on Vercel (required)
 
-Demo payment snapshots are saved in the HTTP-only `wb_mock_payments` cookie so a different
-Vercel instance can reconstruct the payment success screen, subscription and receipt history.
-The cookie lasts 30 days and retains up to three recent orders, within the browser cookie size
-limit. Start a new payment after deploying this fix: orders created by the old memory-only
-implementation cannot be recovered after that server instance is gone. Clearing cookies or
-opening the link in another browser also removes access to those demo orders.
+Vercel instances do not share JavaScript memory. The demo now stores mutable data through
+`src/lib/mock-state.ts`: published pages, editor drafts and versions, uploaded images, websites
+and ownership, products, business details, payments, subscriptions, deployment history, account
+settings, notifications and admin changes. Public visitors read the same server-owned data;
+they do not need the owner's browser cookies. The old payment/deployment data cookies are ignored.
 
-This is mock session storage, like `wb_role`; it is not verified bank payment data. Real billing
-must use the Spring API with database storage and bank-confirmed status. No extra Vercel
-environment variables are needed for the current demo.
+Before deploying:
 
-Run `pnpm test:billing` to test payment rendering and account recovery across isolated instances.
+1. Connect a PostgreSQL database to the Vercel project. You can use an existing database or
+   [a PostgreSQL integration from the Vercel Marketplace](https://vercel.com/docs/marketplace-storage).
+2. Set the server-only `DATABASE_URL` (or `POSTGRES_URL`) for every Vercel environment you use.
+   Use your provider's pooled, TLS-enabled connection URL. Never prefix it with `NEXT_PUBLIC_`.
+3. Redeploy the app. The first request creates `webblock_demo_state` automatically; the database
+   role needs permission to create that table initially, then read and update its records.
+4. Save and deploy your website again. Data lost by an older memory-only instance cannot be
+   recovered. New records remain available across deployments that use the same database and namespace.
 
-### Mock deployments on Vercel
+`WEBBLOCK_DATA_NAMESPACE` defaults to `webblock-demo-v1`. Use separate databases or namespaces
+for independent production and preview data. A missing database on Vercel returns a configuration
+error instead of accepting changes that will disappear. See [.env.example](.env.example).
 
-The HTTP-only `wb_mock_deployments` cookie keeps up to six recent demo deployment snapshots
-for 30 days, within the browser cookie size limit. Progress and completion can be reconstructed
-after a server instance changes, and duplicate starts reuse the original deployment ID.
-Deployments created before this fix cannot be recovered after their server instance is gone;
-those links show a recovery screen with a link back to the editor. Start a new deployment
-after redeploying this fix. Real deployment records and published content must live in the backend.
+Without a database, local development and `next start` use `.data/webblock-state.json`, which is
+gitignored and survives process restarts. `WEBBLOCK_STATE_FILE` can select another local file;
+it is not a substitute for shared database storage on Vercel.
 
-Run `pnpm test:deploy` to test deployment progress, completion and recovery across isolated instances.
+The storage layer isolates concurrent requests, retries conflicting commits, and saves nested
+feature changes together. Uploaded bytes are encoded for storage and restored for public image
+requests. This is a small demo backend; payment confirmation, deployment timing, login and email
+remain mocks until Spring is connected. A full backend should use entity tables and object storage.
+
+For publicly shared sites, use the production domain. A preview URL protected by
+[Vercel Deployment Protection](https://vercel.com/docs/deployment-protection) requires Vercel
+sign-in before a request reaches this app, regardless of the app's public `/sites/` route.
 
 ## Scripts
 
@@ -79,6 +89,11 @@ Run `pnpm test:deploy` to test deployment progress, completion and recovery acro
 | `pnpm start` | Run the production build |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
+| `pnpm test` | Shared-state, public-site, payment and deployment regression tests |
+| `pnpm test:state` | Shared-state and concurrent write regression tests |
+| `pnpm test:billing` | Payment and receipt regression tests |
+| `pnpm test:deploy` | Deployment and public publishing regression tests |
+| `pnpm test:production` | Real HTTP checks across a production server restart (run after `pnpm build`) |
 | `node .claude/hooks/invariants.mjs --all` | Project rule checks (see [Rules](#rules)) |
 
 ## Project structure

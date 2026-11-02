@@ -1,3 +1,4 @@
+import { mockApi, mockCollection } from "@/lib/mock-state";
 // Admin Portal data access. Mock now; when Spring is ready only the function bodies change.
 // Every function maps to one endpoint under /api/admin (noted above each).
 import { ApiError } from "@/lib/api/errors";
@@ -101,7 +102,7 @@ function latestMonthRevenue() {
 }
 
 /** GET /api/admin/overview */
-export async function getOverview(): Promise<AdminOverview> {
+export const getOverview = mockApi(async function getOverview(): Promise<AdminOverview> {
   await delay();
   const failedSites = adminWebsites
     .filter((w) => w.releaseStatus === "FAILED")
@@ -168,12 +169,12 @@ export async function getOverview(): Promise<AdminOverview> {
     revenueByMonth,
     attention,
   };
-}
+});
 
 // ── Users ────────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/users?q=&page=&size=&sort= */
-export async function listUsers(
+export const listUsers = mockApi(async function listUsers(
   filters: UserFilters,
   query: TableQuery,
 ): Promise<Page<UserAccount>> {
@@ -184,10 +185,10 @@ export async function listUsers(
       (!filters.plan || u.plan === filters.plan),
   );
   return toPage(sorted(items, query.sort), query);
-}
+});
 
 /** GET /api/admin/users/stats */
-export async function getUserStats(): Promise<UserStats> {
+export const getUserStats = mockApi(async function getUserStats(): Promise<UserStats> {
   await delay(150);
   return {
     totalAccounts: userAccounts.length,
@@ -195,16 +196,16 @@ export async function getUserStats(): Promise<UserStats> {
     paying: userAccounts.filter((u) => isPaid(u.plan) && u.status === "ACTIVE").length,
     liveWebsites: liveSites().length,
   };
-}
+});
 
 /** GET /api/admin/users/{userId} */
-export async function getUser(userId: string): Promise<UserAccount> {
+export const getUser = mockApi(async function getUser(userId: string): Promise<UserAccount> {
   await delay(150);
   return userAccounts.find((u) => u.id === userId) ?? notFound("User");
-}
+});
 
 /** GET /api/admin/users/export.csv?q= — the CSV file body. */
-export async function exportUsersCsv(filters: UserFilters): Promise<string> {
+export const exportUsersCsv = mockApi(async function exportUsersCsv(filters: UserFilters): Promise<string> {
   await delay();
   const cell = (v: string | number) => `"${String(v).replaceAll('"', '""')}"`;
   const rows = userAccounts
@@ -219,10 +220,10 @@ export async function exportUsersCsv(filters: UserFilters): Promise<string> {
         .join(","),
     );
   return ["Name,Email,Websites,Plan,Status,Joined", ...rows].join("\n");
-}
+});
 
 /** POST /api/admin/users/{userId}/suspend */
-export async function suspendUser(userId: string): Promise<UserAccount> {
+export const suspendUser = mockApi(async function suspendUser(userId: string): Promise<UserAccount> {
   await delay();
   const user = userAccounts.find((u) => u.id === userId) ?? notFound("User");
   if (user.status === "SUSPENDED") {
@@ -234,20 +235,20 @@ export async function suspendUser(userId: string): Promise<UserAccount> {
   }
   user.status = "SUSPENDED";
   return user;
-}
+});
 
 /** POST /api/admin/users/{userId}/reactivate */
-export async function reactivateUser(userId: string): Promise<UserAccount> {
+export const reactivateUser = mockApi(async function reactivateUser(userId: string): Promise<UserAccount> {
   await delay();
   const user = userAccounts.find((u) => u.id === userId) ?? notFound("User");
   user.status = "ACTIVE";
   return user;
-}
+});
 
 // ── Websites ─────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/projects?q=&release=&ownerId=&page=&size=&sort= */
-export async function listWebsites(
+export const listWebsites = mockApi(async function listWebsites(
   filters: WebsiteFilters,
   query: TableQuery,
 ): Promise<Page<AdminWebsite>> {
@@ -260,16 +261,16 @@ export async function listWebsites(
       (!filters.ownerId || w.ownerId === filters.ownerId),
   );
   return toPage(sorted(items, query.sort), query);
-}
+});
 
 /** GET /api/admin/projects/{projectId} */
-export async function getWebsite(websiteId: string): Promise<AdminWebsite> {
+export const getWebsite = mockApi(async function getWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay(150);
   return adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
-}
+});
 
 /** GET /api/admin/deploys?projectId=&page=&size= — newest first. */
-export async function listDeploys(
+export const listDeploys = mockApi(async function listDeploys(
   filters: { websiteId?: string },
   query: TableQuery,
 ): Promise<Page<Deploy>> {
@@ -278,15 +279,15 @@ export async function listDeploys(
     .filter((d) => !filters.websiteId || d.websiteId === filters.websiteId)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
   return toPage(items, query);
-}
+});
 
-const redeployKeys = new Map<string, Deploy>();
+const redeployKeys = mockCollection("admin.redeployKeys", new Map<string, Deploy>());
 
 /**
  * POST /api/admin/projects/{projectId}/redeploy (Idempotency-Key header).
  * The backend runs the pipeline and its retries; we only trigger it and show the state.
  */
-export async function redeployWebsite(
+export const redeployWebsite = mockApi(async function redeployWebsite(
   websiteId: string,
   idempotencyKey: string,
 ): Promise<Deploy> {
@@ -340,43 +341,43 @@ export async function redeployWebsite(
   website.redeploysLeft -= 1;
   redeployKeys.set(idempotencyKey, deploy);
   return deploy;
-}
+});
 
 /** POST /api/admin/projects/{projectId}/suspend — takes the site offline, content is kept. */
-export async function suspendWebsite(websiteId: string): Promise<AdminWebsite> {
+export const suspendWebsite = mockApi(async function suspendWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay();
   const website =
     adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
   website.siteStatus = "SUSPENDED";
   return website;
-}
+});
 
 /** POST /api/admin/projects/{projectId}/contact-owner — the backend emails the website's owner. */
-export async function contactWebsiteOwner(
+export const contactWebsiteOwner = mockApi(async function contactWebsiteOwner(
   websiteId: string,
   email: { subject: string; message: string },
 ): Promise<void> {
   await delay();
   const website = adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
-  // Mock outbox (resets on restart); Spring sends the real email.
+  // Persist the demo outbox; Spring will send the real email.
   ownerEmailOutbox.push({ to: website.ownerEmail, ...email, sentAt: new Date().toISOString() });
-}
+});
 
-const ownerEmailOutbox: { to: string; subject: string; message: string; sentAt: string }[] = [];
+const ownerEmailOutbox: { to: string; subject: string; message: string; sentAt: string }[] = mockCollection("admin.ownerEmailOutbox", []);
 
 /** POST /api/admin/projects/{projectId}/resume */
-export async function resumeWebsite(websiteId: string): Promise<AdminWebsite> {
+export const resumeWebsite = mockApi(async function resumeWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay();
   const website =
     adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
   website.siteStatus = website.liveRelease ? "ONLINE" : "NOT_DEPLOYED";
   return website;
-}
+});
 
 // ── Subscriptions ────────────────────────────────────────────────────────────
 
 /** GET /api/admin/subscriptions?q=&status=&plan=&page=&size=&sort= */
-export async function listSubscriptions(
+export const listSubscriptions = mockApi(async function listSubscriptions(
   filters: SubscriptionFilters,
   query: TableQuery,
 ): Promise<Page<Subscription>> {
@@ -388,10 +389,10 @@ export async function listSubscriptions(
       (!filters.plan || s.plan === filters.plan),
   );
   return toPage(sorted(items, query.sort), query);
-}
+});
 
 /** GET /api/admin/subscriptions/stats */
-export async function getSubscriptionStats(): Promise<SubscriptionStats> {
+export const getSubscriptionStats = mockApi(async function getSubscriptionStats(): Promise<SubscriptionStats> {
   await delay(150);
   return {
     monthlyRevenue: latestMonthRevenue().total.toFixed(2),
@@ -399,10 +400,10 @@ export async function getSubscriptionStats(): Promise<SubscriptionStats> {
     trialsEndingSoon: trialsEnding().length,
     pending: subscriptions.filter((s) => s.status === "PENDING").length,
   };
-}
+});
 
 /** GET /api/admin/subscriptions/{subscriptionId} */
-export async function getSubscription(
+export const getSubscription = mockApi(async function getSubscription(
   subscriptionId: string,
 ): Promise<Subscription> {
   await delay(150);
@@ -410,10 +411,10 @@ export async function getSubscription(
     subscriptions.find((s) => s.id === subscriptionId) ??
     notFound("Subscription")
   );
-}
+});
 
 /** GET /api/admin/subscriptions/{subscriptionId}/payments — newest first. */
-export async function listPayments(
+export const listPayments = mockApi(async function listPayments(
   subscriptionId: string,
   query: TableQuery,
 ): Promise<Page<Payment>> {
@@ -422,24 +423,24 @@ export async function listPayments(
     .filter((p) => p.subscriptionId === subscriptionId)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return toPage(items, query);
-}
+});
 
 // ── Plans ────────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/plans */
-export async function listPlans(): Promise<Page<Plan>> {
+export const listPlans = mockApi(async function listPlans(): Promise<Page<Plan>> {
   await delay();
   return toPage(plans, { page: 0, size: plans.length });
-}
+});
 
 /** GET /api/admin/plans/{planId} */
-export async function getPlan(planId: string): Promise<Plan> {
+export const getPlan = mockApi(async function getPlan(planId: string): Promise<Plan> {
   await delay(150);
   return plans.find((p) => p.id === planId) ?? notFound("Plan");
-}
+});
 
 /** PUT /api/admin/plans/{planId} — applies to new subscriptions and renewals. */
-export async function updatePlan(
+export const updatePlan = mockApi(async function updatePlan(
   planId: string,
   input: PlanInput,
 ): Promise<Plan> {
@@ -447,12 +448,12 @@ export async function updatePlan(
   const plan = plans.find((p) => p.id === planId) ?? notFound("Plan");
   Object.assign(plan, input);
   return plan;
-}
+});
 
 // ── Notifications ────────────────────────────────────────────────────────────
 
 /** GET /api/admin/notifications?unread=&page=&size= — newest first. */
-export async function listNotifications(
+export const listNotifications = mockApi(async function listNotifications(
   filters: NotificationFilters,
   query: TableQuery,
 ): Promise<Page<AdminNotification>> {
@@ -461,16 +462,16 @@ export async function listNotifications(
     .filter((n) => !filters.unread || n.readAt === null)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return toPage(items, query);
-}
+});
 
 /** GET /api/admin/notifications/unread-count */
-export async function getUnreadNotificationCount(): Promise<number> {
+export const getUnreadNotificationCount = mockApi(async function getUnreadNotificationCount(): Promise<number> {
   await delay(100);
   return adminNotifications.filter((n) => n.readAt === null).length;
-}
+});
 
 /** POST /api/admin/notifications/{notificationId}/read */
-export async function markNotificationRead(
+export const markNotificationRead = mockApi(async function markNotificationRead(
   notificationId: string,
 ): Promise<AdminNotification> {
   await delay(150);
@@ -479,19 +480,19 @@ export async function markNotificationRead(
     notFound("Notification");
   notification.readAt ??= new Date().toISOString();
   return notification;
-}
+});
 
 /** POST /api/admin/notifications/read-all */
-export async function markAllNotificationsRead(): Promise<void> {
+export const markAllNotificationsRead = mockApi(async function markAllNotificationsRead(): Promise<void> {
   await delay(150);
   const now = new Date().toISOString();
   for (const n of adminNotifications) n.readAt ??= now;
-}
+});
 
 // ── Profile ──────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/me — the signed-in admin (Spring reads who from the session). */
-export async function getAdminProfile(): Promise<AdminProfile> {
+export const getAdminProfile = mockApi(async function getAdminProfile(): Promise<AdminProfile> {
   await delay(100);
   return adminProfile;
-}
+});

@@ -1,3 +1,4 @@
+import { mockApi, mockCollection } from "@/lib/mock-state";
 // Data access for a website's products. Mock now, Spring later: only these function bodies change.
 import { ApiError } from "@/lib/api/errors";
 import { delay } from "@/lib/api/delay";
@@ -6,13 +7,8 @@ import { toPage, type TableQuery } from "@/lib/table-query";
 import { productCategories, products as seed } from "@/mocks/products";
 import type { Product, ProductCounts } from "./types";
 
-const globalForStore = globalThis as typeof globalThis & {
-  __wbProducts?: Product[];
-  __wbProductCategories?: Record<string, string[]>;
-};
-const store: Product[] = (globalForStore.__wbProducts ??= structuredClone(seed));
-const categoryStore: Record<string, string[]> = (globalForStore.__wbProductCategories ??=
-  structuredClone(productCategories));
+const store: Product[] = mockCollection("products", seed);
+const categoryStore: Record<string, string[]> = mockCollection("productCategories", productCategories);
 
 export type ListProductsFilter = {
   q?: string;
@@ -20,7 +16,7 @@ export type ListProductsFilter = {
 };
 
 /** GET /projects/{projectId}/products?q=&category=&page=&size=&sort= — newest first by default. */
-export async function listProducts(
+export const listProducts = mockApi(async function listProducts(
   websiteId: string,
   query: TableQuery,
   filter: ListProductsFilter = {},
@@ -40,10 +36,10 @@ export async function listProducts(
     return sign * a.createdAt.localeCompare(b.createdAt);
   });
   return toPage(items, query);
-}
+});
 
 /** GET /projects/{projectId}/products/counts */
-export async function countProducts(websiteId: string): Promise<ProductCounts> {
+export const countProducts = mockApi(async function countProducts(websiteId: string): Promise<ProductCounts> {
   await delay(100);
   const mine = store.filter((p) => p.websiteId === websiteId);
   return {
@@ -53,16 +49,16 @@ export async function countProducts(websiteId: string): Promise<ProductCounts> {
       count: mine.filter((p) => p.category === category).length,
     })),
   };
-}
+});
 
 /** GET /projects/{projectId}/product-categories */
-export async function listProductCategories(websiteId: string): Promise<string[]> {
+export const listProductCategories = mockApi(async function listProductCategories(websiteId: string): Promise<string[]> {
   await delay(100);
   return categoryStore[websiteId] ?? [];
-}
+});
 
 /** POST /projects/{projectId}/product-categories { name } — adds a category at the end of the list. */
-export async function createProductCategory(websiteId: string, name: string): Promise<string> {
+export const createProductCategory = mockApi(async function createProductCategory(websiteId: string, name: string): Promise<string> {
   await delay(300);
   const categories = (categoryStore[websiteId] ??= []);
   if (categories.some((c) => c.toLowerCase() === name.toLowerCase())) {
@@ -70,16 +66,16 @@ export async function createProductCategory(websiteId: string, name: string): Pr
   }
   categories.push(name);
   return name;
-}
+});
 
-export async function getProduct(websiteId: string, productId: string): Promise<Product> {
+export const getProduct = mockApi(async function getProduct(websiteId: string, productId: string): Promise<Product> {
   await delay(100);
   const product = store.find((p) => p.id === productId && p.websiteId === websiteId);
   if (!product) {
     throw new ApiError({ title: "Product not found", status: 404, detail: "That product no longer exists." });
   }
   return product;
-}
+});
 
 export type ProductBody = {
   name: string;
@@ -97,7 +93,7 @@ function checkCategory(websiteId: string, category: string) {
 }
 
 /** POST /projects/{projectId}/products */
-export async function createProduct(websiteId: string, body: ProductBody): Promise<Product> {
+export const createProduct = mockApi(async function createProduct(websiteId: string, body: ProductBody): Promise<Product> {
   await delay(400);
   checkCategory(websiteId, body.category);
   const now = new Date().toISOString();
@@ -114,10 +110,10 @@ export async function createProduct(websiteId: string, body: ProductBody): Promi
   };
   store.unshift(product);
   return product;
-}
+});
 
 /** PUT /projects/{projectId}/products/{productId} */
-export async function updateProduct(websiteId: string, productId: string, body: ProductBody): Promise<Product> {
+export const updateProduct = mockApi(async function updateProduct(websiteId: string, productId: string, body: ProductBody): Promise<Product> {
   const product = await getProduct(websiteId, productId);
   await delay(300);
   checkCategory(websiteId, body.category);
@@ -130,15 +126,15 @@ export async function updateProduct(websiteId: string, productId: string, body: 
     updatedAt: new Date().toISOString(),
   });
   return product;
-}
+});
 
 /** DELETE /projects/{projectId}/products/{productId} */
-export async function deleteProduct(websiteId: string, productId: string): Promise<Product> {
+export const deleteProduct = mockApi(async function deleteProduct(websiteId: string, productId: string): Promise<Product> {
   const product = await getProduct(websiteId, productId);
   await delay(300);
   store.splice(store.indexOf(product), 1);
   return product;
-}
+});
 
 /**
  * Mock only: Spring copies the template's sample products and categories into a new website's product

@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { sessionUsers, websiteOwners } from "@/mocks/session";
 import { AUTH_PREVIEW, ROLE_COOKIE, isRole, type SessionUser } from "./roles";
+import { mockApi } from "@/lib/mock-state";
 
 /** Signed-in user, or redirect to /sign-in. In preview (no sign-in yet), no cookie = the mock admin. */
 export const requireUser = cache(async (): Promise<SessionUser> => {
@@ -23,7 +24,7 @@ export async function requireAdmin(): Promise<SessionUser> {
 }
 
 /** Signed-in owner of `websiteId`. Anyone else gets a 404 so ids are not leaked. */
-export async function requireWebsiteOwner(
+export const requireWebsiteOwner = mockApi(async function requireWebsiteOwner(
   websiteId: string,
 ): Promise<SessionUser> {
   const user = await requireUser();
@@ -32,4 +33,4 @@ export async function requireWebsiteOwner(
   );
   if (!owns && !AUTH_PREVIEW) notFound();
   return user;
-}
+});

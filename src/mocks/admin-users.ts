@@ -1,3 +1,4 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { UserAccount, UserStats } from "@/features/admin/types";
 import { SOVANNARITH_ID } from "./session";
 import { at, daysAgo, hoursAgo } from "./time";
@@ -9,7 +10,7 @@ export const userStats: UserStats = {
   liveWebsites: 1047,
 };
 
-export const userAccounts: UserAccount[] = [
+export const userAccounts: UserAccount[] = mockCollection("admin.users", [
   {
     id: SOVANNARITH_ID,
     accountCode: "usr_0b7f21",
@@ -191,4 +192,4 @@ export const userAccounts: UserAccount[] = [
     websiteCount: 0,
     joinedAt: hoursAgo(26),
   },
-];
+]);

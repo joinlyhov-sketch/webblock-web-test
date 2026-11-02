@@ -1,3 +1,4 @@
+import { mockApi, mockCollection } from "@/lib/mock-state";
 // Data access for deployments and web addresses. Mock now, Spring later: only these function bodies change.
 // The backend owns the deploy pipeline (steps, retries, SSL, going live). The frontend starts a deploy and
 // then only reads its status; it never decides that a step finished.
@@ -10,7 +11,6 @@ import { delay } from "@/lib/api/delay";
 import { initials } from "@/lib/format";
 import { websiteOwners, sessionUsers } from "@/mocks/session";
 import { DOMAIN_SUFFIX, subdomainSchema } from "./schemas";
-import { readMockDeployments, saveMockDeployment } from "./mock-deployment-session";
 import type {
   DeployStepKey,
   DeployStepStatus,
@@ -49,40 +49,11 @@ type StoredDeployment = {
   settled: boolean;
 };
 
-const globalForStore = globalThis as typeof globalThis & {
-  __wbDeployments?: StoredDeployment[];
-};
-const store: StoredDeployment[] = (globalForStore.__wbDeployments ??= []);
+const store: StoredDeployment[] = mockCollection("deployments", []);
 
-/** Recover the browser's demo deployments on a new server instance. */
+/** Deployments are shared server records, independent of the owner's browser session. */
 async function entriesFor(websiteId: string): Promise<StoredDeployment[]> {
-  const entries: StoredDeployment[] = [];
-  for (const snapshot of await readMockDeployments(ownerOf(websiteId))) {
-    if (snapshot.websiteId !== websiteId) continue;
-    let entry = store.find((e) => e.deployment.id === snapshot.id && e.deployment.websiteId === websiteId);
-    if (!entry) {
-      entry = {
-        deployment: {
-          id: snapshot.id,
-          websiteId,
-          kind: snapshot.kind,
-          domain: snapshot.domain,
-          startedAt: snapshot.startedAt,
-          status: "RUNNING",
-          percent: 0,
-          secondsLeft: Math.ceil(TOTAL_MS / 1000),
-          steps: stepsAt(0, null),
-          finishedAt: null,
-        },
-        idempotencyKey: snapshot.idempotencyKey,
-        failAtStep: null,
-        settled: false,
-      };
-      store.unshift(entry);
-    }
-    entries.push(entry);
-  }
-  return entries;
+  return store.filter((entry) => entry.deployment.websiteId === websiteId);
 }
 
 function ownerOf(websiteId: string): string {
@@ -97,7 +68,7 @@ function ownerOf(websiteId: string): string {
 }
 
 /** GET /domains/check?name= - is this address valid and free for this website? */
-export async function checkDomain(
+export const checkDomain = mockApi(async function checkDomain(
   websiteId: string,
   name: string,
 ): Promise<DomainCheck> {
@@ -121,7 +92,7 @@ export async function checkDomain(
     };
   }
   return { name: clean, host, available: true, problem: null };
-}
+});
 
 function stepsAt(elapsed: number, failAtStep: number | null): DeploymentStep[] {
   let start = 0;
@@ -236,17 +207,17 @@ function stable(value: unknown): string {
  * Does the saved draft differ from what visitors see? A website that was never deployed always has
  * something to deploy. Spring answers this inside the deployments endpoint (409 when nothing changed).
  */
-export async function hasUndeployedChanges(websiteId: string): Promise<boolean> {
+export const hasUndeployedChanges = mockApi(async function hasUndeployedChanges(websiteId: string): Promise<boolean> {
   const page = await getPageData(websiteId);
   return !page.published || stable(page.draft) !== stable(page.published);
-}
+});
 
 /**
  * POST /projects/{projectId}/deployments - starts a deploy of the saved draft. Answers 402 when the
  * owner's plan does not allow it, 409 when one is already running or the address is unusable.
  * `idempotencyKey` goes in the `Idempotency-Key` header: a repeated request returns the same deployment.
  */
-export async function startDeployment(
+export const startDeployment = mockApi(async function startDeployment(
   websiteId: string,
   body: StartDeploymentBody,
   currentDomain: string | null,
@@ -312,15 +283,6 @@ export async function startDeployment(
     startedAt: new Date().toISOString(),
     finishedAt: null,
   };
-  await saveMockDeployment({
-    id: deployment.id,
-    userId: ownerOf(websiteId),
-    websiteId,
-    kind: deployment.kind,
-    domain: deployment.domain,
-    startedAt: deployment.startedAt,
-    idempotencyKey: body.idempotencyKey,
-  });
   store.unshift({
     deployment,
     idempotencyKey: body.idempotencyKey,
@@ -328,10 +290,10 @@ export async function startDeployment(
     settled: false,
   });
   return structuredClone(deployment);
-}
+});
 
 /** GET /projects/{projectId}/deployments/{id} - the deploy's current progress. */
-export async function getDeployment(
+export const getDeployment = mockApi(async function getDeployment(
   websiteId: string,
   deploymentId: string,
 ): Promise<Deployment> {
@@ -348,10 +310,10 @@ export async function getDeployment(
     });
   await settle(entry);
   return structuredClone(entry.deployment);
-}
+});
 
 /** GET /projects/{projectId}/deployments?status=RUNNING&size=1 - the deploy in progress, if any. */
-export async function getRunningDeployment(
+export const getRunningDeployment = mockApi(async function getRunningDeployment(
   websiteId: string,
 ): Promise<Deployment | null> {
   await delay(120);
@@ -364,10 +326,17 @@ export async function getRunningDeployment(
   return entry.deployment.status === "RUNNING"
     ? structuredClone(entry.deployment)
     : null;
-}
+});
+
+/** A visitor or dashboard request can finish a demo deployment after its owner closed progress. */
+export const settleDeployments = mockApi(async function settleDeployments(websiteId?: string): Promise<void> {
+  for (const entry of store.filter((item) => !websiteId || item.deployment.websiteId === websiteId)) {
+    await settle(entry);
+  }
+});
 
 /** MOCK ONLY (no Spring equivalent): `?mock=fail` makes the running deploy fail at "Launching your website". */
-export async function mockFailDeployment(
+export const mockFailDeployment = mockApi(async function mockFailDeployment(
   websiteId: string,
   deploymentId: string,
 ): Promise<void> {
@@ -376,4 +345,4 @@ export async function mockFailDeployment(
       e.deployment.websiteId === websiteId && e.deployment.id === deploymentId,
   );
   if (entry && entry.deployment.status === "RUNNING") entry.failAtStep = 3;
-}
+});

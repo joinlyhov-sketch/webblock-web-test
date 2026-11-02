@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Admin Monitoring data access. Mock now; when Spring is ready only the function bodies change.
 // Read-only: the backend runs the publish pipeline, its retries and rollbacks.
 import { ApiError } from "@/lib/api/errors";
@@ -39,7 +40,7 @@ function sorted<T>(items: T[], sort: TableQuery["sort"]): T[] {
 }
 
 /** GET /api/admin/monitoring/pipeline?stage=&page=&size=&sort= — each website's latest publish. */
-export async function listPipelineRuns(
+export const listPipelineRuns = mockApi(async function listPipelineRuns(
   filters: PipelineFilters,
   query: TableQuery,
 ): Promise<Page<PipelineRun>> {
@@ -51,10 +52,10 @@ export async function listPipelineRuns(
     sorted(items, query.sort ?? { field: "currentStep", direction: "asc" }),
     query,
   );
-}
+});
 
 /** GET /api/admin/monitoring/pipeline/{websiteId} — the publish flow of one website. */
-export async function getPipelineRun(websiteId: string): Promise<PipelineRun> {
+export const getPipelineRun = mockApi(async function getPipelineRun(websiteId: string): Promise<PipelineRun> {
   await delay(150);
   const run = pipelineRuns.find((r) => r.websiteId === websiteId);
   if (!run)
@@ -64,10 +65,10 @@ export async function getPipelineRun(websiteId: string): Promise<PipelineRun> {
       detail: "No deploy found for this website.",
     });
   return run;
-}
+});
 
 /** GET /api/admin/monitoring/pipeline/{websiteId}/logs?level=&size= — newest first. */
-export async function listLiveLogs(
+export const listLiveLogs = mockApi(async function listLiveLogs(
   websiteId: string,
   filters: { level?: LogLevel },
   query: TableQuery,
@@ -81,10 +82,10 @@ export async function listLiveLogs(
     )
     .sort((a, b) => b.at.localeCompare(a.at));
   return toPage(items, query);
-}
+});
 
 /** GET /api/admin/monitoring/activity?action=&actor=&page=&size=&sort= */
-export async function listActivity(
+export const listActivity = mockApi(async function listActivity(
   filters: ActivityFilters,
   query: TableQuery,
 ): Promise<Page<ActivityEntry>> {
@@ -100,14 +101,14 @@ export async function listActivity(
     sorted(items, query.sort ?? { field: "createdAt", direction: "desc" }),
     query,
   );
-}
+});
 
 /** GET /api/admin/monitoring/activity/actors — admin emails that appear in the log. */
-export async function listActivityActors(): Promise<string[]> {
+export const listActivityActors = mockApi(async function listActivityActors(): Promise<string[]> {
   await delay(100);
   return [
     ...new Set(
       activityLog.flatMap((a) => (a.actorEmail ? [a.actorEmail] : [])),
     ),
   ].sort();
-}
+});

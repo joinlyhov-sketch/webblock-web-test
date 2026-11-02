@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Plans and KHQR payment logic. The backend owns the payment status; this layer reads it.
 import { notFound } from "next/navigation";
 import type { ActionResult } from "@/lib/actions/result";
@@ -69,7 +70,7 @@ function slug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
-export async function getPlansView(
+export const getPlansView = mockApi(async function getPlansView(
   userId: string,
   searchParams: Record<string, string | string[] | undefined>,
 ): Promise<PlansView> {
@@ -93,14 +94,14 @@ export async function getPlansView(
     from: first(searchParams.from) === "settings" ? "settings" : "",
     reason: first(searchParams.from) === "deploy" ? deployReason(first(searchParams.reason)) : null,
   };
-}
+});
 
 function isPaidPlan(value: string): value is PaidPlanCode {
   return value === "PLUS" || value === "PRO" || value === "ULTRA";
 }
 
 /** Creates the payment for a plan and returns its id so the caller can open the payment page. */
-export async function startPayment(
+export const startPayment = mockApi(async function startPayment(
   userId: string,
   planCode: string,
   forWebsite?: string,
@@ -113,7 +114,7 @@ export async function startPayment(
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-}
+});
 
 /**
  * A plan only helps if it has room for the website being added: Plus allows 1 website online, Pro 3, Ultra 10.
@@ -149,7 +150,7 @@ async function createFor(
 }
 
 /** "Generate new code" on an expired payment: same plan, fresh order. */
-export async function regeneratePayment(userId: string, orderId: string): Promise<ActionResult<{ orderId: string }>> {
+export const regeneratePayment = mockApi(async function regeneratePayment(userId: string, orderId: string): Promise<ActionResult<{ orderId: string }>> {
   try {
     const old = await getPayment(userId, orderId);
     if (old.status === "PAID") return { ok: true, data: { orderId: old.id } };
@@ -159,7 +160,7 @@ export async function regeneratePayment(userId: string, orderId: string): Promis
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-}
+});
 
 export type PaymentView = {
   order: PaymentOrder;
@@ -183,7 +184,7 @@ const SUBTITLE: Record<PaymentOrder["kind"], (order: PaymentOrder) => string> = 
   RENEW: (o) => `You’re adding another month of ${o.planName} to ${o.websiteName}.`,
 };
 
-export async function getPaymentView(
+export const getPaymentView = mockApi(async function getPaymentView(
   userId: string,
   orderId: string,
   options: { from?: string; simulate?: string } = {},
@@ -216,7 +217,7 @@ export async function getPaymentView(
     totalMs: Math.max(new Date(order.expiresAt).getTime() - new Date(order.createdAt).getTime(), TEN_MINUTES_MS),
     next: nextAfterPayment(order, options.from),
   };
-}
+});
 
 /**
  * Settings → back to Settings › Billing; Deploy → straight on with that website's deploy (the backend

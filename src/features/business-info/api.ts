@@ -1,14 +1,14 @@
+import { mockApi, mockCollection } from "@/lib/mock-state";
 // Data access for a website's business details. Mock now, Spring later: only these function bodies change.
 import { ApiError } from "@/lib/api/errors";
 import { delay } from "@/lib/api/delay";
 import { businessInfo as seed } from "@/mocks/business-info";
 import type { BusinessInfo } from "./types";
 
-const globalForStore = globalThis as typeof globalThis & { __wbBusinessInfo?: BusinessInfo[] };
-const store: BusinessInfo[] = (globalForStore.__wbBusinessInfo ??= structuredClone(seed));
+const store: BusinessInfo[] = mockCollection("businessInfo", seed);
 
 /** GET /projects/{projectId}/business-info */
-export async function getBusinessInfo(websiteId: string): Promise<BusinessInfo> {
+export const getBusinessInfo = mockApi(async function getBusinessInfo(websiteId: string): Promise<BusinessInfo> {
   await delay();
   const info = store.find((b) => b.websiteId === websiteId);
   if (!info) {
@@ -19,7 +19,7 @@ export async function getBusinessInfo(websiteId: string): Promise<BusinessInfo> 
     });
   }
   return info;
-}
+});
 
 export type BusinessInfoBody = Pick<BusinessInfo, "description" | "phone" | "email" | "address" | "mapsUrl" | "hours"> & {
   /** `undefined` keeps the current logo. */
@@ -27,7 +27,7 @@ export type BusinessInfoBody = Pick<BusinessInfo, "description" | "phone" | "ema
 };
 
 /** PUT /projects/{projectId}/business-info */
-export async function updateBusinessInfo(websiteId: string, body: BusinessInfoBody): Promise<BusinessInfo> {
+export const updateBusinessInfo = mockApi(async function updateBusinessInfo(websiteId: string, body: BusinessInfoBody): Promise<BusinessInfo> {
   await delay(300);
   // PUT creates the record when the website has none yet.
   let info = store.find((b) => b.websiteId === websiteId);
@@ -46,7 +46,7 @@ export async function updateBusinessInfo(websiteId: string, body: BusinessInfoBo
     updatedAt: new Date().toISOString(),
   });
   return info;
-}
+});
 
 /**
  * Mock only: Spring creates this record inside POST /projects ("Use template") from the business

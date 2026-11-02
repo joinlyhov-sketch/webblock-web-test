@@ -1,10 +1,11 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { AdminNotification } from "@/features/admin/types";
 import { at } from "./time";
 
 // Times are relative to server start so "2 mins ago" stays realistic while you click around.
 const ago = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString();
 
-export const adminNotifications: AdminNotification[] = [
+export const adminNotifications: AdminNotification[] = mockCollection("admin.notifications", [
   {
     id: "d2f4a6c8-6e8a-4b1c-9d3e-4f6a8c0e0701",
     kind: "DEPLOY_FAILED",
@@ -115,4 +116,4 @@ export const adminNotifications: AdminNotification[] = [
     createdAt: ago(60 * 24 * 6),
     readAt: ago(60 * 24 * 6 - 10),
   },
-];
+]);

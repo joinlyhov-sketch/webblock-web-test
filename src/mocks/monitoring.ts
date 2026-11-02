@@ -1,11 +1,11 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { ActivityEvent, Deploy, DeployStatus, SiteStatus } from "@/features/monitoring/types";
 import { PETAL_AND_STEM_ID } from "./session";
 import { daysAgo, hoursAgo } from "./time";
 
 const HOUR = 3_600_000;
 
-// Kept on globalThis (like the websites) so a deploy made while the dev server runs survives hot reload.
-const globalForMonitoring = globalThis as typeof globalThis & { __wbDeploys?: Deploy[]; __wbSiteStatus?: SiteStatus[] };
+// Deployment history and site status share the same durable state as the websites.
 
 /** The owner (session.ts / account.ts): the only person who deploys his websites. */
 const sovannarith = { fullName: "Sovannarith Soeun", initials: "SS" };
@@ -34,14 +34,14 @@ function toDeploys(websiteId: string, prefix: string, seeds: DeploySeed[]): Depl
  * Petal & Stem failed once (missing email), then went live. That was the trial's first deploy; the
  * other websites are drafts that were never deployed.
  */
-export const deploys: Deploy[] = (globalForMonitoring.__wbDeploys ??= [
+export const deploys: Deploy[] = mockCollection("monitoring.deploys", [
   ...toDeploys(PETAL_AND_STEM_ID, "d3a1e5c2-7b4f-4e8a-9c01", [
     [4, "FAILED", 64, "Business email is missing"],
     [0.08, "SUCCEEDED", 101],
   ]),
 ]);
 
-export const siteStatus: SiteStatus[] = (globalForMonitoring.__wbSiteStatus ??= [
+export const siteStatus: SiteStatus[] = mockCollection("monitoring.siteStatus", [
   { websiteId: PETAL_AND_STEM_ID, online: true, uptimePercent: "99.98", checkedAt: hoursAgo(0.05) },
 ]);
 

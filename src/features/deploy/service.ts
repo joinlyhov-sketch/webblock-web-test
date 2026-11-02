@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Deploy logic: who may deploy what, and which screen comes next. The backend owns the plan limits and
 // the pipeline; this layer only asks and routes. It never imports mocks, so it stays the same with Spring.
 import { redirect } from "next/navigation";
@@ -41,7 +42,7 @@ function first(value: string | string[] | undefined): string {
  * deploy) starts it at once when the website already has its address; the payment id is the
  * idempotency key, so opening that link again never deploys twice.
  */
-export async function getDeployView(
+export const getDeployView = mockApi(async function getDeployView(
   userId: string,
   websiteId: string,
   searchParams: Record<string, string | string[] | undefined>,
@@ -91,14 +92,14 @@ export async function getDeployView(
     name,
     check: await checkDomain(websiteId, name),
   };
-}
+});
 
 /**
  * Starts a deploy of the saved draft (the editor saves it first). The answer says where to go next:
  * the plans when the plan does not allow it, the address picker for a draft (a website that was never
  * published picks its address first, even right after paying), or the progress screen.
  */
-export async function startDeploy(
+export const startDeploy = mockApi(async function startDeploy(
   userId: string,
   websiteId: string,
   subdomain: string | null,
@@ -160,4 +161,4 @@ export async function startDeploy(
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-}
+});

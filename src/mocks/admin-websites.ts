@@ -1,3 +1,4 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { AdminWebsite, Deploy } from "@/features/admin/types";
 import { SOVANNARITH_TRIAL_END } from "./admin-subscriptions";
 import { at, daysAgo, hoursAgo } from "./time";
@@ -16,7 +17,7 @@ const SOVANNARITH = {
   ownerAvatarUrl: "/mock/avatars/sovannarith-soeun.jpg",
 };
 
-export const adminWebsites: AdminWebsite[] = [
+export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
   {
     id: PETAL_AND_STEM_ID,
     name: "Petal & Stem",
@@ -313,9 +314,9 @@ export const adminWebsites: AdminWebsite[] = [
     redeployLimit: 0,
     sslValidUntil: null,
   },
-];
+]);
 
-export const adminDeploys: Deploy[] = [
+export const adminDeploys: Deploy[] = mockCollection("admin.deploys", [
   {
     id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0302",
     websiteId: "9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0210",
@@ -512,4 +513,4 @@ export const adminDeploys: Deploy[] = [
     startedAt: at("2026-11-01T08:58:00Z"),
     durationSeconds: null,
   },
-];
+]);

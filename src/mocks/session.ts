@@ -1,3 +1,4 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { SessionUser } from "@/lib/auth/roles";
 
 /** The demo owner (USER role): his id is the same in the owner screens and in the admin data. */
@@ -38,10 +39,7 @@ const ownerSeed: WebsiteOwner[] = [
 }));
 
 /**
- * Which user owns which website. Kept on globalThis so dev hot reloads do not drop
- * websites created while the server is running.
+ * Ownership is part of the shared demo state, including websites created after deployment.
  */
-const globalForOwners = globalThis as typeof globalThis & {
-  __wbWebsiteOwners?: WebsiteOwner[];
-};
-export const websiteOwners: WebsiteOwner[] = (globalForOwners.__wbWebsiteOwners ??= ownerSeed);
+
+export const websiteOwners: WebsiteOwner[] = mockCollection("websiteOwners", ownerSeed);

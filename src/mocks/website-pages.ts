@@ -1,3 +1,4 @@
+import { mockCollection } from "@/lib/mock-state";
 import type { BusinessInfo } from "@/features/business-info/types";
 import type { BlockName, MediaAsset, PageData, Product as SiteProduct, SiteRootProps, WebsitePage } from "@/features/editor/types";
 import type { Product } from "@/features/products/types";
@@ -10,8 +11,7 @@ import { templatePages } from "./template-pages";
 import { templateSites } from "./template-sites";
 import { daysAgo, hoursAgo } from "./time";
 
-// Kept on globalThis so editor saves survive hot reload and are shared by every route in dev.
-const store = globalThis as typeof globalThis & { __wbWebsitePages?: WebsitePage[] };
+// Drafts, published pages and uploads belong to the shared demo state.
 
 const SHORT_DAY: Record<OpeningHour["day"], string> = {
   MONDAY: "Mon",
@@ -149,7 +149,7 @@ function published(page: WebsitePage, publishedAt: string): WebsitePage {
 }
 
 // Template ids match src/mocks/websites.ts.
-export const websitePages: WebsitePage[] = (store.__wbWebsitePages ??= [
+export const websitePages: WebsitePage[] = mockCollection("websitePages", [
   published(seeded(newWebsitePage(PETAL_AND_STEM_ID, "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c01", hoursAgo(2)), "Petal & Stem"), hoursAgo(2)),
   seeded(newWebsitePage(MAPLE_AND_RYE_ID, "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c02", hoursAgo(26)), "Maple & Rye Bakery"),
   seeded(newWebsitePage(LANTERN_CAFE_ID, "c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c03", daysAgo(4)), "Lantern Café"),
@@ -172,8 +172,7 @@ export const mediaAssets: MediaAsset[] = MEDIA_FILES.flatMap(([folder, files]) =
   name: `${file}.webp`,
 }));
 
-/** Images an owner uploaded from their computer. The mock backend keeps the bytes in memory. */
+/** Uploaded bytes persist with the demo state so public image requests can reach any instance. */
 export type UploadedMedia = { websiteId: string; asset: MediaAsset; type: string; bytes: Uint8Array };
 
-const uploads = globalThis as typeof globalThis & { __wbUploadedMedia?: UploadedMedia[] };
-export const uploadedMedia: UploadedMedia[] = (uploads.__wbUploadedMedia ??= []);
+export const uploadedMedia: UploadedMedia[] = mockCollection("uploadedMedia", []);

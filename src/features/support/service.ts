@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 import type { ActionResult } from "@/lib/actions/result";
 import { getProfile } from "@/features/account/api";
 import { listFaq, listTopics, sendSupportMessage } from "./api";
@@ -14,7 +15,7 @@ export type SupportView = {
   faq: FaqItem[];
 };
 
-export async function getSupportView(userId: string): Promise<SupportView> {
+export const getSupportView = mockApi(async function getSupportView(userId: string): Promise<SupportView> {
   const [profile, websites, topics, faq] = await Promise.all([
     getProfile(userId),
     listWebsites(userId),
@@ -27,7 +28,7 @@ export async function getSupportView(userId: string): Promise<SupportView> {
     topics,
     faq,
   };
-}
+});
 
 export type SupportReceipt = {
   ticket: string;
@@ -37,7 +38,7 @@ export type SupportReceipt = {
   website: string | null;
 };
 
-export async function submitSupport(
+export const submitSupport = mockApi(async function submitSupport(
   userId: string,
   formData: FormData,
 ): Promise<ActionResult<SupportReceipt>> {
@@ -86,4 +87,4 @@ export async function submitSupport(
     if (e instanceof ApiError) return { ok: false, message: e.message, values };
     throw e;
   }
-}
+});

@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Builds the Monitor screen from several monitoring endpoints.
 // Nothing here knows whether data comes from the mock or from Spring.
 import { getWebsite } from "@/features/websites/api";
@@ -27,7 +28,7 @@ export type MonitorView = {
 
 const RECENT = 6;
 
-export async function getMonitorView(websiteId: string, now: number = Date.now()): Promise<MonitorView> {
+export const getMonitorView = mockApi(async function getMonitorView(websiteId: string, now: number = Date.now()): Promise<MonitorView> {
   const [website, status, stats, usage, page] = await Promise.all([
     getWebsite(websiteId),
     getSiteStatus(websiteId),
@@ -62,4 +63,4 @@ export async function getMonitorView(websiteId: string, now: number = Date.now()
     timeline: recent.slice(0, 7).reverse(),
     activity,
   };
-}
+});

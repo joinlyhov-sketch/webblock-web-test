@@ -1,3 +1,4 @@
+import { mockApi } from "@/lib/mock-state";
 // Business details logic. Pages call the read functions, Server Actions call the write functions.
 // Nothing here knows whether data comes from the mock or from Spring.
 import { z } from "zod";
@@ -43,7 +44,7 @@ function emptyBusinessInfo(websiteId: string): BusinessInfo {
   };
 }
 
-export async function getBusinessInfoView(websiteId: string, searchParams: SearchParams): Promise<BusinessInfoView> {
+export const getBusinessInfoView = mockApi(async function getBusinessInfoView(websiteId: string, searchParams: SearchParams): Promise<BusinessInfoView> {
   const [info, website, page] = await Promise.all([
     // A website without a record yet opens with empty details; saving the form creates it.
     getBusinessInfo(websiteId).catch((e: unknown): BusinessInfo => {
@@ -64,9 +65,9 @@ export async function getBusinessInfoView(websiteId: string, searchParams: Searc
     preview: page && { root: page.draft.root, content: top ? [top] : [] },
     editing: searchParams.edit === "1",
   };
-}
+});
 
-export async function saveBusinessInfo(websiteId: string, formData: FormData): Promise<ActionResult> {
+export const saveBusinessInfo = mockApi(async function saveBusinessInfo(websiteId: string, formData: FormData): Promise<ActionResult> {
   const values = {
     description: formText(formData, "description"),
     phone: formText(formData, "phone"),
@@ -100,4 +101,4 @@ export async function saveBusinessInfo(websiteId: string, formData: FormData): P
     if (e instanceof ApiError) return { ok: false, message: e.message, values };
     throw e;
   }
-}
+});
