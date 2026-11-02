@@ -46,11 +46,12 @@ They set a mock session cookie (`wb_role`) and take you to `/websites` or `/admi
 
 ### Mock payments on Vercel
 
-Set `MOCK_PAYMENT_SECRET` in Vercel to a random secret of at least 32 characters, then redeploy.
-Keep the same value across deployments. Vercel mock payments use signed, HTTP-only cookies so
-`/billing/pay/[orderId]` and its refreshes work across function instances. Orders stay available
-in the creating browser for 24 hours. Existing orders lost from server memory must be created again.
-Local development keeps its in-memory mock; the real backend will replace this mock storage.
+Vercel billing is a display-only demo using static sample payment data. Choosing Plus, Pro, or
+Ultra opens that plan's existing payment screen. Direct payment URLs also show a sample, and
+the preview stays pending so the page remains visible. No payment secret or backend setup is
+required, and previews do not activate subscriptions or add orders to billing history.
+Local development keeps its original in-memory mock payment flow. The real backend will replace
+these mocks when it is connected.
 
 ## Scripts
 

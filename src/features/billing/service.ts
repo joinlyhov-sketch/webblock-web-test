@@ -134,7 +134,7 @@ async function createFor(
   website: Website | null,
   deployingId: string | null,
 ): Promise<ActionResult<{ orderId: string }>> {
-  const problem = await roomProblem(userId, plan, website);
+  const problem = process.env.VERCEL === "1" ? null : await roomProblem(userId, plan, website);
   if (problem) return { ok: false, message: problem };
   const name = website?.name ?? "Your website";
   const order = await createPayment(userId, {

@@ -4,21 +4,16 @@
 import { activatePlan, getSubscription, recordPlanOrder } from "@/features/account/api";
 import { delay } from "@/lib/api/delay";
 import { ApiError } from "@/lib/api/errors";
-import { billingPlans, MOCK_AUTO_PAY_MS, MOCK_QR_IMAGE_URL, QR_LIFETIME_MS } from "@/mocks/billing";
+import { billingPlans, MOCK_AUTO_PAY_MS, MOCK_PAYMENT_PREVIEW_IDS, MOCK_QR_IMAGE_URL, QR_LIFETIME_MS } from "@/mocks/billing";
 import type { BillingPlan, CreatePaymentBody, PaymentKind, PaymentOrder } from "./types";
-import { readMockPayments, writeMockPayment, type StoredOrder } from "./mock-payment-store";
 
 const DAY_MS = 24 * 3_600_000;
 
+/** Local mock entry. Vercel displays static samples without storing or settling payments. */
+type StoredOrder = { userId: string; order: PaymentOrder; payAt: number | null };
+
 const globalForStore = globalThis as typeof globalThis & { __wbPayments?: StoredOrder[] };
 const store: StoredOrder[] = (globalForStore.__wbPayments ??= []);
-
-// Local development keeps its existing in-memory mock. Vercel requests may hit different instances.
-async function ordersFor(userId: string): Promise<StoredOrder[]> {
-  return process.env.VERCEL === "1"
-    ? readMockPayments(userId)
-    : store.filter((entry) => entry.userId === userId);
-}
 
 export async function listPlans(): Promise<BillingPlan[]> {
   await delay(80);
@@ -30,12 +25,39 @@ function reference(id: string): string {
   return `WB-${hex.slice(0, 4)}-${String(parseInt(hex.slice(4, 8), 16) % 10000).padStart(4, "0")}`;
 }
 
-async function entryFor(userId: string, orderId: string): Promise<StoredOrder> {
-  const entry = (await ordersFor(userId)).find((e) => e.order.id === orderId);
+function entryFor(userId: string, orderId: string): StoredOrder {
+  const entry = store.find((e) => e.order.id === orderId && e.userId === userId);
   if (!entry) {
     throw new ApiError({ title: "Payment not found", status: 404, detail: "We could not find this payment." });
   }
   return entry;
+}
+
+/** Display-only Vercel preview. No secret, cookie, database, or payment confirmation is needed. */
+function previewPayment(orderId: string): PaymentOrder {
+  const code = (Object.keys(MOCK_PAYMENT_PREVIEW_IDS) as PaymentOrder["plan"][])
+    .find((plan) => MOCK_PAYMENT_PREVIEW_IDS[plan] === orderId) ?? "PRO";
+  const plan = billingPlans.find((plan) => plan.code === code)!;
+  const now = Date.now();
+  return {
+    id: orderId,
+    reference: reference(MOCK_PAYMENT_PREVIEW_IDS[code]),
+    plan: code,
+    planName: plan.name,
+    kind: "SUBSCRIBE",
+    websiteId: null,
+    websiteName: "Petal & Stem",
+    websiteDomain: "petalandstem.webblock.com",
+    websiteImageUrl: "/images/billing/petal-and-stem.jpg",
+    amount: plan.monthlyPrice,
+    currency: "USD",
+    status: "PENDING",
+    qrImageUrl: MOCK_QR_IMAGE_URL,
+    createdAt: new Date(now).toISOString(),
+    expiresAt: new Date(now + QR_LIFETIME_MS).toISOString(),
+    paidAt: null,
+    nextPaymentAt: new Date(now + 30 * DAY_MS).toISOString(),
+  };
 }
 
 /** First day after the period this payment buys. A renewal adds 30 days on top of the current renewal date. */
@@ -55,6 +77,7 @@ export async function createPayment(userId: string, body: CreatePaymentBody): Pr
   if (!plan) {
     throw new ApiError({ title: "Unknown plan", status: 400, detail: "That plan does not exist." });
   }
+  if (process.env.VERCEL === "1") return previewPayment(MOCK_PAYMENT_PREVIEW_IDS[body.plan]);
   const now = Date.now();
   const id = crypto.randomUUID();
   const nextPaymentAt = await nextPeriodStart(userId, body.kind, now);
@@ -77,9 +100,7 @@ export async function createPayment(userId: string, body: CreatePaymentBody): Pr
     paidAt: null,
     nextPaymentAt,
   };
-  const entry = { userId, order, payAt: now + MOCK_AUTO_PAY_MS };
-  if (process.env.VERCEL === "1") await writeMockPayment(entry);
-  else store.push(entry);
+  store.push({ userId, order, payAt: now + MOCK_AUTO_PAY_MS });
   return order;
 }
 
@@ -101,10 +122,7 @@ async function settle(entry: StoredOrder): Promise<void> {
   if (entry.payAt !== null && now >= entry.payAt && entry.payAt < new Date(order.expiresAt).getTime()) {
     order.status = "PAID";
     order.paidAt = new Date(entry.payAt).toISOString();
-    // A restored Vercel renewal uses its original date instead of adding another month on every poll.
-    if (process.env.VERCEL !== "1") {
-      order.nextPaymentAt = await nextPeriodStart(entry.userId, order.kind, entry.payAt);
-    }
+    order.nextPaymentAt = await nextPeriodStart(entry.userId, order.kind, entry.payAt);
     await activatePlan(entry.userId, order.plan, order.nextPaymentAt);
     await recordPlanOrder(entry.userId, { ...history, status: "PAID" });
   } else if (now >= new Date(order.expiresAt).getTime()) {
@@ -115,12 +133,14 @@ async function settle(entry: StoredOrder): Promise<void> {
 
 /** Confirms or expires every open payment of the user, so the billing history is always up to date. */
 export async function settlePendingPayments(userId: string): Promise<void> {
-  for (const entry of await ordersFor(userId)) await settle(entry);
+  if (process.env.VERCEL === "1") return;
+  for (const entry of store.filter((entry) => entry.userId === userId)) await settle(entry);
 }
 
 export async function getPayment(userId: string, orderId: string): Promise<PaymentOrder> {
   await delay(120);
-  const entry = await entryFor(userId, orderId);
+  if (process.env.VERCEL === "1") return previewPayment(orderId);
+  const entry = entryFor(userId, orderId);
   await settle(entry);
   return { ...entry.order };
 }
@@ -136,7 +156,8 @@ export async function mockSimulatePayment(
   orderId: string,
   outcome: MockOutcome,
 ): Promise<void> {
-  const entry = await entryFor(userId, orderId);
+  if (process.env.VERCEL === "1") return;
+  const entry = entryFor(userId, orderId);
   if (entry.order.status !== "PENDING") return;
   const now = Date.now();
   if (outcome === "pay") entry.payAt = now;
@@ -148,5 +169,4 @@ export async function mockSimulatePayment(
     entry.payAt = null;
     entry.order.expiresAt = new Date(now + 45_000).toISOString();
   }
-  if (process.env.VERCEL === "1") await writeMockPayment(entry);
 }

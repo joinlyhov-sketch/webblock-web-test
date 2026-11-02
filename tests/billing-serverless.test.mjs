@@ -8,24 +8,21 @@ import ts from "typescript";
 
 const root = path.resolve(import.meta.dirname, "..");
 const nativeRequire = createRequire(import.meta.url);
-const secret = "test-only-payment-secret-with-at-least-32-characters";
 const body = {
   plan: "PRO", kind: "SUBSCRIBE", websiteId: null, websiteName: "Test site",
   websiteDomain: "test.webblock.com", websiteImageUrl: "/images/billing/petal-and-stem.jpg",
 };
 
-// Each instance has its own globalThis and module cache, like separate Vercel workers.
-// Only the browser's cookies survive; reading a page must never write response cookies.
-function instance(jar, clock, { vercel = true, writable = false, key = secret } = {}) {
+// A fresh module cache/globalThis represents another Vercel worker. No payment storage is shared.
+function instance(clock, { vercel = true, key, fullWebsite = false } = {}) {
   const modules = new Map();
   const subscription = {
     renewsAt: null, plan: "FREE_TRIAL", planName: "Free trial", monthlyPrice: null,
     trialEndsAt: new Date(clock.now + 14 * 86400000).toISOString(),
   };
-  const errors = [];
+  const effects = [];
   const context = vm.createContext({
     Buffer, crypto: globalThis.crypto,
-    console: { error: (message) => errors.push(message) },
     process: { env: { NODE_ENV: "production", VERCEL: vercel ? "1" : undefined, MOCK_PAYMENT_SECRET: key } },
     Date: class extends Date { static now() { return clock.now; } },
   });
@@ -37,22 +34,22 @@ function instance(jar, clock, { vercel = true, writable = false, key = secret } 
       compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
     }).outputText;
     function require(specifier) {
-      if (specifier === "next/headers") return {
-        cookies: async () => ({
-          getAll: () => [...jar].map(([name, { value }]) => ({ name, value })),
-          set(name, value, options) {
-            assert.ok(writable, "Server Component reads must not set cookies");
-            jar.set(name, { value, options });
-          },
-        }),
-      };
+      if (specifier === "next/headers") throw new Error("Static previews must not use payment cookies");
       if (specifier === "@/lib/api/delay") return { delay: async () => {} };
       if (specifier === "next/navigation") return { notFound: () => { throw new Error("Not found"); } };
-      if (specifier === "@/features/websites/api") return { listWebsites: async () => ({ items: [] }) };
+      if (specifier === "@/features/websites/api") return {
+        listWebsites: async (_userId, filter) => ({ items: fullWebsite ? [
+          { id: "live-site", status: "LIVE", name: "Live site" },
+          ...(filter?.status === "LIVE" ? [] : [{ id: "draft-site", status: "DRAFT", name: "Draft site" }]),
+        ] : [] }),
+      };
       if (specifier === "@/features/account/api") return {
         getSubscription: async () => subscription,
-        activatePlan: async (_userId, _plan, renewsAt) => { subscription.renewsAt = renewsAt; },
-        recordPlanOrder: async () => {},
+        websiteLimitOf: () => 1,
+        activatePlan: async (_userId, plan, renewsAt) => {
+          effects.push("activate"); subscription.plan = plan; subscription.renewsAt = renewsAt;
+        },
+        recordPlanOrder: async () => { effects.push("record"); },
       };
       if (specifier.startsWith("node:")) return nativeRequire(specifier);
       const resolved = specifier.startsWith("@/")
@@ -67,127 +64,84 @@ function instance(jar, clock, { vercel = true, writable = false, key = secret } 
   return {
     api: load(path.join(root, "src/features/billing/api.ts")),
     service: load(path.join(root, "src/features/billing/service.ts")),
-    subscription,
-    errors,
+    subscription, effects,
   };
 }
 
-test("Vercel payments survive cold instances and repeated page refreshes", async () => {
-  const jar = new Map();
+test("all three plans open matching Vercel previews on fresh workers without a secret", async () => {
   const clock = { now: Date.now() };
-  const creator = instance(jar, clock, { writable: true });
-  const order = await creator.api.createPayment("owner", body);
-  assert.equal(jar.size, 1);
-  const [{ options }] = jar.values();
-  assert.equal(options.httpOnly, true);
-  assert.equal(options.secure, true);
-  assert.equal(options.sameSite, "lax");
-  assert.equal(options.path, "/");
-  for (let poll = 0; poll < 3; poll++) {
-    const freshWorker = instance(jar, clock);
-    assert.equal((await freshWorker.api.getPayment("owner", order.id)).status, "PENDING");
-    clock.now += 1500;
+  for (const [plan, amount] of [["PLUS", "9.99"], ["PRO", "19.99"], ["ULTRA", "39.99"]]) {
+    const started = await instance(clock).service.startPayment("owner", plan);
+    assert.equal(started.ok, true);
+    const reader = instance(clock);
+    const view = await reader.service.getPaymentView("owner", started.data.orderId);
+    assert.equal(view.order.plan, plan);
+    assert.equal(view.order.amount, amount);
+    assert.equal(view.order.status, "PENDING");
+    assert.ok(view.remainingMs > 0);
+    assert.equal(reader.effects.length, 0);
   }
-  clock.now += 8000;
-  const paid = await instance(jar, clock).api.getPayment("owner", order.id);
-  assert.equal(paid.status, "PAID");
-  assert.equal((await instance(jar, clock).api.getPayment("owner", order.id)).paidAt, paid.paidAt);
 });
 
-test("separate Vercel orders remain available and cannot be read by another user", async () => {
-  const jar = new Map();
+test("the original payment URL and other direct URLs show static data without a stored order", async () => {
   const clock = { now: Date.now() };
-  const first = await instance(jar, clock, { writable: true }).api.createPayment("owner", body);
-  const second = await instance(jar, clock, { writable: true }).api.createPayment("owner", { ...body, plan: "PLUS" });
-  const reader = instance(jar, clock);
-  assert.equal((await reader.api.getPayment("owner", first.id)).plan, "PRO");
-  assert.equal((await reader.api.getPayment("owner", second.id)).plan, "PLUS");
-  await assert.rejects(reader.api.getPayment("other-user", first.id), { status: 404 });
-  await assert.rejects(reader.api.getPayment("owner", crypto.randomUUID()), { status: 404 });
+  for (const id of ["f4ef81be-add0-467b-b87c-f76c68e0e0b6", crypto.randomUUID(), "preview"]) {
+    const view = await instance(clock).service.getPaymentView("owner", id);
+    assert.equal(view.order.id, id);
+    assert.equal(view.order.websiteName, "Petal & Stem");
+    assert.equal(view.order.qrImageUrl, "/images/billing/khqr-code.jpg");
+    assert.equal(view.order.status, "PENDING");
+    assert.ok(!view.order.reference.includes("NaN"));
+  }
 });
 
-test("tampered and expired payment cookies cannot restore an order", async () => {
-  const jar = new Map();
+test("Vercel previews remain visible and never settle or activate subscriptions", async () => {
   const clock = { now: Date.now() };
-  const order = await instance(jar, clock, { writable: true }).api.createPayment("owner", body);
-  const [[name, saved]] = jar;
-  const [payload, mac] = saved.value.split(".");
-  const changed = JSON.parse(Buffer.from(payload, "base64url").toString());
-  changed.order.status = "PAID";
-  jar.set(name, { ...saved, value: `${Buffer.from(JSON.stringify(changed)).toString("base64url")}.${mac}` });
-  await assert.rejects(instance(jar, clock).api.getPayment("owner", order.id), { status: 404 });
-  jar.set(name, saved);
+  const worker = instance(clock);
+  const order = await worker.api.createPayment("owner", body);
   clock.now += 24 * 60 * 60 * 1000;
-  await assert.rejects(instance(jar, clock).api.getPayment("owner", order.id), { status: 404 });
+  await worker.api.settlePendingPayments("owner");
+  await worker.api.mockSimulatePayment("owner", order.id, "pay");
+  assert.equal((await worker.api.getPayment("owner", order.id)).status, "PENDING");
+  assert.equal((await instance(clock).api.getPayment("owner", order.id)).status, "PENDING");
+  assert.equal(worker.subscription.renewsAt, null);
+  assert.equal(worker.effects.length, 0);
 });
 
-test("restoring a renewal does not extend its billing period on every refresh", async () => {
-  const jar = new Map();
+test("Vercel plans and previews do not depend on a missing, short, or old payment secret", async () => {
   const clock = { now: Date.now() };
-  const creator = instance(jar, clock, { writable: true });
-  creator.subscription.renewsAt = new Date(clock.now + 10 * 86400000).toISOString();
-  const order = await creator.api.createPayment("owner", { ...body, kind: "RENEW" });
-  clock.now += 9000;
-  const reader = instance(jar, clock);
-  for (let poll = 0; poll < 3; poll++) {
-    assert.equal((await reader.api.getPayment("owner", order.id)).nextPaymentAt, order.nextPaymentAt);
-  }
-  const freshWorker = instance(jar, clock);
-  await freshWorker.api.settlePendingPayments("owner");
-  assert.equal(freshWorker.subscription.renewsAt, order.nextPaymentAt);
-});
-
-test("expired Vercel orders can still be read when generating a replacement code", async () => {
-  const jar = new Map();
-  const clock = { now: Date.now() };
-  const creator = instance(jar, clock, { writable: true });
-  const order = await creator.api.createPayment("owner", body);
-  await creator.api.mockSimulatePayment("owner", order.id, "expire");
-  assert.equal((await instance(jar, clock).api.getPayment("owner", order.id)).status, "EXPIRED");
-  const replacement = await instance(jar, clock, { writable: true }).api.createPayment("owner", body);
-  assert.notEqual(replacement.id, order.id);
-  assert.equal((await instance(jar, clock).api.getPayment("owner", replacement.id)).status, "PENDING");
-});
-
-test("missing Vercel secret fails before opening a missing payment page; local mock is unchanged", async () => {
-  const clock = { now: Date.now() };
-  await assert.rejects(
-    instance(new Map(), clock, { writable: true, key: "" }).api.createPayment("owner", body),
-    { status: 503 },
-  );
-  const jar = new Map();
-  const local = instance(jar, clock, { vercel: false, key: "" });
-  const order = await local.api.createPayment("owner", body);
-  assert.equal((await local.api.getPayment("owner", order.id)).status, "PENDING");
-  assert.equal(jar.size, 0);
-  await assert.rejects(instance(jar, clock, { vercel: false }).api.getPayment("owner", order.id), { status: 404 });
-});
-
-test("existing payment cookies cannot crash plans when the Vercel secret is missing or too short", async () => {
-  const jar = new Map();
-  const clock = { now: Date.now() };
-  const order = await instance(jar, clock, { writable: true }).api.createPayment("owner", body);
-  for (const key of ["", "short"]) {
-    const worker = instance(jar, clock, { key });
-    await worker.api.settlePendingPayments("owner");
+  for (const key of [undefined, "", "short", "old-payment-secret-that-is-long-enough"]) {
+    const worker = instance(clock, { key });
     const plans = await worker.service.getPlansView("owner", {});
     assert.equal(plans.variant, "dashboard");
-    assert.ok(plans.plans.some((plan) => plan.code === "PRO"));
-    assert.equal(worker.subscription.renewsAt, null);
-    const regenerate = await worker.service.regeneratePayment("owner", order.id);
-    assert.equal(regenerate.ok, false);
+    const start = await worker.service.startPayment("owner", "PRO");
+    assert.equal(start.ok, true);
+    const regenerated = await instance(clock, { key }).service.regeneratePayment("owner", start.data.orderId);
+    assert.equal(regenerated.ok, true);
   }
 });
 
-test("starting an unconfigured Vercel payment returns the existing action error without throwing", async () => {
-  const jar = new Map();
+test("demo preview navigation is not blocked by account capacity checks", async () => {
+  const worker = instance({ now: Date.now() }, { fullWebsite: true });
+  assert.equal((await worker.service.startPayment("owner", "PLUS", "draft-site")).ok, true);
+});
+
+test("the local mock still stores, settles, and activates its original payment flow", async () => {
   const clock = { now: Date.now() };
-  for (const key of ["", "short"]) {
-    const worker = instance(jar, clock, { key, writable: true });
-    const result = await worker.service.startPayment("owner", "PRO");
-    assert.equal(result.ok, false);
-    assert.equal(result.message, "Payments are temporarily unavailable. Please try again later.");
-    assert.ok(worker.errors.some((message) => message.includes("MOCK_PAYMENT_SECRET")));
-    assert.equal(jar.size, 0);
-  }
+  const worker = instance(clock, { vercel: false });
+  const order = await worker.api.createPayment("owner", body);
+  assert.equal((await worker.api.getPayment("owner", order.id)).status, "PENDING");
+  clock.now += 9000;
+  assert.equal((await worker.api.getPayment("owner", order.id)).status, "PAID");
+  assert.equal(worker.subscription.plan, "PRO");
+  assert.deepEqual(worker.effects, ["activate", "record"]);
+});
+
+test("local missing/other-owner orders and invalid plans retain their original errors", async () => {
+  const clock = { now: Date.now() };
+  const worker = instance(clock, { vercel: false });
+  const order = await worker.api.createPayment("owner", body);
+  await assert.rejects(worker.api.getPayment("another-owner", order.id), { status: 404 });
+  await assert.rejects(instance(clock, { vercel: false }).api.getPayment("owner", order.id), { status: 404 });
+  assert.equal((await instance(clock).service.startPayment("owner", "INVALID")).ok, false);
 });
