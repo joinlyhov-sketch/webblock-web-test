@@ -6,14 +6,19 @@ import { delay } from "@/lib/api/delay";
 import { ApiError } from "@/lib/api/errors";
 import { billingPlans, MOCK_AUTO_PAY_MS, MOCK_QR_IMAGE_URL, QR_LIFETIME_MS } from "@/mocks/billing";
 import type { BillingPlan, CreatePaymentBody, PaymentKind, PaymentOrder } from "./types";
+import { readMockPayments, writeMockPayment, type StoredOrder } from "./mock-payment-store";
 
 const DAY_MS = 24 * 3_600_000;
 
-/** Mock store entry. `payAt` is the moment the "bank" confirms; Spring has no such field. */
-type StoredOrder = { userId: string; order: PaymentOrder; payAt: number | null };
-
 const globalForStore = globalThis as typeof globalThis & { __wbPayments?: StoredOrder[] };
 const store: StoredOrder[] = (globalForStore.__wbPayments ??= []);
+
+// Local development keeps its existing in-memory mock. Vercel requests may hit different instances.
+async function ordersFor(userId: string): Promise<StoredOrder[]> {
+  return process.env.VERCEL === "1"
+    ? readMockPayments(userId)
+    : store.filter((entry) => entry.userId === userId);
+}
 
 export async function listPlans(): Promise<BillingPlan[]> {
   await delay(80);
@@ -25,8 +30,8 @@ function reference(id: string): string {
   return `WB-${hex.slice(0, 4)}-${String(parseInt(hex.slice(4, 8), 16) % 10000).padStart(4, "0")}`;
 }
 
-function entryFor(userId: string, orderId: string): StoredOrder {
-  const entry = store.find((e) => e.order.id === orderId && e.userId === userId);
+async function entryFor(userId: string, orderId: string): Promise<StoredOrder> {
+  const entry = (await ordersFor(userId)).find((e) => e.order.id === orderId);
   if (!entry) {
     throw new ApiError({ title: "Payment not found", status: 404, detail: "We could not find this payment." });
   }
@@ -72,7 +77,9 @@ export async function createPayment(userId: string, body: CreatePaymentBody): Pr
     paidAt: null,
     nextPaymentAt,
   };
-  store.push({ userId, order, payAt: now + MOCK_AUTO_PAY_MS });
+  const entry = { userId, order, payAt: now + MOCK_AUTO_PAY_MS };
+  if (process.env.VERCEL === "1") await writeMockPayment(entry);
+  else store.push(entry);
   return order;
 }
 
@@ -94,7 +101,10 @@ async function settle(entry: StoredOrder): Promise<void> {
   if (entry.payAt !== null && now >= entry.payAt && entry.payAt < new Date(order.expiresAt).getTime()) {
     order.status = "PAID";
     order.paidAt = new Date(entry.payAt).toISOString();
-    order.nextPaymentAt = await nextPeriodStart(entry.userId, order.kind, entry.payAt);
+    // A restored Vercel renewal uses its original date instead of adding another month on every poll.
+    if (process.env.VERCEL !== "1") {
+      order.nextPaymentAt = await nextPeriodStart(entry.userId, order.kind, entry.payAt);
+    }
     await activatePlan(entry.userId, order.plan, order.nextPaymentAt);
     await recordPlanOrder(entry.userId, { ...history, status: "PAID" });
   } else if (now >= new Date(order.expiresAt).getTime()) {
@@ -105,12 +115,12 @@ async function settle(entry: StoredOrder): Promise<void> {
 
 /** Confirms or expires every open payment of the user, so the billing history is always up to date. */
 export async function settlePendingPayments(userId: string): Promise<void> {
-  for (const entry of store.filter((e) => e.userId === userId)) await settle(entry);
+  for (const entry of await ordersFor(userId)) await settle(entry);
 }
 
 export async function getPayment(userId: string, orderId: string): Promise<PaymentOrder> {
   await delay(120);
-  const entry = entryFor(userId, orderId);
+  const entry = await entryFor(userId, orderId);
   await settle(entry);
   return { ...entry.order };
 }
@@ -126,7 +136,7 @@ export async function mockSimulatePayment(
   orderId: string,
   outcome: MockOutcome,
 ): Promise<void> {
-  const entry = entryFor(userId, orderId);
+  const entry = await entryFor(userId, orderId);
   if (entry.order.status !== "PENDING") return;
   const now = Date.now();
   if (outcome === "pay") entry.payAt = now;
@@ -138,4 +148,5 @@ export async function mockSimulatePayment(
     entry.payAt = null;
     entry.order.expiresAt = new Date(now + 45_000).toISOString();
   }
+  if (process.env.VERCEL === "1") await writeMockPayment(entry);
 }

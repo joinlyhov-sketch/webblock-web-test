@@ -44,6 +44,14 @@ Open <http://localhost:3000>.
 There is no real login yet. On `/sign-in`, use the **Enter as User** or **Enter as Admin** buttons.
 They set a mock session cookie (`wb_role`) and take you to `/websites` or `/admin`.
 
+### Mock payments on Vercel
+
+Set `MOCK_PAYMENT_SECRET` in Vercel to a random secret of at least 32 characters, then redeploy.
+Keep the same value across deployments. Vercel mock payments use signed, HTTP-only cookies so
+`/billing/pay/[orderId]` and its refreshes work across function instances. Orders stay available
+in the creating browser for 24 hours. Existing orders lost from server memory must be created again.
+Local development keeps its in-memory mock; the real backend will replace this mock storage.
+
 ## Scripts
 
 | Command | What it does |
