@@ -108,7 +108,7 @@ export async function startPayment(
   if (!isPaidPlan(planCode)) return { ok: false, message: "Choose Plus, Pro or Ultra." };
   try {
     const [subscription, website] = await Promise.all([getSubscription(userId), websiteFor(userId, forWebsite)]);
-    return createFor(userId, planCode, subscription, website, forWebsite ? (website?.id ?? null) : null);
+    return await createFor(userId, planCode, subscription, website, forWebsite ? (website?.id ?? null) : null);
   } catch (e) {
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
@@ -154,7 +154,7 @@ export async function regeneratePayment(userId: string, orderId: string): Promis
     const old = await getPayment(userId, orderId);
     if (old.status === "PAID") return { ok: true, data: { orderId: old.id } };
     const [subscription, website] = await Promise.all([getSubscription(userId), websiteFor(userId, old.websiteId)]);
-    return createFor(userId, old.plan, subscription, website, old.websiteId);
+    return await createFor(userId, old.plan, subscription, website, old.websiteId);
   } catch (e) {
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
