@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:billing": "node --test tests/payment-session.test.mjs"
   },
   "dependencies": {
     "@puckeditor/core": "^0.23.0",

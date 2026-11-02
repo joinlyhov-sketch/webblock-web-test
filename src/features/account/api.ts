@@ -15,6 +15,7 @@ import { websitePages } from "@/mocks/website-pages";
 import { formatDayMonthYear, formatPrice } from "@/lib/format";
 import type { DeployAccess, DeployReason, OrderStatus, PlanCode, PlanOrder, Profile, Subscription } from "./types";
 import type { PaidPlanCode } from "@/features/billing/types";
+import { mockPaymentStatus, readMockPayments, type MockPaymentSnapshot } from "@/features/billing/mock-payment-session";
 
 const globalForStore = globalThis as typeof globalThis & {
   __wbProfiles?: Profile[];
@@ -27,6 +28,35 @@ const subscriptions: Record<string, Subscription> = (globalForStore.__wbSubscrip
 const planOrders: Record<string, PlanOrder[]> = (globalForStore.__wbPlanOrders ??=
   structuredClone(ordersSeed));
 
+/** Rebuild demo billing on every instance, including direct receipt and deploy requests. */
+async function restoreMockBilling(userId: string): Promise<void> {
+  let latestPaid: MockPaymentSnapshot | undefined;
+  for (const entry of await readMockPayments(userId)) {
+    const status = mockPaymentStatus(entry);
+    if (status === "PENDING") continue;
+    const meta = planLimits[entry.body.plan];
+    await recordPlanOrder(userId, {
+      id: entry.id,
+      plan: entry.body.plan,
+      planName: `${meta.name} plan`,
+      websiteName: entry.body.websiteName,
+      period: entry.body.kind === "RENEW" ? "Monthly · renewal" : "Monthly",
+      createdAt: entry.createdAt,
+      amount: meta.price,
+      currency: "USD",
+      status,
+    });
+    if (status === "PAID") latestPaid = entry;
+  }
+  const current = subscriptions[userId];
+  if (
+    latestPaid && current &&
+    (current.plan !== latestPaid.body.plan || current.renewsAt !== latestPaid.nextPaymentAt)
+  ) {
+    await activatePlan(userId, latestPaid.body.plan, latestPaid.nextPaymentAt);
+  }
+}
+
 function find(userId: string): Profile {
   const profile = store.find((p) => p.id === userId);
   if (!profile) {
@@ -37,6 +67,7 @@ function find(userId: string): Profile {
 
 export async function getProfile(userId: string): Promise<Profile> {
   await delay(120);
+  await restoreMockBilling(userId);
   return find(userId);
 }
 
@@ -75,6 +106,7 @@ export async function setPassword(
 
 export async function getSubscription(userId: string): Promise<Subscription> {
   await delay(150);
+  await restoreMockBilling(userId);
   const subscription = subscriptions[userId];
   if (!subscription) {
     throw new ApiError({ title: "No subscription", status: 404, detail: "This account has no plan yet." });
@@ -144,6 +176,7 @@ export async function listOrders(
   query: TableQuery,
 ): Promise<Page<PlanOrder>> {
   await delay();
+  await restoreMockBilling(userId);
   const sorted = (planOrders[userId] ?? [])
     .filter((o) => !filter.status || o.status === filter.status)
     .filter((o) => !filter.plan || o.plan === filter.plan);
@@ -167,6 +200,7 @@ export async function getOrderReceipt(
   orderId: string,
 ): Promise<{ filename: string; type: "application/pdf"; bytes: Uint8Array }> {
   await delay(150);
+  await restoreMockBilling(userId);
   const order = (planOrders[userId] ?? []).find((o) => o.id === orderId);
   if (!order) {
     throw new ApiError({ title: "Order not found", status: 404, detail: "We could not find that order." });

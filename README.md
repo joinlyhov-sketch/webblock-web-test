@@ -44,6 +44,21 @@ Open <http://localhost:3000>.
 There is no real login yet. On `/sign-in`, use the **Enter as User** or **Enter as Admin** buttons.
 They set a mock session cookie (`wb_role`) and take you to `/websites` or `/admin`.
 
+### Mock billing on Vercel
+
+Demo payment snapshots are saved in the HTTP-only `wb_mock_payments` cookie so a different
+Vercel instance can reconstruct the payment success screen, subscription and receipt history.
+The cookie lasts 30 days and retains up to three recent orders, within the browser cookie size
+limit. Start a new payment after deploying this fix: orders created by the old memory-only
+implementation cannot be recovered after that server instance is gone. Clearing cookies or
+opening the link in another browser also removes access to those demo orders.
+
+This is mock session storage, like `wb_role`; it is not verified bank payment data. Real billing
+must use the Spring API with database storage and bank-confirmed status. No extra Vercel
+environment variables are needed for the current demo.
+
+Run `pnpm test:billing` to test payment rendering and account recovery across isolated instances.
+
 ## Scripts
 
 | Command | What it does |
