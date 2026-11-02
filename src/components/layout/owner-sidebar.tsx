@@ -1,18 +1,16 @@
-import Link from "next/link";
-import { ownerNav } from "@/config/nav";
-import { SidebarNav } from "./sidebar-nav";
-import { SidebarShell } from "./sidebar-shell";
+import { requireWebsiteOwner } from "@/lib/auth/session";
+import { getProfileView } from "@/features/account";
+import { getWebsite } from "@/features/websites";
+import { OwnerSidebarShell } from "./owner-sidebar-shell";
 
-export function OwnerSidebar({ websiteId }: { websiteId: string }) {
+/** Owner Portal sidebar. Loads the website and the owner on the server, the shell handles clicks. */
+export async function OwnerSidebar({ websiteId }: { websiteId: string }) {
+  const user = await requireWebsiteOwner(websiteId);
+  const [website, profile] = await Promise.all([getWebsite(websiteId), getProfileView(user.id)]);
   return (
-    <SidebarShell label="Owner Portal" homeHref={`/portal/${websiteId}`}>
-      <SidebarNav items={ownerNav(websiteId)} />
-      <Link
-        href="/websites"
-        className="mt-auto px-3 text-sm text-muted-foreground hover:text-foreground"
-      >
-        ← Back to my websites
-      </Link>
-    </SidebarShell>
+    <OwnerSidebarShell
+      website={{ id: website.id, name: website.name, domain: website.domain, status: website.status }}
+      profile={profile}
+    />
   );
 }

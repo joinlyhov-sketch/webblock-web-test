@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowDown2, ArrowSwapVertical, ArrowUp2 } from "iconsax-reactjs";
+import { ArrowDown, ArrowSwapVertical, ArrowUp } from "iconsax-reactjs";
 import { TablePagination } from "@/components/common/table-pagination";
 import {
   Table,
@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Page } from "@/lib/api/types";
-import { parseTableQuery, tableHref, type SearchParams } from "@/lib/table-query";
+import { parseTableQuery, tableHref, type SearchParams, type TableQuery } from "@/lib/table-query";
 import { cn } from "@/lib/utils";
 
 export type DataTableColumn<T> = {
@@ -21,6 +21,8 @@ export type DataTableColumn<T> = {
   cell: (row: T) => ReactNode;
   /** API sort field. Makes the header a link that toggles `?sort=<field>,asc|desc`. */
   sortField?: string;
+  /** Static icon after the header text (e.g. a filter glyph). */
+  headerIcon?: ReactNode;
   /** Width / alignment for the whole column, e.g. "w-40 text-right". */
   className?: string;
 };
@@ -30,20 +32,49 @@ type DataTableProps<T> = {
   data: Page<T>;
   rowKey: (row: T) => string;
   /** The page's resolved `searchParams` — pagination and sort links keep every other param. */
-  searchParams: SearchParams;
+  searchParams?: SearchParams;
+  /**
+   * Browser mode: the parent keeps sort and page in state and passes the slice to show. Headers and
+   * pages become buttons, so nothing navigates or re-renders on the server.
+   */
+  controls?: {
+    sort?: TableQuery["sort"];
+    onSort: (field: string, direction: "asc" | "desc") => void;
+    onPageChange: (page: number) => void;
+  };
   /** Plural noun for the footer: "Showing 1–9 of 14 {itemLabel}". */
   itemLabel: string;
+  /** Singular noun for the footer when there is exactly one item. Defaults to `itemLabel`. */
+  itemLabelOne?: string;
   /** Accessible name of the table, e.g. "User accounts". */
   label: string;
+  /** Title row above the toolbar. */
+  heading?: ReactNode;
   /** Search, filters and actions shown above the table. */
   toolbar?: ReactNode;
-  /** Shown when there are no items at all (use `EmptyState` when it exists). */
+  /** Shown when there are no items at all (use `EmptyState`). */
   empty?: ReactNode;
+  /** Sort applied when the URL has none; its header shows as active. */
+  defaultSort?: TableQuery["sort"];
+  /** `false` for a short preview table (e.g. a dashboard widget): no pagination footer. */
+  footer?: boolean;
+  /** Smallest table width, e.g. "min-w-[960px]". Narrower screens scroll the table sideways. */
+  minWidth?: string;
+  /** Extra row classes, e.g. "relative cursor-pointer" for rows with a stretched link. */
+  rowClassName?: string;
+  /** Stretch to the bottom of a flex-column parent (the Admin `<main>`), never shorter than 420px. */
+  fill?: boolean;
+  /** Denser rows and smaller text (Admin Portal): 48px rows, 12px text, 34px header. */
+  compact?: boolean;
+  className?: string;
 };
 
 /**
  * Every list screen's table ("Draft table style"): "No." first column, sortable headers,
- * pinned footer with "Showing …" + pagination, full grid even with few rows.
+ * pinned footer with "Showing …" + pagination. Only real rows are drawn (no empty filler rows). The card
+ * takes the height its parent gives it (e.g. `flex-1` or `fill`), whatever the row count: spare room stays
+ * blank above the footer, and when there are too many rows only the rows scroll while the toolbar, the
+ * column headers and the footer stay in place.
  * A Server Component — page, size and sort live in the URL (see `lib/table-query`).
  *
  * @example
@@ -62,45 +93,83 @@ export function DataTable<T>({
   columns,
   data,
   rowKey,
-  searchParams,
+  searchParams = {},
+  controls,
   itemLabel,
+  itemLabelOne,
   label,
+  heading,
   toolbar,
   empty,
+  defaultSort,
+  footer = true,
+  minWidth,
+  rowClassName,
+  fill = false,
+  compact = false,
+  className,
 }: DataTableProps<T>) {
-  const { sort } = parseTableQuery(searchParams);
+  const sort = controls ? controls.sort : parseTableQuery(searchParams, { sort: defaultSort }).sort;
   const offset = data.page * data.size;
-  const fillerRows = data.items.length > 0 ? data.size - data.items.length : 0;
   const colSpan = columns.length + 1;
+  const noItems = data.totalItems === 0;
 
   return (
-    <section className="overflow-hidden rounded-[20px] border border-border bg-background shadow-card">
+    <section
+      className={cn(
+        "flex min-h-0 flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-table",
+        fill && "min-h-[420px] flex-1",
+        className,
+      )}
+    >
+      {heading && <div className="shrink-0 px-4 pt-5 pb-1">{heading}</div>}
       {toolbar && (
-        <div className="flex flex-wrap items-center gap-2.5 border-b border-border px-4 py-3.5">{toolbar}</div>
+        <div
+          className={cn(
+            "flex shrink-0 flex-wrap items-center gap-2.5 border-b border-border px-4",
+            compact ? "py-2.5 [&_button]:h-8 [&_button]:text-xs [&_input]:h-8 [&_input]:text-xs" : "py-3.5",
+          )}
+        >
+          {toolbar}
+        </div>
       )}
 
-      <Table aria-label={label}>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[72px] pl-[21px]">No.</TableHead>
+      <Table
+        aria-label={label}
+        containerClassName={cn(noItems ? "shrink-0" : "min-h-0 grow", fill && "overscroll-contain")}
+        className={cn(
+          // Fixed layout: column widths come from the header, so they stay put when the row count changes.
+          "table-fixed",
+          minWidth,
+          compact &&
+            cn(
+              "text-xs [&_td]:h-12 [&_td]:py-1.5 [&_th]:h-[34px] [&_th]:text-[11px] [&_td_.text-xs]:text-[11px]",
+              // Smaller badges, avatars and thumbnails inside rows.
+              "[&_[data-badge]]:h-5 [&_[data-badge]]:px-1.5 [&_[data-badge]]:text-[11px] [&_[data-badge]_svg]:size-3",
+              "[&_[data-avatar]]:size-7 [&_[data-avatar]]:text-[10px] [&_[data-thumb]]:size-7",
+            ),
+        )}
+      >
+        <TableHeader className="sticky top-0 z-10 shadow-[inset_0_-1px_0_var(--color-border)]">
+          <TableRow className="border-0">
+            <TableHead className="h-auto w-[77px] py-3 pr-0 pl-[21px] leading-normal">No.</TableHead>
             {columns.map((column) => {
               const active = sort && column.sortField === sort.field ? sort.direction : undefined;
               return (
                 <TableHead
                   key={column.key}
-                  className={column.className}
+                  className={cn("h-auto py-3 leading-normal", column.className)}
                   aria-sort={active === "asc" ? "ascending" : active === "desc" ? "descending" : undefined}
                 >
                   {column.sortField ? (
-                    <SortLink
-                      field={column.sortField}
-                      active={active}
-                      searchParams={searchParams}
-                    >
+                    <SortLink field={column.sortField} active={active} searchParams={searchParams} onSort={controls?.onSort}>
                       {column.header}
                     </SortLink>
                   ) : (
-                    column.header
+                    <span className="inline-flex items-center gap-1.5">
+                      {column.header}
+                      {column.headerIcon}
+                    </span>
                   )}
                 </TableHead>
               );
@@ -108,50 +177,68 @@ export function DataTable<T>({
           </TableRow>
         </TableHeader>
 
-        <TableBody>
-          {data.items.map((row, i) => (
-            <TableRow
-              key={rowKey(row)}
-              className="hover:bg-muted/70 motion-safe:animate-row-in"
-              style={{ animationDelay: `${i * 25}ms` }}
-            >
-              <TableCell className="pl-[21px] tabular-nums">{offset + i + 1}</TableCell>
-              {columns.map((column) => (
-                <TableCell key={column.key} className={column.className}>
-                  {column.cell(row)}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+        {!noItems && (
+          // Keyed by size so the rows fade in again when "Rows" changes (10 → 20 → 50).
+          <TableBody key={data.size}>
+            {data.items.map((row, i) => (
+              <TableRow
+                key={rowKey(row)}
+                className={cn("hover:bg-muted/70 motion-safe:animate-row-in", rowClassName)}
+                style={{ animationDelay: `${Math.min(i, 12) * 25}ms` }}
+              >
+                <TableCell className="pr-0 pl-[21px] tabular-nums">{offset + i + 1}</TableCell>
+                {columns.map((column) => (
+                  <TableCell key={column.key} className={column.className}>
+                    {column.cell(row)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
 
-          {Array.from({ length: fillerRows }, (_, i) => (
-            <TableRow key={`filler-${i}`} aria-hidden>
-              <TableCell colSpan={colSpan} />
-            </TableRow>
-          ))}
-
-          {data.items.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={colSpan} className="h-64 text-center">
-                {data.totalItems > 0 ? (
+            {data.items.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={colSpan} className="h-64 text-center">
                   <p className="text-muted-foreground">
                     This page is empty.{" "}
-                    <Link href={tableHref(searchParams, { page: null })} className="font-medium text-primary hover:underline">
-                      Go to the first page
-                    </Link>
+                    {controls ? (
+                      <button type="button" onClick={() => controls.onPageChange(0)} className="font-medium text-primary hover:underline">
+                        Go to the first page
+                      </button>
+                    ) : (
+                      <Link href={tableHref(searchParams, { page: null })} className="font-medium text-primary hover:underline">
+                        Go to the first page
+                      </Link>
+                    )}
                   </p>
-                ) : (
-                  (empty ?? <p className="text-muted-foreground">No {itemLabel} yet.</p>)
-                )}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        )}
       </Table>
 
-      {data.totalItems > 0 && (
-        <div className="border-t border-border">
-          <TablePagination data={data} searchParams={searchParams} itemLabel={itemLabel} />
+      {/* Outside the (possibly wider-than-screen) table, so it stays centred in the visible area. */}
+      {noItems && (
+        <div className="flex min-h-[300px] flex-1 items-center justify-center px-6 py-10 text-center">
+          {empty ?? <p className="text-muted-foreground">No {itemLabel} yet.</p>}
+        </div>
+      )}
+
+      {footer && (
+        <div
+          className={cn(
+            "shrink-0 border-t border-border",
+            // Compact footer: smaller "Showing …" text and page buttons.
+            compact && "[&_a]:h-7 [&_a]:min-w-7 [&_a]:text-xs [&_p]:text-xs [&_span]:text-xs [&>div]:py-2",
+          )}
+        >
+          <TablePagination
+            data={data}
+            searchParams={searchParams}
+            onPageChange={controls?.onPageChange}
+            itemLabel={itemLabel}
+            itemLabelOne={itemLabelOne}
+          />
         </div>
       )}
     </section>
@@ -163,36 +250,45 @@ function SortLink({
   field,
   active,
   searchParams,
+  onSort,
   children,
 }: {
   field: string;
   active?: "asc" | "desc";
   searchParams: SearchParams;
+  onSort?: (field: string, direction: "asc" | "desc") => void;
   children: ReactNode;
 }) {
   const next = active === "asc" ? "desc" : "asc";
-  const Icon = active === "asc" ? ArrowUp2 : active === "desc" ? ArrowDown2 : ArrowSwapVertical;
-
-  return (
-    <Link
-      href={tableHref(searchParams, { sort: `${field},${next}`, page: null })}
-      scroll={false}
-      className={cn(
-        "group -mx-1.5 inline-flex items-center gap-1.5 rounded-full px-1.5 py-1 outline-none transition-colors duration-150 focus-visible:ring-3 focus-visible:ring-ring/40",
-        active ? "text-primary" : "hover:text-foreground",
-      )}
-    >
+  const Icon = active === "asc" ? ArrowUp : active === "desc" ? ArrowDown : ArrowSwapVertical;
+  const className = cn(
+    "group inline-flex items-center gap-1.5 rounded-full outline-none transition-colors duration-150 focus-visible:ring-3 focus-visible:ring-ring/40",
+    active ? "text-primary" : "hover:text-foreground",
+  );
+  const content = (
+    <>
       {children}
       <Icon
         aria-hidden
         className={cn(
-          "size-3.5 transition-[opacity,transform] duration-150",
-          active ? "opacity-100" : "opacity-60 group-hover:opacity-100 motion-safe:group-hover:scale-110",
+          "transition-[opacity,transform] duration-150",
+          active ? "size-3 opacity-100" : "size-3.5 opacity-80 group-hover:opacity-100",
         )}
       />
       <span className="sr-only">
         {active ? `, sorted ${active === "asc" ? "ascending" : "descending"}` : ", sort"}
       </span>
+    </>
+  );
+
+  // Browser mode sorts in state with a button; URL mode links to `?sort=`.
+  return onSort ? (
+    <button type="button" onClick={() => onSort(field, next)} className={className}>
+      {content}
+    </button>
+  ) : (
+    <Link href={tableHref(searchParams, { sort: `${field},${next}`, page: null })} scroll={false} className={className}>
+      {content}
     </Link>
   );
 }
@@ -203,7 +299,7 @@ export function DataTableSkeleton({ columns = 5, rows = 8 }: { columns?: number;
     <div
       aria-busy="true"
       aria-label="Loading table"
-      className="overflow-hidden rounded-[20px] border border-border bg-background shadow-card"
+      className="overflow-hidden rounded-[20px] border border-border bg-background shadow-table"
     >
       <div className="h-11 border-b border-border bg-muted" />
       <div className="animate-pulse">

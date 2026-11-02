@@ -7,12 +7,14 @@ import { cn } from "@/lib/utils";
  * WebBlock button (Figma "Button" + "Icon button").
  * primary = main action (one per view) · secondary = neutral · soft = secondary brand action
  * (Edit, Use template) · ghost = low emphasis · dark = high contrast · danger = destructive ·
- * white = on coloured backgrounds.
+ * white = on coloured backgrounds · outline / tonal = landing page (Figma "LP/Button").
  */
 export const buttonVariants = cva(
   [
     "relative inline-flex shrink-0 items-center justify-center rounded-full font-semibold whitespace-nowrap select-none",
-    "transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out",
+    // Tailwind 4 moves buttons with the `translate`/`scale` properties (not `transform`), so list those,
+    // and `filter` for the plan-coloured buttons that darken with `brightness-*`.
+    "transition-[background-color,color,border-color,box-shadow,translate,scale,filter] duration-150 ease-out",
     "outline-none focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:ring-offset-2",
     "motion-safe:active:scale-97",
     "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
@@ -33,11 +35,17 @@ export const buttonVariants = cva(
           "bg-danger-soft text-danger hover:bg-danger hover:text-primary-foreground active:bg-danger/90",
         white:
           "bg-background text-brand-strong shadow-button hover:bg-primary-soft hover:shadow-button-hover motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0",
+        outline:
+          "border border-border-strong text-foreground hover:border-primary hover:bg-primary-soft active:bg-brand-soft",
+        tonal: "bg-brand-soft text-brand-deep hover:bg-brand/20 active:bg-brand/25",
       },
       size: {
         sm: "h-8 gap-2 px-3 text-[13px] [&_svg]:size-[15px]",
         md: "h-10 gap-2 px-[18px] text-sm [&_svg]:size-4",
         lg: "h-[50px] gap-2.5 px-6 text-[15px] [&_svg]:size-[18px]",
+        // Landing "LP/Button" sizes: medium-weight 16px label.
+        "lp-md": "h-11 gap-2 px-5 text-base font-medium [&_svg]:size-[18px]",
+        "lp-lg": "h-[52px] gap-2.5 px-7 text-base font-medium [&_svg]:size-5",
         "icon-sm": "size-8 [&_svg]:size-4",
         icon: "size-9 [&_svg]:size-[18px]",
         "icon-lg": "size-10 [&_svg]:size-5",

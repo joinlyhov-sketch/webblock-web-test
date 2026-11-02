@@ -17,6 +17,9 @@ export type TableQuery = {
 const DEFAULT_SIZE = 10;
 const MAX_SIZE = 100;
 
+/** Largest page size the URL accepts (bigger values fall back to the default). */
+export const MAX_PAGE_SIZE = MAX_SIZE;
+
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }

@@ -12,7 +12,7 @@ export default async function PortalLayout({
   return (
     <div className="flex min-h-dvh">
       <OwnerSidebar websiteId={websiteId} />
-      <main className="min-w-0 flex-1 p-page">{children}</main>
+      <main className="page-motion flex min-w-0 flex-1 flex-col gap-6 px-page pt-8 pb-12">{children}</main>
     </div>
   );
 }

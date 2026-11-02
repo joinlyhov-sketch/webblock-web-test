@@ -1,5 +1,6 @@
-import { PageHeader } from "@/components/common/page-header";
+import { LandingView, listPublicPlans } from "@/features/landing";
 
-export default function HomePage() {
-  return <PageHeader title="Build your business website" />;
+export default async function HomePage() {
+  const plans = await listPublicPlans();
+  return <LandingView plans={plans.items} />;
 }

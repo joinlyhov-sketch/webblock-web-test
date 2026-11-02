@@ -3,9 +3,10 @@ import { cn } from "@/lib/utils";
 
 // shadcn/ui table primitives, styled to the Figma admin table. Use `common/data-table` for screens.
 
-export function Table({ className, ...props }: ComponentProps<"table">) {
+/** `containerClassName` styles the scrolling wrapper, e.g. `min-h-0` so it can scroll inside a fixed-height card. */
+export function Table({ className, containerClassName, ...props }: ComponentProps<"table"> & { containerClassName?: string }) {
   return (
-    <div className="relative w-full overflow-x-auto">
+    <div className={cn("relative w-full overflow-x-auto", containerClassName)}>
       <table className={cn("w-full caption-bottom border-collapse text-sm", className)} {...props} />
     </div>
   );

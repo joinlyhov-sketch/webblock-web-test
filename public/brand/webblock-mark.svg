@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1229">
+<g transform="translate(-482 -60)">
+<rect x="482" y="317" width="453" height="453" rx="115" fill="#2563EB"/>
+<rect x="482" y="836" width="453" height="453" rx="115" fill="#3B82F6"/>
+<rect x="1001" y="836" width="453" height="453" rx="115" fill="#7C4DFF"/>
+<path d="M1115.5 329.5H1339A102.5 102.5 0 0 1 1441.5 432V654.5A102.5 102.5 0 0 1 1339 757H1115.5A102.5 102.5 0 0 1 1013 654.5V432A102.5 102.5 0 0 1 1115.5 329.5Z" fill="none" stroke="#C7CCF5" stroke-width="19" stroke-dasharray="46 44.35" stroke-dashoffset="44.65"/>
+<g transform="translate(1265 491.5) rotate(10)">
+<rect x="-226.5" y="-226.5" width="453" height="453" rx="115" fill="#ECEAFF"/>
+<ellipse cx="-141.75" cy="58.2" rx="39" ry="22.5" fill="#FFB3C6"/>
+<ellipse cx="143.6" cy="58.25" rx="39" ry="22.5" fill="#FFB3C6"/>
+<circle cx="-76.7" cy="-26.1" r="35" fill="#151A2C"/>
+<circle cx="78.7" cy="-26.1" r="35" fill="#151A2C"/>
+<circle cx="-63.75" cy="-39.05" r="11" fill="#FFFFFF"/>
+<circle cx="91.65" cy="-39.05" r="11" fill="#FFFFFF"/>
+<path d="M-45.5 45Q0.5 96 46.5 45Z" fill="#151A2C"/>
+</g>
+<path d="M1466.8 159.3 1504.8 83.3M1602.4 251.1 1674 205.5M1628 394H1713" stroke="#7C4DFF" stroke-width="45" stroke-linecap="round"/>
+</g>
+</svg>

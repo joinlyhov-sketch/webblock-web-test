@@ -1,6 +1,8 @@
 "use client";
 
 // The only place that imports sonner. Use `toast.success / warning / error` everywhere else.
+import { useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { Toaster as SonnerToaster, toast as sonner } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +24,9 @@ function show(variant: Variant, title: string, message?: string) {
       <span aria-hidden className={cn("w-1 shrink-0", styles.bar)} />
       <div className="flex-1 px-4 py-3">
         <p className={cn("text-sm font-semibold", styles.title)}>{title}</p>
-        {message && <p className="mt-0.5 text-sm text-muted-foreground">{message}</p>}
+        {message && (
+          <p className="mt-0.5 text-sm text-muted-foreground">{message}</p>
+        )}
       </div>
       <button
         type="button"
@@ -42,7 +46,34 @@ export const toast = {
   error: (title: string, message?: string) => show("error", title, message),
 };
 
+// A native modal <dialog> sits in the browser's top layer, above <body> whatever the z-index, and makes
+// everything outside it inert. So the toasts live in one host element that moves into the open dialog
+// and back out when it closes. Moving the host keeps the toasts on screen (no remount).
+let host: HTMLDivElement | null = null;
+const openDialogs: HTMLElement[] = [];
+
+function toastHost(): HTMLDivElement {
+  if (!host) {
+    host = document.createElement("div");
+    document.body.append(host);
+  }
+  return host;
+}
+
+/** Called by a modal <dialog> once it is open. Returns the function to call when it closes. */
+export function raiseToastsInto(dialog: HTMLElement): () => void {
+  openDialogs.push(dialog);
+  dialog.append(toastHost());
+  return () => {
+    openDialogs.splice(openDialogs.indexOf(dialog), 1);
+    (openDialogs.at(-1) ?? document.body).append(toastHost());
+  };
+}
+
+const subscribe = () => () => {};
+
 /** Mounted once in the root layout. */
 export function Toaster() {
-  return <SonnerToaster position="top-right" />;
+  const container = useSyncExternalStore(subscribe, toastHost, () => null);
+  return container && createPortal(<SonnerToaster position="top-right" />, container);
 }

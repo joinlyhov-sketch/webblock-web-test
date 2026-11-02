@@ -1,20 +1,20 @@
-# Branch flow: your branch → pull request into dev → the designated teammate merges dev into master (submission).
-# Runs on every push to dev or master, and on every pull request into dev or master.
-# Branch names are case-sensitive: if your submit branch is "MASTER", change "master" below to match.
+# Branch flow: feature/<name> → pull request into dev → the designated teammate merges dev into Master (submission).
+# Runs on every push to dev or Master, and on every pull request into dev or Master.
+# Branch names are case-sensitive: the submit branch is "Master" with a capital M.
 name: CI
 
 on:
   push:
-    branches: [dev, master]
+    branches: [dev, Master]
   pull_request:
-    branches: [dev, master]
+    branches: [dev, Master]
 
 # Saves Actions minutes (private repo: the organization's monthly allowance is shared by all its repos).
 # A newer push to the same branch or pull request cancels the older, now-outdated run.
-# Runs on master are never cancelled, so every submission commit gets a full check.
+# Runs on Master are never cancelled, so every submission commit gets a full check.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/Master' }}
 
 jobs:
   check:
@@ -23,13 +23,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Installs the pnpm version pinned in package.json "packageManager". Must run before setup-node.
+      - uses: pnpm/action-setup@v6
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
-      - name: Install dependencies (exactly as in package-lock.json)
-        run: npm ci
+      - name: Install dependencies (exactly as in pnpm-lock.yaml)
+        run: pnpm install --frozen-lockfile
 
       - name: Invariant checks (zero-transaction, boundaries, secrets, Server Action auth)
         run: node .claude/hooks/invariants.mjs --all
@@ -38,10 +41,10 @@ jobs:
         run: node --test .claude/hooks/invariants.test.mjs
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
 
       - name: Build (also type-checks)
-        run: npm run build
+        run: pnpm build
 
   secrets:
     # Runs the open-source gitleaks CLI directly on GitHub's runner (no license needed, nothing to install

@@ -1,7 +1,11 @@
-import { PageHeader } from "@/components/common/page-header";
 import { requireUser } from "@/lib/auth/session";
+import { getSettingsView, SettingsScreen } from "@/features/account";
 
-export default async function ProfilePage() {
-  await requireUser();
-  return <PageHeader title="Profile" />;
+export const metadata = { title: "Profile" };
+
+export default async function ProfileSettingsPage() {
+  const user = await requireUser();
+  const { profile, billing } = await getSettingsView(user.id, {});
+
+  return <SettingsScreen profile={profile} billing={billing} initialTab="profile" />;
 }

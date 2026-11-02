@@ -1,13 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "permissions": {
     "allow": [
-      "Bash(npm run dev)",
-      "Bash(npm run typecheck)",
-      "Bash(npm run lint)",
-      "Bash(npm run lint *)",
-      "Bash(npm run build)",
-      "Bash(npx prettier *)",
+      "Bash(pnpm dev)",
+      "Bash(pnpm typecheck)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm build)",
+      "Bash(pnpm exec prettier *)",
       "Bash(git status)",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -15,11 +20,11 @@
       "Bash(node --test .claude/hooks/invariants.test.mjs)"
     ],
     "ask": [
-      "Bash(npm install *)",
-      "Bash(npm uninstall *)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm remove *)",
       "Bash(git commit *)",
-      "Bash(npm i *)",
-      "Bash(npm rm *)"
+      "Bash(pnpm approve-builds *)"
     ],
     "deny": [
       "Read(./.env)",

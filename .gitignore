@@ -10,6 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+# lockfiles of other package managers: this project uses pnpm (pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
 # testing
 /coverage
 

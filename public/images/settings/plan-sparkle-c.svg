@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="19.959" height="19.4574" viewBox="0 0 19.959 19.4574" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Sparkle" opacity="0.55" filter="url(#filter0_d_0_8)">
+<ellipse cx="9.9795" cy="9.72869" rx="1.4795" ry="1.22869" fill="white"/>
+</g>
+<defs>
+<filter id="filter0_d_0_8" x="0" y="0" width="19.959" height="19.4574" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="1" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_0_8"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="3.75"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.858824 0 0 0 0 0.917647 0 0 0 0 0.996078 0 0 0 0.9 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_8"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_8" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -1,12 +1,19 @@
-import { PageHeader } from "@/components/common/page-header";
 import { requireWebsiteOwner } from "@/lib/auth/session";
+import type { SearchParams } from "@/lib/table-query";
+import { getProductsData, parseInitialProductsFilter, ProductsView } from "@/features/products";
+
+export const metadata = { title: "Products" };
 
 export default async function ProductsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ websiteId: string }>;
+  searchParams: Promise<SearchParams>;
 }) {
   const { websiteId } = await params;
+  const query = await searchParams;
   await requireWebsiteOwner(websiteId);
-  return <PageHeader title="Products" />;
+  const data = await getProductsData(websiteId);
+  return <ProductsView data={data} initialFilter={parseInitialProductsFilter(query)} />;
 }

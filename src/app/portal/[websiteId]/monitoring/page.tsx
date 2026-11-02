@@ -1,5 +1,7 @@
-import { PageHeader } from "@/components/common/page-header";
 import { requireWebsiteOwner } from "@/lib/auth/session";
+import { getMonitorView, MonitorView } from "@/features/monitoring";
+
+export const metadata = { title: "Monitor" };
 
 export default async function MonitoringPage({
   params,
@@ -8,5 +10,6 @@ export default async function MonitoringPage({
 }) {
   const { websiteId } = await params;
   await requireWebsiteOwner(websiteId);
-  return <PageHeader title="Monitoring" />;
+  const data = await getMonitorView(websiteId);
+  return <MonitorView data={data} websiteId={websiteId} />;
 }

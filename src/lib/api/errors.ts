@@ -18,3 +18,12 @@ export class ApiError extends Error {
     this.detail = problem.detail;
   }
 }
+
+/**
+ * For `.catch()`: a 404 becomes `null`, anything else is rethrown. Used for URL-driven popups
+ * (`?user=<id>`): a stale or mistyped id just shows the list without the popup instead of an error page.
+ */
+export function nullIfNotFound(e: unknown): null {
+  if (e instanceof ApiError && e.status === 404) return null;
+  throw e;
+}

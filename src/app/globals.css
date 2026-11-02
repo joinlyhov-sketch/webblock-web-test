@@ -3,7 +3,7 @@
 /*
  * Design tokens (from Figma "Local WebBlock UI"). Components use these via Tailwind classes — never raw hex.
  * Names follow shadcn/ui (background, foreground, muted, muted-foreground, input, ring, destructive…)
- * so components added with `npx shadcn add` pick them up without edits.
+ * so components added with `pnpm dlx shadcn add` pick them up without edits.
  */
 @theme {
   /* Surfaces & text */
@@ -17,6 +17,7 @@
   --color-border: #e5e7eb;
   --color-input: #e5e7eb;
   --color-ring: #4379d6;
+  --color-border-strong: #7c8dae; /* Figma border-strong: outline buttons */
 
   /* Accent: page titles, links, active sort, focus ring */
   --color-primary: #4379d6;
@@ -28,26 +29,425 @@
   --color-brand-strong: #2a5fbd; /* text on brand-soft */
   --color-brand-dark: #0936c3;
   --color-brand-soft: #e3eefc;
+  --color-brand-deep: #1f4fb5; /* selected item text (editor structure, option cards) */
+  --color-brand-border: #9dbbe9; /* selected item border */
+
+  /* Editor */
+  --color-segment: #eef2f8; /* segmented-control track (panel tabs, option groups) */
+  --color-canvas: #f4f7fc; /* editor/preview canvas behind the page */
+  --color-canvas-dot: #c9d5ea; /* canvas dot grid */
+  --color-brand-deep: #1f4fb5; /* Figma text-brand-deep: active nav, avatar initials */
+  --color-heading: #1f3c6e; /* hero headings */
+  --color-violet-border: #cfe0f8; /* trial card border, avatar gradient end */
+  --color-trial-from: #e7effd; /* trial card gradient start */
+
+  /* Landing · decor (dot grid, diamonds) */
+  --color-decor-dot: #b9cbea;
+  --color-decor-diamond: #ccdbf5;
+
+  /* Landing · pricing plan themes (trial uses primary / primary-soft) */
+  --color-plan-plus: #2d57a6;
+  --color-plan-plus-light: #5b8fe6; /* CTA gradient start */
+  --color-plan-plus-soft: #dce5f6;
+  --color-plan-plus-tint: #e6edf8;
+  --color-plan-plus-border: #cedbf2;
+  --color-plan-pro: #b3832a;
+  --color-plan-pro-strong: #8a5a12;
+  --color-plan-pro-soft: #f1e9d9;
+  --color-plan-pro-tint: #f5efe3;
+  --color-plan-pro-border: #d1b57f;
+  --color-plan-ultra: #6d3fd6;
+  --color-plan-ultra-strong: #5b21b6;
+  --color-plan-ultra-soft: #e5dcf8;
+  --color-plan-ultra-tint: #ece6fa;
+  --color-plan-ultra-border: #dacff5;
+
+  /* Landing · CTA band */
+  --color-cta-from: #fcffff;
+  --color-cta-via: #edf5ff;
+  --color-cta-to: #d1e3ff;
+  --color-cta-border: #d1e0f7;
+
+  /* Landing · showcase & templates */
+  --color-window-close: #ff5f57; /* browser chrome traffic lights */
+  --color-window-minimize: #febc2e;
+  --color-window-zoom: #28c840;
+  --color-browser-url: #52525b;
+  --color-browser-glass: rgb(235 235 235 / 0.35); /* clear frosted browser frame: the slider shows through */
+  --color-browser-page: rgb(230 230 230 / 0.75); /* frosted tint behind transparent template pages */
+  --shadow-browser: 0 24px 70px rgb(0 0 0 / 0.16);
+  --shadow-browser-sm: 0 12px 35px rgb(0 0 0 / 0.16);
+
+  /* Landing · how it works demo */
+  --color-hiw-stage: #eaeff6; /* behind the choose-template dialog */
+  --color-hiw-chip: #eaf0f9;
+  --color-hiw-preview: #f1f5fc; /* template thumbnail well */
+  --color-hiw-drag: #5b8fd9; /* deploy dot fields */
+  --color-hiw-diamond: #cfe0f8;
+  --color-hiw-scrim: #0b1530;
+  --shadow-hiw-panel: 0 2px 8px rgb(60 120 207 / 0.06), 0 28px 56px -18px rgb(60 120 207 / 0.12);
+  --shadow-hiw-screen: 0 51px 128px -26px rgb(41 84 191 / 0.16);
+  --shadow-hiw-step: 0 12px 30px -10px rgb(60 120 207 / 0.1);
+  --shadow-hiw-dialog: 0 4px 12px rgb(15 23 42 / 0.08), 0 24px 60px -18px rgb(15 23 42 / 0.2);
+  --shadow-hiw-ring: 0 12px 16px rgb(47 107 196 / 0.18);
+  --shadow-hiw-pill: 0 6px 16px rgb(27 43 75 / 0.06), 0 1px 2px rgb(27 43 75 / 0.04);
+  --shadow-hiw-steps: 0 10px 30px -12px rgb(60 120 207 / 0.2), 0 2px 6px rgb(60 120 207 / 0.05);
+  --shadow-hiw-node: 0 4px 10px rgb(47 107 196 / 0.22);
+  --shadow-hiw-modal: 0 28px 72px -10px rgb(15 23 42 / 0.2);
+  --shadow-hiw-success: 0 14px 30px rgb(60 120 207 / 0.16), 0 2px 6px rgb(30 138 90 / 0.1);
+  --shadow-hiw-cta: 0 8px 10px rgb(47 107 196 / 0.35);
+  --drop-shadow-hiw-cursor: 0 2px 4px rgb(27 43 75 / 0.25);
+
+  /* Landing · editor demo */
+  --color-editor-canvas: #eef2f8; /* editor chrome background + loop veil */
+  --color-editor-selected: #9dbbe9; /* selected page-structure row border */
+  --color-editor-drop: #eaf1fd; /* drop-zone fill */
+  --color-editor-bubble: #f3f5f9; /* AI chat bubble */
+  --color-editor-open: #147345; /* "Open now" on the mock site */
+  --color-editor-dot: #aab9f4; /* canvas dot grid (used at 85%) */
+  --shadow-editor-showcase: 0 28px 56px -18px rgb(60 120 207 / 0.12), 0 2px 8px rgb(60 120 207 / 0.06);
+  --shadow-editor-frame: 0 40px 96px -24px rgb(41 84 191 / 0.14);
+  --shadow-editor-panel: 0 5.63px 16.89px rgb(27 43 75 / 0.06), 0 0.7px 1.4px rgb(27 43 75 / 0.04);
+  --shadow-editor-composer: 0 2.8px 11.26px rgb(27 43 75 / 0.06);
+  --shadow-editor-ghost: 0 9.85px 19.7px -4.22px rgb(31 64 140 / 0.22);
+  --drop-shadow-editor-cursor: 0 2.4px 2.4px rgb(27 43 75 / 0.25);
+
+  /* Settings (Figma) */
+  --color-segment: #eef2f8; /* segmented tabs track */
+  --color-panel: #f6f8fc; /* details panel, close button */
+  --color-track: #e8eef8; /* progress track in dialogs */
+  --color-hint: #8a9ab8; /* helper text */
+  --color-hint-strong: #657899; /* upload hint text */
+  --color-field-locked: #f4f7fc; /* read-only input */
+  --color-badge-soft: #e6effc; /* plan badge in the profile card */
+  --color-tile: #eef3fc; /* icon tile in billing cards */
+  --color-plan-from: #8fc2fa; /* plan badge gradient */
+  --color-plan-to: #4d91e3;
+  --color-avatar-from: #d2e1fa;
+  --color-usage-from: #2c5bb0; /* usage bar gradient */
+  --color-pro-from: #e8b84a; /* Pro plan panel (gold) */
+  --color-pro-to: #c4871a;
+  --color-ultra-from: #8d6fe6; /* Ultra plan panel (purple) */
+  --color-ultra-to: #5f3fbd;
+  --color-logo-from: #6091e6;
+  --color-logo-to: #3562b0;
+  /* "Current plan" card panels (Figma "Current plan card · by plan"): a metallic sweep with a bright band. */
+  --image-plan-panel-pro: linear-gradient(
+    47.168deg,
+    #8a5a12 10.99%,
+    #b3832a 46.099%,
+    #d9ae4a 60.923%,
+    #f1d58e 69.505%,
+    #d6aa45 78.087%,
+    #9c6b1a 89.01%
+  );
+  --image-plan-panel-ultra: linear-gradient(
+    47.168deg,
+    #4c1d95 10.99%,
+    #6d3fd6 46.099%,
+    #8d66ee 60.923%,
+    #c4adfa 69.505%,
+    #8f6cf0 78.087%,
+    #5b21b6 89.01%
+  );
+
+  /* Template preview: device switcher, page gradient and device frames (Figma 08b) */
+  --color-switcher: #e9eff9;
+  --color-page: #f8f9fc;
+  --color-page-from: #dfe7fe;
+  --color-page-via: #eef2ff;
+  --color-device-monitor: #171f33;
+  --color-device-chin: #e5ebf2;
+  --color-device-stand: #ccd6e5;
+  --color-device-phone: #0b0b0d;
+  --color-device-phone-edge: #6e7076;
+  --color-device-tablet-edge: #8e9198;
+  --color-device-key: #7a7d84;
+  --color-device-key-mid: #d2d4d8;
+  --color-device-key-tablet: #9a9da4;
+  --color-device-key-tablet-mid: #e4e6ea;
+  --color-scroll-track: rgb(128 140 166 / 0.12);
+  --color-scroll-thumb: rgb(89 102 133 / 0.55);
+
+  /* Contact Support (Figma 24) */
+  --color-hero-from: #e8f2ff;
+  --color-hero-to: #fcfeff;
+  --color-hero-fade: #f0f5ff;
+  --color-field-disabled: #f4f7fc;
+  --color-faq-row: #f7f9fe;
+  --color-faq-open-border: #cfddf5;
+  --color-faq-open-text: #2f5fb8;
+  --color-help-from: #e5f0ff;
+  --color-help-to: #f5faff;
+  --color-help-icon: #d1e3ff;
+  --color-plane-from: #6c9bea;
+  --color-plane-to: #3a68c4;
+  --color-sent-from: #eaf1fd;
+  --color-sent-to: #f7faff;
+  --color-body-soft: #657899;
+  --color-ink: #1a273d;
+  --color-overlay: rgb(11 21 48 / 0.34);
+  --shadow-support: 0 8px 24px -6px rgb(60 120 207 / 0.07);
+  /* Business info wizard (Figma 09) */
+  --color-wizard-from: #eef4fe;
+  --color-wizard-to: #dce8fc;
+  --color-wizard-footer: #f8fafe;
+  --color-dropzone: #f5f8fe;
+  --color-dropzone-border: #9dbdeb;
+  --color-picker: #f1f5fc;
+  --color-optional: #95a6c4;
+  --color-step-line: #dce6f6;
+  --shadow-wizard: 0 25px 80px rgb(136 136 136 / 0.38), 0 4px 12px rgb(60 120 207 / 0.18);
+  --shadow-panel-sm: 0 8px 12px rgb(60 120 207 / 0.07);
 
   /* Status */
   --color-success: #1e8a5a;
   --color-success-soft: #e6f5ec;
   --color-warning: #d97706;
+  --color-warning-soft: #fdf1e0;
+
+  /* Admin portal: chart segments, info state, plan tones */
+  --color-danger-muted: #eba3a3; /* chart segment next to danger */
+  --color-info: #3c78cf; /* in-progress states: deploying, updating */
+  --color-info-soft: #e3eefc;
+  --color-neutral-soft: #eef2f7; /* not deployed, free trial */
+  --color-teal: #0f8a86;
+  --color-teal-soft: #dff4f2;
+  --color-violet: #6d3fd6;
+  --color-violet-soft: #f1ecfd;
+  --color-gold: #9c6b1a;
+  --color-gold-soft: #fbf3e0;
+  --color-gold-strong: #b8862b; /* Pro plan filled button */
+  --shadow-kpi: 0 8px 24px rgb(31 51 102 / 0.06);
+  --shadow-popover: 0 12px 32px rgb(31 51 102 / 0.14);
   --color-danger: #cc3d3d;
   --color-danger-soft: #fce8e8;
   --color-destructive: #cc3d3d;
+
+  /* Website categories (badges) */
+  --color-category-clothes: #b8326e;
+  --color-category-clothes-soft: #fce9f2;
+  --color-category-food: #5e7a12;
+  --color-category-food-soft: #f1f6df;
+  --color-category-tech: #0e7490;
+  --color-category-tech-soft: #e3f3f7;
+  --color-category-handmade: #b4570f;
+  --color-category-handmade-soft: #fdf0e3;
+
+  /* My Websites: status pills, notifications, dashed tile, template chooser */
+  --color-status-draft-soft: #e6eefa;
+  --color-status-suspended: #b76e0b;
+  --color-status-suspended-soft: #fdf1de;
+  --color-segment-track: #eef2f8;
+  --color-dashed-line: #9dbdeb;
+  --color-chip: #eaf0f9;
+  --color-preview-panel: #f1f5fc;
+  --color-notice-border: #e6ecf5;
+  --color-notice-unread: #f4f8fe;
+  --color-notice-warning: #e8a317;
+  --color-notice-warning-soft: #fdefd2;
+  --color-scrim: rgb(11 21 48 / 0.34);
 
   /* Shadows (blue-tinted, from Figma effects) */
   --shadow-button: 0 1px 1px rgb(60 120 207 / 0.06), 0 1px 0.5px rgb(60 120 207 / 0.04);
   --shadow-button-hover: 0 4px 10px rgb(47 107 196 / 0.18), 0 1px 2px rgb(47 107 196 / 0.1);
   --shadow-card: 5px 6px 12px rgb(60 120 207 / 0.05);
+  --shadow-modal: 0 24px 60px rgb(27 43 75 / 0.18), 0 4px 12px rgb(27 43 75 / 0.08);
   --shadow-page-active: 0 4px 5px rgb(47 107 196 / 0.28);
+  --shadow-panel: 0 8px 24px rgb(60 120 207 / 0.06), 0 1px 2px rgb(60 120 207 / 0.03); /* billing cards */
+  --shadow-surface: 0 8px 12px rgb(60 120 207 / 0.06), 0 1px 1px rgb(60 120 207 / 0.03); /* profile cards */
+  --shadow-table: 0 16px 20px rgb(60 120 207 / 0.08), 0 1px 1.5px rgb(60 120 207 / 0.04);
+  --shadow-segment: 0 4px 5px rgb(60 120 207 / 0.08), 0 1px 1.5px rgb(60 120 207 / 0.08);
+  --shadow-tab: 0 4px 5px rgb(60 120 207 / 0.06), 0 1px 1.5px rgb(60 120 207 / 0.08);
+  --shadow-menu: 0 4px 12px rgb(60 120 207 / 0.08), 0 24px 60px -18px rgb(60 120 207 / 0.2);
+  --shadow-notifications: 0 16px 40px rgb(27 43 75 / 0.14);
+  --shadow-dialog: 0 4px 12px rgb(15 23 42 / 0.08), 0 24px 60px -18px rgb(15 23 42 / 0.2);
+  --shadow-avatar: 0 4px 20px rgb(60 120 207 / 0.2);
+  --shadow-badge: 0 8px 18px rgb(47 107 196 / 0.28);
+  --shadow-upload: 0 8px 10px rgb(47 107 196 / 0.35);
+  --shadow-float: 0 10px 30px rgb(60 120 207 / 0.12), 0 2px 6px rgb(60 120 207 / 0.05); /* Figma Shadow/Card */
+  --shadow-logo: 0 3px 4px rgb(67 121 214 / 0.6);
+  --shadow-plan: 0 10px 28px rgb(31 51 102 / 0.06);
+  --shadow-soft: 0 8px 24px -6px rgb(27 43 75 / 0.07);
+  --shadow-cta: 0 24px 56px -12px rgb(41 84 191 / 0.14);
+
+  /* Billing: plan tiers, KHQR panel and page decor (Figma Plans / Payment screens). */
+  --color-tier-plus: #2d57a6;
+  --color-tier-plus-soft: #dce5f6;
+  --color-tier-plus-from: #e6edf8;
+  --color-tier-plus-border: #cedbf2;
+  --color-tier-plus-cta: #5b8fe6;
+  --color-tier-pro: #8a5a12;
+  --color-tier-pro-accent: #b3832a;
+  --color-tier-pro-soft: #f1e9d9;
+  --color-tier-pro-from: #f5efe3;
+  --color-tier-pro-border: #d1b57f;
+  --color-tier-ultra: #5b21b6;
+  --color-tier-ultra-soft: #e5dcf8;
+  --color-tier-ultra-from: #ece6fa;
+  --color-tier-ultra-border: #dacff5;
+  --color-tier-ultra-cta: #6d3fd6;
+  --color-card-tint: #f2f7ff;
+  --color-badge-pink: #f06bc7;
+  --color-bubble-from: #6b99f2;
+  --color-bubble-to: #2a5ebd;
+  --color-eyebrow-border: #d5e2f8;
+  --color-cube: #ccdbf5;
+  --color-dot: #c3d3f0;
+  --color-khqr: #e1232e;
+  --color-slate-soft: #f1f5f9;
+  --color-slate: #64748b;
+  --shadow-plan-card: 0 10px 28px rgb(31 51 102 / 0.06);
+  --shadow-payment-card: 0 24px 48px -16px rgb(60 120 207 / 0.1), 0 2px 8px rgb(60 120 207 / 0.06);
+  --shadow-bubble: 0 14px 28px -4px rgb(47 107 196 / 0.35);
+  --shadow-plan-lg: 0 2px 3px rgb(60 120 207 / 0.04), 0 12px 14px rgb(60 120 207 / 0.1);
+  --shadow-plan-lg-pro: 0 2px 3px rgb(60 120 207 / 0.04), 0 20px 20px rgb(60 120 207 / 0.16);
 
   /* Page content inset from the sidebar and the right edge. */
   --spacing-page: 15px;
 
   --animate-toast-in: toast-in 200ms ease-out;
   --animate-row-in: row-in 240ms ease-out both;
+  --animate-modal-in: modal-in 180ms ease-out;
+  --animate-pop-in: pop-in 140ms ease-out;
+  --animate-pop-out: pop-out 150ms ease-in forwards;
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up: accordion-up 200ms ease-out;
+  --animate-fade-in: fade-in 200ms ease-out; /* overlays (Sheet backdrop) */
+  --animate-fade-out: fade-out 150ms ease-in forwards;
+  --animate-sheet-in-right: sheet-in-right 280ms cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-sheet-out-right: sheet-out-right 200ms ease-in forwards;
+  --animate-sheet-in-left: sheet-in-left 280ms cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-sheet-out-left: sheet-out-left 200ms ease-in forwards;
+
+  /* Auth screens: content rises in once on load. Use with `motion-safe:` and an animation delay. */
+  --animate-fade-up: fade-up 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in-slow: fade-in 700ms ease-out both; /* auth backgrounds */
+  /* Confirm popup (log out, suspend): a ring that ripples out from the icon halo. Use with `motion-safe:`. */
+  --animate-halo-ripple: halo-ripple 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  --animate-halo-float: halo-float 3.2s ease-in-out infinite; /* icon bobbing gently */
+  /* Notifications: the bell swings briefly every few seconds while something is unread, and its dot pings. */
+  --animate-bell-ring: bell-ring 4s ease-in-out infinite;
+  --animate-dot-ping: dot-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  /* Plan cards: a glass glint sweeps across every few seconds. Use with `motion-safe:` and an animation delay. */
+  --animate-glass-shine: glass-shine 5s ease-in-out infinite;
+  /* Payment confirmed: the green check pops in. Use with `motion-safe:`. */
+  --animate-check-pop: check-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  /* Payment confirmed → deploy: the confirmation card and the WebBlock mark hover up and down. Use with `motion-safe:`. */
+  --animate-float-soft: float-soft 3s ease-in-out infinite;
+  /* AI chat: a new message grows out of its tail corner; the typing dots bounce in turn. Use with `motion-safe:`. */
+  --animate-message-in: message-in 320ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-typing-dot: typing-dot 1.1s ease-in-out infinite;
+
+  @keyframes check-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes message-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes typing-dot {
+    0%,
+    60%,
+    100% {
+      opacity: 0.25;
+      transform: translateY(0);
+    }
+    30% {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes sheet-in-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes sheet-out-right {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes sheet-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes sheet-out-left {
+    to {
+      transform: translateX(-100%);
+    }
+  }
 
   @keyframes toast-in {
     from {
@@ -57,6 +457,39 @@
     to {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pop-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.96);
     }
   }
 
@@ -70,19 +503,430 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes halo-ripple {
+    0% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.45);
+    }
+  }
+
+  @keyframes bell-ring {
+    0%,
+    24%,
+    100% {
+      transform: rotate(0deg);
+    }
+    4% {
+      transform: rotate(14deg);
+    }
+    8% {
+      transform: rotate(-12deg);
+    }
+    12% {
+      transform: rotate(8deg);
+    }
+    16% {
+      transform: rotate(-5deg);
+    }
+    20% {
+      transform: rotate(2deg);
+    }
+  }
+
+  @keyframes glass-shine {
+    0% {
+      opacity: 0;
+      transform: translateX(-120%) skewX(-16deg);
+    }
+    4% {
+      opacity: 1;
+    }
+    26% {
+      opacity: 1;
+      transform: translateX(420%) skewX(-16deg);
+    }
+    27%,
+    100% {
+      opacity: 0;
+      transform: translateX(420%) skewX(-16deg);
+    }
+  }
+
+  @keyframes dot-ping {
+    0% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    80%,
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+
+  @keyframes halo-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(-4deg);
+    }
+  }
 }
 
 /* Font variables are set by next/font on <html> in the root layout. */
+/* `static`: always written to :root. Charts read these as var(--color-<name>) built at runtime, which
+   Tailwind can't see, so a plain @theme would drop them and the chart would paint black. */
+@theme static {
+  --color-chart-red: #d4736b;
+  --color-chart-pink: #ebaaa6;
+  --color-chart-yellow: #e9c45e;
+  --color-chart-blue: #7fa6e6;
+}
+
 @theme inline {
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-familjen-grotesk), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Figma "Puck/Dot grid background": 24px spacing, 3px dots. Editor canvas and preview. */
+@utility bg-dot-grid {
+  background-color: var(--color-canvas);
+  background-image: radial-gradient(var(--color-canvas-dot) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/*
+ * Customer website themes (the Puck templates). Site components use ONLY these `site-*` utilities,
+ * never the platform tokens above. Each template sets the `--site-*` variables on its root
+ * (`[data-site-template]`); "Layout & Design · Visual style" overrides some of them below.
+ */
+@theme inline {
+  --color-site-bg: var(--site-bg); /* page background */
+  --color-site-alt: var(--site-alt); /* alternate section / panel background */
+  --color-site-surface: var(--site-surface); /* cards, inputs, dialogs */
+  --color-site-ink: var(--site-ink); /* main text */
+  --color-site-muted: var(--site-muted); /* secondary text */
+  --color-site-subtle: var(--site-subtle); /* placeholders, captions, faint labels */
+  --color-site-border: var(--site-border);
+  --color-site-accent: var(--site-accent); /* main button, links, active chip */
+  --color-site-accent-fg: var(--site-accent-fg); /* text on accent */
+  --color-site-accent-soft: var(--site-accent-soft); /* soft accent fill */
+  --color-site-tint-1: var(--site-tint-1); /* template extras: pastel cards, stickers, badges… */
+  --color-site-tint-2: var(--site-tint-2);
+  --color-site-tint-3: var(--site-tint-3);
+  --color-site-tint-4: var(--site-tint-4);
+  --color-site-success: var(--site-success); /* "Open now" dot/text */
+  --color-site-success-soft: var(--site-success-soft); /* "Open now" pill */
+  --color-site-map-land: var(--site-map-land);
+  --color-site-map-park: var(--site-map-park);
+  --color-site-map-road: var(--site-map-road);
+  --color-site-map-pin: var(--site-map-pin);
+
+  --font-site-heading: var(--site-font-heading);
+  --font-site-body: var(--site-font-body);
+  --font-site-display: var(--site-font-display); /* script / mono labels */
+
+  --radius-site-card: var(--site-radius-card);
+  --radius-site-image: var(--site-radius-image);
+  --radius-site-button: var(--site-radius-button);
+}
+
+/* Shared defaults; each template block below overrides what it needs. */
+[data-site-template] {
+  --site-success: #1e8a5a;
+  --site-success-soft: #e6f5ec;
+  --site-map-land: #eaf1e8;
+  --site-map-park: #cfe5c8;
+  --site-map-road: #ffffff;
+  --site-map-pin: #2f6bc4;
+  --site-font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-space: 1;
+}
+
+/*
+ * Everything on a customer site is text the owner typed, and one long word (a pasted link,
+ * "aaaa…") must never push past its block at any device width. `anywhere` still wraps at spaces
+ * first; it only splits a word that can't fit, and it lets flex and grid items shrink to do so.
+ */
+[data-site-template] {
+  overflow-wrap: anywhere;
+}
+
+/* @site-templates:start — one block per template */
+[data-site-template="everyday-store"] {
+  --site-bg: #ffffff;
+  --site-alt: #f5f8fd;
+  --site-surface: #ffffff;
+  --site-ink: #1b2b4b;
+  --site-muted: #5a6b8c;
+  --site-subtle: #a3adbf;
+  --site-border: #e4ebf5;
+  --site-accent: #1b2b4b;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #eaf1fc;
+  --site-tint-1: #e6eefb;
+  --site-tint-2: #e3f5ea;
+  --site-tint-3: #f5f7fa;
+  --site-tint-4: #fdf3e7;
+  --site-success: #1f8a4c;
+  --site-success-soft: #e3f5ea;
+  --site-map-land: #e3ebe2;
+  --site-map-park: #cce3c7;
+  --site-map-road: #ffffff;
+  --site-map-pin: #2f6bc4;
+  --site-font-heading: var(--font-familjen-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-familjen-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --site-radius-card: 16px;
+  --site-radius-image: 12px;
+}
+
+[data-site-template="sweet-pastel"] {
+  --site-bg: #fff8f3;
+  --site-alt: #ffe1ea;
+  --site-surface: #ffffff;
+  --site-ink: #4a2b36;
+  --site-muted: #8a6b76;
+  --site-subtle: #9a7a86;
+  --site-border: #f1dde4;
+  --site-accent: #e25c85;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #fcd3e0;
+  --site-tint-1: #fff1b8;
+  --site-tint-2: #d8f0e3;
+  --site-tint-3: #e6dcf7;
+  --site-tint-4: #ffe1ea;
+  --site-success: #147345;
+  --site-success-soft: #ebf7f0;
+  --site-map-land: #e8f0e5;
+  --site-map-park: #cce3c7;
+  --site-map-road: #ffffff;
+  --site-map-pin: #2f6bc4;
+  --site-font-heading: var(--font-fredoka), ui-rounded, sans-serif;
+  --site-font-display: var(--font-caveat), "Comic Sans MS", cursive;
+  --site-radius-card: 32px;
+  --site-radius-image: 24px;
+}
+
+[data-site-template="warm-bold"] {
+  --site-bg: #271b15; /* espresso page background */
+  --site-alt: #342419; /* About section, image placeholder */
+  --site-surface: #2e2019; /* dialogs, map pin card + map pill (dark, so gold pin text stays legible) */
+  --site-ink: #f6ecdc; /* cream text */
+  --site-muted: #b89e8a;
+  --site-subtle: #8c7464;
+  --site-border: #4a3528;
+  --site-accent: #f2b544; /* gold */
+  --site-accent-fg: #271b15;
+  --site-accent-soft: #3d2c1a;
+  --site-tint-1: #1a110c; /* deep band: facts strip, footer, feature-card gradient */
+  --site-tint-2: #46362c;
+  --site-tint-3: #4a3528;
+  --site-tint-4: #f6ecdc;
+  --site-success: #7ed39a; /* dark-green "Open now" pill */
+  --site-success-soft: #1f3a2a;
+  --site-map-land: #e8f0e5;
+  --site-map-park: #cce3c7;
+  --site-map-road: #ffffff;
+  --site-map-pin: #f2b544;
+  --site-font-heading: var(--font-playfair), Georgia, serif;
+  --site-font-display: var(--font-dm-mono), ui-monospace, monospace;
+  --site-radius-card: 6px;
+  --site-radius-image: 4px;
+}
+
+[data-site-template="clean-mono"] {
+  --site-bg: #ffffff;
+  --site-alt: #f3f3f3;
+  --site-surface: #ffffff;
+  --site-ink: #111111;
+  --site-muted: #6f6f6f;
+  --site-subtle: #9a9a9a;
+  --site-border: #e5e7eb;
+  --site-accent: #e53935;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #fdecea;
+  --site-tint-1: #f3f3f3;
+  --site-tint-2: #e5e7eb;
+  --site-tint-3: #111111;
+  --site-tint-4: #e53935;
+  --site-success: #147345;
+  --site-success-soft: #ebf7f0;
+  --site-map-land: #e8f0e5;
+  --site-map-park: #cce3c7;
+  --site-map-road: #ffffff;
+  --site-map-pin: #2f6bc4;
+  --site-font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-space-mono), ui-monospace, monospace;
+  --site-radius-card: 0px;
+  --site-radius-image: 0px;
+}
+[data-site-template="jackets"] {
+  /* Dark page, cream cards. The cards use tint-2 (cream) with tint-3 (near-black) text. */
+  --site-bg: #0c0c0f;
+  --site-alt: #17171c;
+  --site-surface: #17171c;
+  --site-ink: #fff3e8;
+  --site-muted: #bdb7b0;
+  --site-subtle: #8a857f;
+  --site-border: #2c2c34;
+  --site-accent: #93c5fd;
+  --site-accent-fg: #0c0c0f;
+  --site-accent-soft: #1b2a3f;
+  --site-tint-1: #ffe27a;
+  --site-tint-2: #fff1e4;
+  --site-tint-3: #0c0c0f;
+  --site-tint-4: #93c5fd;
+  --site-success: #1e8a5a;
+  --site-success-soft: #e6f5ec;
+  --site-map-land: #fff1e4;
+  --site-map-park: #cfe7c4;
+  --site-map-road: #ffe27a;
+  --site-map-pin: #93c5fd;
+  --site-font-heading: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+  --site-font-body: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --site-radius-card: 24px;
+  --site-radius-image: 16px;
+  --site-radius-button: 999px;
+}
+[data-site-template="keyboards"] {
+  /* Near-black page, hairline cards, one violet accent. Tints are the glow colours behind the photos. */
+  --site-bg: #07070a;
+  --site-alt: #0e0e13;
+  --site-surface: #0e0e13;
+  --site-ink: #f4f4f6;
+  --site-muted: #9a9aa8;
+  --site-subtle: #6c6c78;
+  --site-border: #23232c;
+  --site-accent: #7c5cff;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #1d1840;
+  --site-tint-1: #7a2d56;
+  --site-tint-2: #2a3a8c;
+  --site-tint-3: #1f6b46;
+  --site-tint-4: #4b2fb8;
+  --site-success: #3ddc84;
+  --site-success-soft: #12261c;
+  --site-map-land: #13131a;
+  --site-map-park: #17241d;
+  --site-map-road: #22222c;
+  --site-map-pin: #7c5cff;
+  --site-font-heading: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --site-font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-dm-mono), ui-monospace, monospace;
+  --site-radius-card: 20px;
+  --site-radius-image: 14px;
+  --site-radius-button: 999px;
+}
+[data-site-template="iced-coffee"] {
+  /* Warm cream page, espresso-brown panels, one amber accent. Tints 1-4 match the drink photo colours. */
+  --site-bg: #f7efe3;
+  --site-alt: #efe4d2;
+  --site-surface: #ffffff;
+  --site-ink: #25160f;
+  --site-muted: #7b6a5b;
+  --site-subtle: #a89886;
+  --site-border: #eadfce;
+  --site-accent: #e5a35a;
+  --site-accent-fg: #25160f;
+  --site-accent-soft: #f7e3c8;
+  --site-tint-1: #f0c48d;
+  --site-tint-2: #bb917a;
+  --site-tint-3: #b9d584;
+  --site-tint-4: #f1a5bf;
+  --site-success: #2e8b57;
+  --site-success-soft: #e3f3ea;
+  --site-map-land: #efe4d3;
+  --site-map-park: #c8dcb2;
+  --site-map-road: #ffffff;
+  --site-map-pin: #25160f;
+  --site-font-heading: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --site-font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-font-display: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --site-radius-card: 24px;
+  --site-radius-image: 18px;
+  --site-radius-button: 999px;
+}
+/* @site-templates:end */
+
+/* Visual style → Color palette (accent only, so each template keeps its own backgrounds). */
+[data-site-palette="lavender"] {
+  --site-accent: #2a5fbd;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #eef4fd;
+}
+[data-site-palette="bakery"] {
+  --site-accent: #b4601e;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #fbf5e8;
+}
+[data-site-palette="sage"] {
+  --site-accent: #3e6b45;
+  --site-accent-fg: #ffffff;
+  --site-accent-soft: #eef1ea;
+}
+
+/* Visual style → Font (headings). */
+[data-site-font="editorial"] {
+  --site-font-heading: var(--font-playfair), Georgia, serif;
+}
+[data-site-font="clean"] {
+  --site-font-heading: var(--font-familjen-grotesk), ui-sans-serif, sans-serif;
+}
+[data-site-font="rounded"] {
+  --site-font-heading: var(--font-fredoka), ui-rounded, sans-serif;
+}
+
+/* Visual style → Buttons. */
+[data-site-buttons="square"] {
+  --site-radius-button: 2px;
+}
+[data-site-buttons="rounded"] {
+  --site-radius-button: 8px;
+}
+[data-site-buttons="pill"] {
+  --site-radius-button: 999px;
+}
+
 @layer base {
+  /* Tailwind v4 dropped the pointer cursor on buttons; every clickable control gets it back. */
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"],
+  [role="radio"],
+  [role="option"],
+  [role="menuitem"],
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  /* Landing anchors (#pricing, #faq…) stop below the fixed header. */
+  html:has([data-landing]) {
+    scroll-padding-top: 7rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:has([data-landing]) {
+      scroll-behavior: smooth;
+    }
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    /* Long unbroken text (a pasted link, "aaaa…") wraps inside its box instead of pushing out of it.
+       `break-word` only splits a word that would overflow, so normal text is unaffected. */
+    overflow-wrap: break-word;
   }
 
   h1,
@@ -90,5 +934,307 @@
   h3,
   h4 {
     font-family: var(--font-heading);
+  }
+}
+
+/* Dot grid from the Figma "Puck/Dot grid background": 3px dots every 24px. */
+@utility bg-dots {
+  background-image: radial-gradient(circle at 1.5px 1.5px, rgb(170 185 244 / 0.85) 1.5px, transparent 1.6px);
+  background-size: 24px 24px;
+}
+
+/* Floating cubes of the billing screens (Figma "Floating cube": 6s loop, rise/fall 6-12px, rotate 8deg). */
+@keyframes billing-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r0, 14deg));
+    animation-timing-function: ease-in-out;
+  }
+  45% {
+    transform: translateY(var(--dy, -6px)) rotate(var(--r1, 6deg));
+    animation-timing-function: ease-in-out;
+  }
+  85% {
+    transform: translateY(0) rotate(var(--r0, 14deg));
+  }
+}
+
+@utility animate-billing-float {
+  animation: billing-float 6s linear infinite;
+  animation-delay: var(--delay, 0s);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transform: rotate(var(--r0, 14deg));
+  }
+}
+
+/*
+ * Landing diamonds and bubbles: gentle endless bob. Pure CSS so the ~30 pieces cost no JavaScript and
+ * run on the compositor. Tune with `--float-y`, `--float-duration`, `--float-delay`.
+ */
+@keyframes landing-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 calc(var(--float-y, 6px) * -1);
+  }
+}
+
+@utility animate-landing-float {
+  animation: landing-float var(--float-duration, 4s) ease-in-out var(--float-delay, 0s) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/*
+ * Landing "Most popular" plan card: a soft band sweeps across the card (first 40% of each 6s loop,
+ * then rests off-card). The band starts at `left: -60%` and is a third of the card wide.
+ */
+@keyframes plan-shine {
+  0% {
+    translate: 0 0;
+  }
+  40%,
+  100% {
+    translate: 520% 0;
+  }
+}
+
+@utility animate-plan-shine {
+  animation: plan-shine 6s ease-in-out 1.6s infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    display: none;
+  }
+}
+
+/*
+ * Enter/exit utilities used by the shadcn menus (dropdown-menu, select, popover):
+ * `data-[state=open]:animate-in fade-in-0 zoom-in-95 slide-in-from-top-2`, and `animate-out` on close.
+ * Same API as tw-animate-css. Radix waits for the exit animation before unmounting.
+ */
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+      scale(var(--tw-enter-scale, 1));
+  }
+}
+
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
+      scale(var(--tw-exit-scale, 1));
+  }
+}
+
+@utility animate-in {
+  animation: enter 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility animate-out {
+  animation: exit 110ms ease-in forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility fade-in-* {
+  --tw-enter-opacity: calc(--value(integer) * 1%);
+}
+@utility fade-out-* {
+  --tw-exit-opacity: calc(--value(integer) * 1%);
+}
+@utility zoom-in-* {
+  --tw-enter-scale: calc(--value(integer) * 1%);
+}
+@utility zoom-out-* {
+  --tw-exit-scale: calc(--value(integer) * 1%);
+}
+@utility slide-in-from-top-* {
+  --tw-enter-translate-y: calc(--value(integer) * var(--spacing) * -1);
+}
+@utility slide-in-from-bottom-* {
+  --tw-enter-translate-y: calc(--value(integer) * var(--spacing));
+}
+@utility slide-in-from-left-* {
+  --tw-enter-translate-x: calc(--value(integer) * var(--spacing) * -1);
+}
+@utility slide-in-from-right-* {
+  --tw-enter-translate-x: calc(--value(integer) * var(--spacing));
+}
+
+/* A native modal <dialog> doesn't lock page scroll (Radix dialogs do): freeze the page behind it. */
+html:has(dialog[open]:modal),
+body:has(dialog[open]:modal),
+main:has(dialog[open]:modal) {
+  overflow: hidden;
+}
+
+/*
+ * Native <dialog> popups (common/modal): the card fades and rises in, fades out on close, and the
+ * blurred backdrop fades with it instead of snapping. `overlay`/`display` keep it in the top layer
+ * until the exit has played. Reduced motion keeps only the fade.
+ */
+@utility dialog-motion {
+  opacity: 0;
+  translate: 0 8px;
+  scale: 0.98;
+  transition-property: opacity, translate, scale, overlay, display;
+  transition-duration: 140ms;
+  transition-timing-function: ease-in;
+  transition-behavior: allow-discrete;
+
+  &[open] {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      translate: 0 8px;
+      scale: 0.98;
+    }
+  }
+
+  &::backdrop {
+    opacity: 0;
+    transition-property: opacity, overlay, display;
+    transition-duration: 140ms;
+    transition-timing-function: ease-in;
+    transition-behavior: allow-discrete;
+  }
+
+  &[open]::backdrop {
+    opacity: 1;
+    transition-duration: 220ms;
+    transition-timing-function: ease-out;
+  }
+
+  @starting-style {
+    &[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    translate: none;
+    scale: none;
+    &[open] {
+      translate: none;
+      scale: none;
+    }
+  }
+}
+
+/*
+ * App shells' <main>: each page eases in when it replaces the previous one, so a click on the
+ * sidebar or a card doesn't hard-cut. Loading skeletons (`aria-busy`) wait 150ms first, so a fast
+ * load goes straight to the page without a skeleton flash. `backwards` leaves no transform behind
+ * (a lasting transform would break `position: fixed` children).
+ */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@utility page-motion {
+  & > * {
+    animation: page-in 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  & > [aria-busy] {
+    animation: page-fade 200ms ease-out 150ms backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & > * {
+      animation-name: page-fade;
+    }
+  }
+}
+
+/*
+ * Border beam (plan "Edit plan" buttons): on hover or keyboard focus a light runs round the
+ * button's edge, with a soft glow. Colour from `--beam-color` (defaults to the accent), e.g.
+ * `border-beam [--beam-color:var(--color-violet)]`. Reduced motion: a still glowing edge.
+ */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+@utility border-beam {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--beam-angle),
+      transparent 0deg,
+      transparent 150deg,
+      color-mix(in oklab, var(--beam-color, var(--color-primary)) 35%, transparent) 230deg,
+      var(--beam-color, var(--color-primary)) 320deg,
+      var(--color-background) 345deg,
+      transparent 360deg
+    );
+    /* Keep only the 2px ring: the content box is cut out of the full box. */
+    mask:
+      linear-gradient(black 0 0) content-box exclude,
+      linear-gradient(black 0 0);
+    -webkit-mask:
+      linear-gradient(black 0 0) content-box,
+      linear-gradient(black 0 0);
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 6px 22px -6px var(--beam-color, var(--color-primary));
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    opacity: 1;
+    animation: beam-spin 2.2s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &:hover::before,
+    &:focus-visible::before {
+      animation: none;
+      background: var(--beam-color, var(--color-primary));
+    }
   }
 }

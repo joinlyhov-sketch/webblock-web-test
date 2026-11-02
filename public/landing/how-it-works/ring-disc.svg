@@ -1,0 +1,21 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="81.4815" height="81.4815" viewBox="0 0 81.4815 81.4815" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Ring disc" filter="url(#filter0_dd_0_36)">
+<circle cx="40.7407" cy="34.2222" r="24.4444" fill="white"/>
+</g>
+<defs>
+<filter id="filter0_dd_0_36" x="0" y="0" width="81.4815" height="81.4815" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="0.814815"/>
+<feGaussianBlur stdDeviation="1.22222"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.235 0 0 0 0 0.471 0 0 0 0 0.812 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_36"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6.51852"/>
+<feGaussianBlur stdDeviation="8.14815"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.235 0 0 0 0 0.471 0 0 0 0 0.812 0 0 0 0.14 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_0_36" result="effect2_dropShadow_0_36"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_0_36" result="shape"/>
+</filter>
+</defs>
+</svg>

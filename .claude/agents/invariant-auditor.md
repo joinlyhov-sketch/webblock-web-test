@@ -18,6 +18,6 @@ Report only violations of these rules:
 3. **Backend responsibilities in the frontend** — retry loops for deploys, deploy state machines,
    OTP generation/verification, payment-provider calls or credentials, SSL logic, direct DB access.
 4. **Secrets** — tokens, API keys or credentials in client components or `NEXT_PUBLIC_*` variables.
-5. **Billing scope** — KHQR/payment UI outside `features/billing` or `app/(project)/billing`.
+5. **Billing scope** — KHQR/WeBill payment UI outside `features/billing` or `app/(project)/billing`.
 
 Output each violation as `file:line — rule — why — fix`. If none, say "No violations".

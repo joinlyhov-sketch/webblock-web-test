@@ -1,0 +1,205 @@
+import type { PageData, Product } from "@/features/editor/types";
+
+const IMG = "/mock/templates/sweet-pastel";
+
+const popular: Product[] = [
+  {
+    name: "Strawberry cupcake",
+    description: "Fresh berry, vanilla sponge",
+    price: "2.50",
+    category: "Cupcakes",
+    imageUrl: `${IMG}/strawberry-cupcake.webp`,
+  },
+  {
+    name: "Chocolate fudge cake",
+    description: "By the slice or whole",
+    price: "4.00",
+    category: "Cakes",
+    imageUrl: `${IMG}/chocolate-fudge-cake.webp`,
+  },
+  {
+    name: "Lemon tart",
+    description: "Toasted meringue top",
+    price: "3.50",
+    category: "Pastries",
+    imageUrl: `${IMG}/lemon-tart.webp`,
+  },
+];
+
+const allProducts: Product[] = [
+  ...popular,
+  {
+    name: "Birthday box of six",
+    description: "Mix any flavours",
+    price: "14.00",
+    category: "Gift boxes",
+    imageUrl: `${IMG}/birthday-box.webp`,
+  },
+  {
+    name: "Cinnamon roll",
+    description: "Baked every morning",
+    price: "3.00",
+    category: "Pastries",
+    imageUrl: `${IMG}/cinnamon-roll.webp`,
+  },
+  {
+    name: "Vanilla bean cupcake",
+    description: "Classic buttercream",
+    price: "2.50",
+    category: "Cupcakes",
+    imageUrl: `${IMG}/strawberry-cupcake.webp`,
+  },
+  {
+    name: "Red velvet slice",
+    description: "Cream cheese frosting",
+    price: "4.00",
+    category: "Cakes",
+    imageUrl: `${IMG}/chocolate-fudge-cake.webp`,
+  },
+  {
+    name: "Mini tart trio",
+    description: "Lemon, berry, chocolate",
+    price: "9.00",
+    category: "Pastries",
+    imageUrl: `${IMG}/lemon-tart.webp`,
+  },
+  {
+    name: "Salted caramel cupcake",
+    description: "Caramel centre, sea salt flakes",
+    price: "2.75",
+    category: "Cupcakes",
+    imageUrl: null,
+  },
+  {
+    name: "Triple chocolate celebration layer cake with salted caramel drizzle",
+    description: "Serves 10 to 12 · two days' notice",
+    price: "28.00",
+    category: "Cakes",
+    imageUrl: `${IMG}/chocolate-fudge-cake.webp`,
+  },
+  {
+    name: "Afternoon tea box",
+    description: "Four cupcakes and two tarts",
+    price: "16.00",
+    category: "Gift boxes",
+    imageUrl: `${IMG}/birthday-box.webp`,
+  },
+  {
+    name: "Pistachio cupcake",
+    description: "Pistachio cream, rose petals",
+    price: "2.75",
+    category: "Cupcakes",
+    imageUrl: `${IMG}/strawberry-cupcake.webp`,
+  },
+];
+
+export const sweetPastelPage: PageData = {
+  root: {
+    props: {
+      templateId: "sweet-pastel",
+      businessName: "Sugar & Crumb",
+      statusText: "Open now · until 7:00 PM",
+      hours: "7:00 AM – 7:00 PM",
+      hoursDetail: "Mon – Sun 7:00 AM – 7:00 PM",
+      address: "22 Street 240, Phnom Penh",
+      phones: [{ number: "012 345 678" }],
+      email: "hello@sugarandcrumb.com",
+      telegram: "sugarandcrumb",
+      facebookUrl: "https://facebook.com/sugarandcrumb",
+      instagramUrl: "https://instagram.com/sugarandcrumb",
+      currency: "USD",
+      palette: "original",
+      accentColor: null,
+      backgroundColor: null,
+      textColor: null,
+      font: "original",
+      buttonStyle: "pill",
+    },
+  },
+  content: [
+    {
+      type: "Hero",
+      props: {
+        id: "sweet-pastel-hero",
+        eyebrow: "fresh from the oven, every single day",
+        heading: "Baked fresh,\nevery morning.",
+        description: "Cupcakes, cakes and small treats from our kitchen on Street 240. Come in early, the good ones go first.",
+        primaryLabel: "See the treats",
+        primaryAction: "shop",
+        secondaryLabel: "Visit the bakery",
+        secondaryAction: "visit",
+        imageUrl: `${IMG}/cupcake-stand.webp`,
+        sideImages: [{ imageUrl: `${IMG}/strawberry-cupcake.webp` }, { imageUrl: `${IMG}/lemon-tart.webp` }],
+        highlights: [{ text: "open from 7 am!" }, { text: "100% real butter" }],
+        badge: "",
+        align: "center",
+        spacing: "normal",
+      },
+    },
+    {
+      type: "ProductCards",
+      props: {
+        id: "sweet-pastel-product-cards",
+        columns: "3",
+        eyebrow: "popular this week",
+        heading: "This week's favourites",
+        viewAllLabel: "View all products",
+        products: popular,
+        align: "center",
+        spacing: "normal",
+      },
+    },
+    {
+      type: "AllProducts",
+      props: {
+        id: "sweet-pastel-all-products",
+        columns: "4",
+        eyebrow: "everything we bake",
+        heading: "Everything in the bakery",
+        searchPlaceholder: "Search cupcakes, cakes, boxes…",
+        categories: [{ name: "Cupcakes" }, { name: "Cakes" }, { name: "Pastries" }, { name: "Gift boxes" }],
+        products: allProducts,
+        pageSize: 8,
+        align: "left",
+        spacing: "normal",
+      },
+    },
+    {
+      type: "About",
+      props: {
+        id: "sweet-pastel-about",
+        eyebrow: "our story",
+        heading: "About the bakery",
+        body: "We're a family bakery on Street 240. Everything is mixed, baked and iced in our own kitchen each morning — no mixes, no shortcuts. Come in for a coffee and watch the next batch come out of the oven.",
+        imageUrl: `${IMG}/about-baker.webp`,
+        caption: "",
+        stats: [
+          { value: "40+", label: "treats daily" },
+          { value: "6 am", label: "first batch" },
+          { value: "100%", label: "real butter" },
+        ],
+        align: "left",
+        spacing: "normal",
+      },
+    },
+    {
+      type: "VisitUs",
+      props: {
+        id: "sweet-pastel-visit-us",
+        eyebrow: "come say hi",
+        heading: "Come and see the bakery",
+        align: "center",
+        spacing: "normal",
+      },
+    },
+    {
+      type: "Footer",
+      props: {
+        id: "sweet-pastel-footer",
+        tagline: "",
+        align: "center",
+        spacing: "normal",
+      },
+    },
+  ],
+};

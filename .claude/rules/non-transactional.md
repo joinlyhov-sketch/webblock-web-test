@@ -23,5 +23,6 @@ WebBlock websites are showcase/contact sites. They NEVER take orders or payments
 - No `<form>` on a website block that posts to the site's own API.
 - Product cards show name, price, image, category — no stock, no add-to-cart.
 
-Platform subscription billing (14-day trial, Plus/Pro/Ultra via KHQR) is a different thing:
+Platform subscription billing (14-day trial, Plus/Pro/Ultra paid by KHQR through WeBill365) is a different thing:
 it lives only in `features/billing` and only displays the QR and status returned by the API.
+The backend talks to WeBill; the frontend never calls WeBill directly.

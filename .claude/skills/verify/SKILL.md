@@ -10,9 +10,9 @@ Run these in order and stop at the first failure:
 
 1. `node .claude/hooks/invariants.mjs --all` — zero-transaction, boundaries, secrets, Server Action auth.
    Scans every file in `src/`, so it also catches changes that didn't go through Edit/Write.
-2. `npm run typecheck` — TypeScript errors (fast; fails before the slow build would).
-3. `npm run lint` — code quality. `next build` does NOT run ESLint, so this step is never redundant.
-4. **Full mode only:** `npm run build` — catches what the steps above can't: server/client component
+2. `pnpm typecheck` — TypeScript errors (fast; fails before the slow build would).
+3. `pnpm lint` — code quality. `next build` does NOT run ESLint, so this step is never redundant.
+4. **Full mode only:** `pnpm build` — catches what the steps above can't: server/client component
    mistakes, pages that crash during pre-rendering, invalid `next.config.ts`, route and CSS errors.
 
 In `quick` mode, say at the end that the build was skipped and a full `/verify` is still needed
