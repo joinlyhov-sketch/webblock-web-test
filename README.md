@@ -44,42 +44,6 @@ Open <http://localhost:3000>.
 There is no real login yet. On `/sign-in`, use the **Enter as User** or **Enter as Admin** buttons.
 They set a mock session cookie (`wb_role`) and take you to `/websites` or `/admin`.
 
-### Shared demo data on Vercel (required)
-
-Vercel instances do not share JavaScript memory. The demo now stores mutable data through
-`src/lib/mock-state.ts`: published pages, editor drafts and versions, uploaded images, websites
-and ownership, products, business details, payments, subscriptions, deployment history, account
-settings, notifications and admin changes. Public visitors read the same server-owned data;
-they do not need the owner's browser cookies. The old payment/deployment data cookies are ignored.
-
-Before deploying:
-
-1. Connect a PostgreSQL database to the Vercel project. You can use an existing database or
-   [a PostgreSQL integration from the Vercel Marketplace](https://vercel.com/docs/marketplace-storage).
-2. Set the server-only `DATABASE_URL` (or `POSTGRES_URL`) for every Vercel environment you use.
-   Use your provider's pooled, TLS-enabled connection URL. Never prefix it with `NEXT_PUBLIC_`.
-3. Redeploy the app. The first request creates `webblock_demo_state` automatically; the database
-   role needs permission to create that table initially, then read and update its records.
-4. Save and deploy your website again. Data lost by an older memory-only instance cannot be
-   recovered. New records remain available across deployments that use the same database and namespace.
-
-`WEBBLOCK_DATA_NAMESPACE` defaults to `webblock-demo-v1`. Use separate databases or namespaces
-for independent production and preview data. A missing database on Vercel returns a configuration
-error instead of accepting changes that will disappear. See [.env.example](.env.example).
-
-Without a database, local development and `next start` use `.data/webblock-state.json`, which is
-gitignored and survives process restarts. `WEBBLOCK_STATE_FILE` can select another local file;
-it is not a substitute for shared database storage on Vercel.
-
-The storage layer isolates concurrent requests, retries conflicting commits, and saves nested
-feature changes together. Uploaded bytes are encoded for storage and restored for public image
-requests. This is a small demo backend; payment confirmation, deployment timing, login and email
-remain mocks until Spring is connected. A full backend should use entity tables and object storage.
-
-For publicly shared sites, use the production domain. A preview URL protected by
-[Vercel Deployment Protection](https://vercel.com/docs/deployment-protection) requires Vercel
-sign-in before a request reaches this app, regardless of the app's public `/sites/` route.
-
 ## Scripts
 
 | Command | What it does |
@@ -89,11 +53,6 @@ sign-in before a request reaches this app, regardless of the app's public `/site
 | `pnpm start` | Run the production build |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint |
-| `pnpm test` | Shared-state, public-site, payment and deployment regression tests |
-| `pnpm test:state` | Shared-state and concurrent write regression tests |
-| `pnpm test:billing` | Payment and receipt regression tests |
-| `pnpm test:deploy` | Deployment and public publishing regression tests |
-| `pnpm test:production` | Real HTTP checks across a production server restart (run after `pnpm build`) |
 | `node .claude/hooks/invariants.mjs --all` | Project rule checks (see [Rules](#rules)) |
 
 ## Project structure

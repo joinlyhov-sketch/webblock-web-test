@@ -12,12 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "test": "node --test tests/shared-state.test.mjs tests/payment-session.test.mjs tests/deployment-session.test.mjs",
-    "test:state": "node --test tests/shared-state.test.mjs",
-    "test:production": "node tests/production-smoke.mjs",
-    "test:billing": "node --test tests/payment-session.test.mjs",
-    "test:deploy": "node --test tests/deployment-session.test.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@puckeditor/core": "^0.23.0",
@@ -28,7 +23,6 @@
     "iconsax-reactjs": "^0.0.8",
     "motion": "^14.6.0",
     "next": "16.4.3",
-    "pg": "^8.23.1",
     "radix-ui": "^1.8.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -39,9 +33,9 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
-    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.187.0",

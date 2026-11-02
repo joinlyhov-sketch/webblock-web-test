@@ -54,20 +54,20 @@ export function LiveScreen() {
             </p>
             <div className="relative mt-4 flex gap-2">
               <span className="flex h-12 items-center gap-2.5 rounded-full border border-border bg-background px-[18px] text-base leading-6 font-bold text-foreground">
-                <Lock1 className="size-[17px] text-muted-foreground" />
+                <Lock1 variant="Outline" className="size-[17px] text-muted-foreground" />
                 petalandstem.webblock.com
               </span>
               <span className="flex size-12 items-center justify-center rounded-full border border-border bg-background text-foreground">
-                <Copy className="size-[17px]" />
+                <Copy variant="Outline" className="size-[17px]" />
               </span>
             </div>
             <div className="relative mt-6 flex gap-2.5 text-[15px] leading-[22.5px] font-semibold">
               <span className="flex h-[50px] items-center gap-2.5 rounded-full bg-brand px-6 text-primary-foreground shadow-hiw-cta">
-                <ExportSquare className="size-[18px]" />
+                <ExportSquare variant="Outline" className="size-[18px]" />
                 Visit your website
               </span>
               <span className="flex h-[50px] items-center gap-2.5 rounded-full border border-border bg-background px-6 text-foreground shadow-button">
-                <Edit2 className="size-[18px]" />
+                <Edit2 variant="Outline" className="size-[18px]" />
                 Back to editor
               </span>
             </div>

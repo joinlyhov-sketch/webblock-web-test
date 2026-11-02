@@ -55,7 +55,7 @@ export function OtpForm({
       )}
       <div className="flex items-center justify-between text-[13px]">
         <p className="flex items-center gap-1.5 text-muted-foreground" aria-live="polite">
-          <Clock className="size-3.5" />
+          <Clock variant="Outline" className="size-3.5" />
           {expired ? (
             <span className="text-danger">Code expired</span>
           ) : (
@@ -77,7 +77,7 @@ export function OtpForm({
         {submitLabel}
       </Button>
       <p className="flex items-center gap-2.5 rounded-[14px] border border-border bg-muted px-3.5 py-3 text-[13px] text-muted-foreground">
-        <InfoCircle className="size-[18px] shrink-0" />
+        <InfoCircle variant="Outline" className="size-[18px] shrink-0" />
         <span>
           Can’t find it? Check your spam folder or{" "}
           <Link href={changeEmailHref} className="font-semibold text-primary hover:underline">

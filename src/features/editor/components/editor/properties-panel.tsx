@@ -118,11 +118,11 @@ export function PropertiesPanel({
       {!open && (
         <PanelRail
           label="Block settings"
-          show={{ label: "Show settings panel", icon: <SidebarRight />, onClick: () => onOpenChange(true) }}
+          show={{ label: "Show settings panel", icon: <SidebarRight variant="Outline" />, onClick: () => onOpenChange(true) }}
           items={[
-            { label: "WebBlock AI", icon: <Magicpen />, onClick: () => openAt("ai") },
-            { label: "Content", icon: <Edit2 />, onClick: () => openAt("content") },
-            { label: "Layout & Design", icon: <Colorfilter />, onClick: () => openAt("layout") },
+            { label: "WebBlock AI", icon: <Magicpen variant="Outline" />, onClick: () => openAt("ai") },
+            { label: "Content", icon: <Edit2 variant="Outline" />, onClick: () => openAt("content") },
+            { label: "Layout & Design", icon: <Colorfilter variant="Outline" />, onClick: () => openAt("layout") },
           ]}
         />
       )}
@@ -164,14 +164,14 @@ export function PropertiesPanel({
                 onClick={() => setAiOpen(false)}
                 className="relative z-10 flex size-7 shrink-0 items-center justify-center rounded-full bg-background text-brand-deep outline-none transition-[background-color,scale] duration-150 hover:bg-background/70 focus-visible:ring-3 focus-visible:ring-ring/40 motion-safe:active:scale-90"
               >
-                <Add aria-hidden className="size-4 rotate-45" />
+                <Add variant="Outline" aria-hidden className="size-4 rotate-45" />
               </button>
             ) : (
               <span
                 aria-hidden
                 className="pointer-events-none flex size-7 shrink-0 items-center justify-center rounded-full bg-segment transition-colors group-hover/ai:bg-background"
               >
-                <ArrowDown2 className="size-3.5 text-foreground-soft transition-transform duration-200 group-hover/ai:translate-y-0.5" />
+                <ArrowDown2 variant="Outline" className="size-3.5 text-foreground-soft transition-transform duration-200 group-hover/ai:translate-y-0.5" />
               </span>
             )}
           </div>
@@ -184,7 +184,7 @@ export function PropertiesPanel({
 
             <div className="flex items-center gap-2.5 px-[18px] py-4">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                <Icon aria-hidden className="size-[18px]" />
+                <Icon variant="Outline" aria-hidden className="size-[18px]" />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">{meta?.label ?? "Site settings"}</p>
@@ -219,7 +219,7 @@ export function PropertiesPanel({
               </div>
             </div>
 
-            <div role="tabpanel" className="min-h-0 flex-1 overflow-y-auto pb-6">
+            <div role="tabpanel" className="min-h-0 flex-1 overflow-y-auto pb-6 [--puck-field-radius:14px]">
               <FieldList
                 key={`${selectedItem?.props.id ?? "root"}-${tab}`}
                 fields={fields}

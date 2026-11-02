@@ -284,10 +284,10 @@ function ProductCards(props: BlockRenderProps<ProductCardsProps>) {
           {count > 1 && (
             <div className="flex shrink-0 items-center gap-2 pb-1">
               <button type="button" aria-label="Previous products" onClick={() => scroll(-1)} className={cn(arrow, FOCUS)}>
-                <ArrowLeft2 aria-hidden className="size-4" />
+                <ArrowLeft2 variant="Outline" aria-hidden className="size-4" />
               </button>
               <button type="button" aria-label="Next products" onClick={() => scroll(1)} className={cn(arrow, FOCUS)}>
-                <ArrowRight2 aria-hidden className="size-4" />
+                <ArrowRight2 variant="Outline" aria-hidden className="size-4" />
               </button>
             </div>
           )}
@@ -468,7 +468,7 @@ function InfoCard({ icon: Icon, label, children, href }: { icon: typeof Call; la
   const body = (
     <>
       <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-site-accent text-site-accent-fg">
-        <Icon className="size-[18px]" />
+        <Icon variant="Outline" className="size-[18px]" />
       </span>
       <span className="flex min-w-0 flex-col">
         <span className={LABEL}>{label}</span>
@@ -507,7 +507,7 @@ function VisitUs(props: BlockRenderProps<VisitUsProps>) {
                     <span className={LABEL}>Opening hours</span>
                     {site.statusText && <span className="text-[15px] font-semibold text-site-ink @5xl:text-[17px]">{site.statusText}</span>}
                   </div>
-                  <Clock aria-hidden className="ml-auto size-4 text-site-subtle" />
+                  <Clock variant="Outline" aria-hidden className="ml-auto size-4 text-site-subtle" />
                 </div>
                 {rows.length > 0 && (
                   <dl className="flex flex-col border-t border-site-border text-[12px]">

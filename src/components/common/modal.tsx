@@ -97,6 +97,7 @@ function BareModal({ open, onClose, label, children, className }: BareModalProps
 
   return (
     <dialog
+      data-mobile-sheet
       ref={(el) => {
         ref.current = el;
         setDialogEl(el);

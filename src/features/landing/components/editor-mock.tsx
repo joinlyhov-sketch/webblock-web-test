@@ -38,7 +38,7 @@ export function EditorTopBar() {
   return (
     <div className={cn(panel, "flex h-[42.222px] items-center gap-[9.852px] rounded-[12.667px] px-[11.259px]")}>
       <span className="flex size-[25.333px] items-center justify-center rounded-full text-foreground">
-        <ArrowLeft className="size-[12.667px]" />
+        <ArrowLeft variant="Outline" className="size-[12.667px]" />
       </span>
       <LogoMark className="h-[21.111px]" />
       <div className="w-[56.736px]">
@@ -111,7 +111,7 @@ export function StructureRow({ icon: IconCmp, label }: { icon: Icon; label: stri
     <div className="flex h-[26.741px] items-center gap-[7.037px] rounded-[8.444px] py-[5.63px] pr-[7.037px] pl-[8.444px]">
       <IconCmp className="size-[10.556px] shrink-0 text-muted-foreground" />
       <p className="flex-1 text-[9.148px] leading-[13.722px] font-medium text-foreground">{label}</p>
-      <Menu className="size-[10.556px] shrink-0 text-placeholder" />
+      <Menu variant="Outline" className="size-[10.556px] shrink-0 text-placeholder" />
     </div>
   );
 }
@@ -120,7 +120,7 @@ export function StructureRow({ icon: IconCmp, label }: { icon: Icon; label: stri
 export function SelectedStructureRow() {
   return (
     <div className="flex h-[26.741px] items-center gap-[7.037px] rounded-[8.444px] border-[0.704px] border-editor-selected bg-primary-soft py-[5.63px] pr-[7.037px] pl-[8.444px]">
-      <Element3 className="size-[10.556px] shrink-0 text-brand-deep" />
+      <Element3 variant="Outline" className="size-[10.556px] shrink-0 text-brand-deep" />
       <p className="text-[9.148px] leading-[13.722px] font-semibold whitespace-nowrap text-brand-deep">
         Product Cards
       </p>
@@ -131,7 +131,7 @@ export function SelectedStructureRow() {
           </span>
         ))}
       </span>
-      <Menu className="size-[10.556px] shrink-0 text-placeholder" />
+      <Menu variant="Outline" className="size-[10.556px] shrink-0 text-placeholder" />
     </div>
   );
 }
@@ -182,7 +182,7 @@ export function BlockItem({
         <p className="text-[7.741px] leading-[11.611px] whitespace-nowrap text-muted-foreground">{hint}</p>
       </div>
       <span className="flex flex-1 justify-end text-muted-foreground">
-        <Add className="size-[12.667px]" />
+        <Add variant="Outline" className="size-[12.667px]" />
       </span>
     </div>
   );
@@ -191,7 +191,7 @@ export function BlockItem({
 export function AddIcon() {
   return (
     <span className="flex rounded-[5.63px] p-[2.111px] text-muted-foreground">
-      <Add className="size-[12.667px]" />
+      <Add variant="Outline" className="size-[12.667px]" />
     </span>
   );
 }
@@ -338,7 +338,7 @@ export function SiteAllProducts({ Heading = PlainHeading }: { Heading?: SitePart
       <Heading className={siteHeading}>Everything in the studio</Heading>
       <div className="flex w-full items-center gap-[11.259px]">
         <span className="flex h-[22.519px] w-[154.815px] items-center gap-[5.63px] rounded-[8px] border-[0.704px] border-border-strong bg-muted px-[7.037px]">
-          <SearchNormal1 className="size-[8.444px] text-muted-foreground" />
+          <SearchNormal1 variant="Outline" className="size-[8.444px] text-muted-foreground" />
           <span className="text-[7.74px] whitespace-nowrap text-muted-foreground">Search flowers, bouquets, gifts…</span>
         </span>
         {/* Figma's spacer is 70px tall, which sets this row's height. */}
@@ -378,13 +378,13 @@ export function AiPanelHeader() {
   return (
     <div className="px-[11.259px] pt-[8.444px] pb-[5.63px]">
       <div className="flex items-center gap-[7.037px] rounded-full bg-primary-soft py-[5.63px] pr-[7.037px] pl-[9.852px]">
-        <MagicStar className="size-[11.259px] text-brand-deep" />
+        <MagicStar variant="Outline" className="size-[11.259px] text-brand-deep" />
         <div className="flex-1 whitespace-nowrap">
           <p className="text-[9.852px] leading-[14.074px] font-semibold text-brand-deep">WebBlock AI</p>
           <p className="text-[8.444px] leading-[11.259px] text-placeholder">Ask AI to edit your site</p>
         </div>
         <span className="flex size-[19.704px] items-center justify-center rounded-full bg-background text-brand-deep">
-          <Add className="size-[9.852px] rotate-45" />
+          <Add variant="Outline" className="size-[9.852px] rotate-45" />
         </span>
       </div>
     </div>
@@ -409,7 +409,7 @@ export function ChatBubble({ from, children }: { from: "user" | "ai"; children: 
 export function SendButton() {
   return (
     <span className="flex size-[25.333px] shrink-0 items-center justify-center rounded-full bg-brand-strong text-primary-foreground">
-      <ArrowUp className="size-[9.852px]" />
+      <ArrowUp variant="Outline" className="size-[9.852px]" />
     </span>
   );
 }

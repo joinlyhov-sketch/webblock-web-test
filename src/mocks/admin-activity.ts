@@ -28,7 +28,7 @@ export const activityLog: ActivityEntry[] = [
     targetDetail: "hollowandco.webblock.com",
     actorEmail: null,
     result: "SUCCEEDED",
-    createdAt: at("2026-11-01T09:36:00Z"),
+    createdAt: at("2026-10-01T04:46:00Z"),
   },
   {
     id: "4b6d8f0a-2c4e-4a6b-9d8f-1a3c5e7b0905",

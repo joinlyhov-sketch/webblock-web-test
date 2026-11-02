@@ -1,0 +1,7 @@
+- generic [active] [ref=f8e1]:
+  - main [ref=f8e2]:
+    - status [ref=f8e3]:
+      - generic [ref=f8e4]: Loading content
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=f8e25]

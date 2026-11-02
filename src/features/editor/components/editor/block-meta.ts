@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import { Element3, Grid1, Location, Message, Note, RowVertical, Text } from "iconsax-reactjs";
 import type { BlockName } from "../../types";
 
-type IconComponent = ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+type IconComponent = ComponentType<{ className?: string; "aria-hidden"?: boolean; variant?: "Outline" }>;
 
 /** Left panel labels, icons and the one-line description under "Add a block" (from Figma). */
 export const BLOCK_META = {

@@ -19,7 +19,7 @@ export function PublishingScreen() {
           <div className="relative flex h-[84px] items-center px-5">
             <span className="flex items-center rounded-full bg-background px-1.5 py-1 shadow-hiw-pill">
               <span className="flex h-8 items-center gap-2 px-3 text-[13px] font-semibold text-foreground-soft">
-                <ArrowLeft className="size-[15px]" />
+                <ArrowLeft variant="Outline" className="size-[15px]" />
                 Back to editor
               </span>
             </span>
@@ -35,7 +35,7 @@ export function PublishingScreen() {
           <div className="relative flex flex-col items-center pt-16">
             <ProgressRing />
             <span className="mt-5 flex h-6 items-center gap-1.5 rounded-full bg-brand-soft px-2.5 text-xs font-semibold text-brand-strong">
-              <Refresh2 className="size-[13px]" />
+              <Refresh2 variant="Outline" className="size-[13px]" />
               Deploying · about 2 minutes left
             </span>
             <p className="mt-3 w-[560px] text-center font-heading text-[34px] leading-[46px] font-semibold tracking-[-1.1px] text-brand-dark">
@@ -99,9 +99,9 @@ const deploySteps: {
   { title: "Building your website", text: "Turning your design into a fast website", meta: "Done · 12s", status: "done" },
   { title: "Setting up your products", text: "Creating storage for products, prices and custom fields", meta: "Done · 8s", status: "done" },
   { title: "Packaging everything", text: "Preparing your site to run on our servers", meta: "Done · 41s", status: "done" },
-  { title: "Launching your website", text: "Starting your website and its data service", meta: "In progress", status: "current", icon: <Driver className="size-5" /> },
-  { title: "Setting up petalandstem.webblock.com", text: "Adding the security padlock (SSL) to your free address", meta: "Up next", status: "pending", icon: <ShieldTick className="size-5" /> },
-  { title: "Live!", text: "Your website is open to customers", meta: "Waiting", status: "pending", icon: <Global className="size-5" /> },
+  { title: "Launching your website", text: "Starting your website and its data service", meta: "In progress", status: "current", icon: <Driver variant="Outline" className="size-5" /> },
+  { title: "Setting up petalandstem.webblock.com", text: "Adding the security padlock (SSL) to your free address", meta: "Up next", status: "pending", icon: <ShieldTick variant="Outline" className="size-5" /> },
+  { title: "Live!", text: "Your website is open to customers", meta: "Waiting", status: "pending", icon: <Global variant="Outline" className="size-5" /> },
 ];
 
 function DeployStep({

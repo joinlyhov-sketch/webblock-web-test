@@ -56,7 +56,7 @@ export function SidebarShell({
               collapsed ? "h-[42px] w-full" : "size-8",
             )}
           >
-            <SidebarLeft aria-hidden className="size-4" />
+            <SidebarLeft variant="Outline" aria-hidden className="size-4" />
           </button>
         )}
       </div>

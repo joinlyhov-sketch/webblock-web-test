@@ -1,0 +1,32 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - complementary [ref=f7e3]:
+      - generic [ref=f7e4]:
+        - link "WebBlock" [ref=f7e5] [cursor=pointer]:
+          - /url: /websites
+          - img "WebBlock" [ref=f7e6]
+        - button "Collapse sidebar" [expanded] [ref=f7e7] [cursor=pointer]
+      - link "Go to website" [ref=f7e12] [cursor=pointer]:
+        - /url: /sites/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70
+      - navigation "Main" [ref=f7e13]:
+        - link "Products" [ref=f7e14] [cursor=pointer]:
+          - /url: /portal/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70/products
+        - link "Business information" [ref=f7e21] [cursor=pointer]:
+          - /url: /portal/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70/info
+        - link "Monitor" [ref=f7e27] [cursor=pointer]:
+          - /url: /portal/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70/monitoring
+      - generic [ref=f7e32]:
+        - link "Back to editor" [ref=f7e33] [cursor=pointer]:
+          - /url: /websites/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70/edit
+        - generic [ref=f7e40]:
+          - generic [ref=f7e41]: Sovannarith Soeun
+          - generic [ref=f7e43]:
+            - paragraph [ref=f7e44]: Sovannarith Soeun
+            - paragraph [ref=f7e45]: Owner
+          - button "Log out" [ref=f7e46] [cursor=pointer]
+    - main [ref=f7e51]:
+      - status [ref=f7e52]:
+        - generic [ref=f7e53]: Loading products
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=f7e70]

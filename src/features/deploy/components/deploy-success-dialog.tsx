@@ -47,7 +47,7 @@ export function DeploySuccessDialog({
     >
       <div className="flex flex-col items-center gap-3 px-8 pt-9 pb-7 text-center">
         <span className="flex size-14 items-center justify-center rounded-full bg-success-soft text-success shadow-card [&_svg]:size-7">
-          <TickCircle aria-hidden />
+          <TickCircle variant="Outline" aria-hidden />
         </span>
         <h2 className="font-heading text-[26px] leading-8 font-semibold tracking-[-0.5px] text-brand-strong">
           {title}
@@ -59,7 +59,7 @@ export function DeploySuccessDialog({
         </p>
         <div className="flex items-center gap-2">
           <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-background px-4 text-sm font-semibold text-foreground">
-            <Lock1 aria-hidden className="size-3.5 text-muted-foreground" />{" "}
+            <Lock1 variant="Outline" aria-hidden className="size-3.5 text-muted-foreground" />{" "}
             {domain}
           </span>
           <Button
@@ -69,18 +69,18 @@ export function DeploySuccessDialog({
             aria-label="Copy address"
             onClick={copy}
           >
-            <Copy aria-hidden />
+            <Copy variant="Outline" aria-hidden />
           </Button>
         </div>
         <div className="flex items-center gap-2 pt-2">
           <Button asChild>
             <Link href={siteHref} target="_blank" rel="noopener noreferrer">
-              <ExportSquare aria-hidden /> Visit your website
+              <ExportSquare variant="Outline" aria-hidden /> Visit your website
             </Link>
           </Button>
           <Button asChild variant="ghost" className="shadow-button">
             <Link href={editorHref}>
-              <Edit2 aria-hidden /> Back to editor
+              <Edit2 variant="Outline" aria-hidden /> Back to editor
             </Link>
           </Button>
         </div>

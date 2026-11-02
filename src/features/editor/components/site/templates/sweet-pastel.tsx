@@ -373,7 +373,7 @@ function Pagination({ page, totalPages, onPage }: { page: number; totalPages: nu
   return (
     <nav aria-label="Product pages" className="flex flex-wrap justify-center gap-2 @5xl:gap-2.5">
       <button type="button" aria-label="Previous page" disabled={page === 0} onClick={() => onPage(page - 1)} className={cn(circle, idle)}>
-        <ArrowLeft2 aria-hidden className="size-4" />
+        <ArrowLeft2 variant="Outline" aria-hidden className="size-4" />
       </button>
       {Array.from({ length: totalPages }, (_, i) => (
         <button
@@ -394,7 +394,7 @@ function Pagination({ page, totalPages, onPage }: { page: number; totalPages: nu
         onClick={() => onPage(page + 1)}
         className={cn(circle, idle)}
       >
-        <ArrowRight2 aria-hidden className="size-4" />
+        <ArrowRight2 variant="Outline" aria-hidden className="size-4" />
       </button>
     </nav>
   );
@@ -417,7 +417,7 @@ function AllProducts(props: BlockRenderProps<AllProductsProps>) {
               <label htmlFor={searchId} className="sr-only">
                 Search products
               </label>
-              <SearchNormal1 aria-hidden className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-site-subtle @5xl:left-5" />
+              <SearchNormal1 variant="Outline" aria-hidden className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-site-subtle @5xl:left-5" />
               <input
                 id={searchId}
                 type="search"
@@ -558,7 +558,7 @@ function InfoRows({ circleClass }: { circleClass: string }) {
         const content = (
           <>
             <span className={cn("flex size-11 shrink-0 items-center justify-center rounded-full text-site-ink", circleClass)}>
-              <row.icon aria-hidden className="size-[18px] @5xl:size-[22px]" />
+              <row.icon variant="Outline" aria-hidden className="size-[18px] @5xl:size-[22px]" />
             </span>
             <span className="min-w-0">
               <span className="block font-site-body text-[11px] font-medium tracking-[0.08em] text-site-muted uppercase @5xl:text-[13px]">
@@ -614,14 +614,14 @@ function GetInTouchPanel() {
                 FOCUS,
               )}
             >
-              <action.icon aria-hidden className="size-5 shrink-0" />
+              <action.icon variant="Outline" aria-hidden className="size-5 shrink-0" />
               <span className="min-w-0 flex-1">
                 <span className="block font-site-body text-[15px] font-semibold @5xl:text-[16px]">{action.label}</span>
                 <span className={cn("block truncate font-site-body text-[12px]", i === 0 ? "text-site-accent-fg/85" : "text-site-muted")}>
                   {action.detail}
                 </span>
               </span>
-              <ArrowRight2 aria-hidden className="size-4 shrink-0" />
+              <ArrowRight2 variant="Outline" aria-hidden className="size-4 shrink-0" />
             </a>
           </li>
         ))}

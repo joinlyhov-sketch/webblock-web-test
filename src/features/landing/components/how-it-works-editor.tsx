@@ -41,14 +41,14 @@ function PageRail() {
   return (
     <div className="flex flex-col items-center gap-[2.815px] self-start rounded-[14.074px] bg-background py-[8.444px] text-foreground-soft shadow-editor-panel">
       <RailIcon>
-        <SidebarLeft className="size-[12.667px]" />
+        <SidebarLeft variant="Outline" className="size-[12.667px]" />
       </RailIcon>
       <span className="my-[2.815px] h-[0.704px] w-[16.889px] bg-border" />
       <RailIcon>
-        <Layer className="size-[12.667px]" />
+        <Layer variant="Outline" className="size-[12.667px]" />
       </RailIcon>
       <RailIcon>
-        <AddSquare className="size-[12.667px]" />
+        <AddSquare variant="Outline" className="size-[12.667px]" />
       </RailIcon>
     </div>
   );
@@ -122,21 +122,21 @@ function SettingsPanel() {
       <div className="px-[11.259px] pt-[8.444px] pb-[5.63px]">
         <div className="flex items-center gap-[7.037px] rounded-[9.852px] border-[0.704px] border-border bg-background py-[5.63px] pr-[7.037px] pl-[5.63px]">
           <span className="flex size-[22.519px] shrink-0 items-center justify-center rounded-[7.037px] bg-brand-soft text-brand">
-            <Magicpen className="size-[11.259px]" />
+            <Magicpen variant="Outline" className="size-[11.259px]" />
           </span>
           <span className="flex-1">
             <span className="block text-[9.852px] leading-[14.074px] font-semibold text-foreground">WebBlock AI</span>
             <span className="block text-[8.444px] leading-[12.667px] text-placeholder">Ask AI to edit your site</span>
           </span>
           <span className="flex size-[19.704px] items-center justify-center rounded-full bg-segment">
-            <ArrowDown2 className="size-[9.852px] text-foreground-soft" />
+            <ArrowDown2 variant="Outline" className="size-[9.852px] text-foreground-soft" />
           </span>
         </div>
       </div>
 
       <div className="flex items-center gap-[7.037px] px-[12.667px] py-[11.259px]">
         <span className="flex size-[28.148px] shrink-0 items-center justify-center rounded-[8.444px] bg-brand-soft text-brand">
-          <Setting2 className="size-[12.667px]" />
+          <Setting2 variant="Outline" className="size-[12.667px]" />
         </span>
         <span>
           <span className="block text-[9.852px] leading-[14.074px] font-semibold text-foreground">Site settings</span>

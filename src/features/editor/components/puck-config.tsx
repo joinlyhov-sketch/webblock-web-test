@@ -13,7 +13,9 @@ import type {
   SiteRootProps,
   TemplateKey,
 } from "../types";
+import { HighlightsField } from "./editor/highlights-field";
 import { ImageField } from "./editor/image-field";
+import { ImagesField } from "./editor/images-field";
 import { SAMPLE_CATALOGUE, SAMPLE_CATEGORIES, SAMPLE_FEATURED } from "./site/sample-products";
 import { SiteRoot } from "./site/site-root";
 import { useSite } from "./site/site-context";
@@ -112,7 +114,7 @@ const productFields: Field = {
   label: "Products",
   arrayFields: {
     name: text("Name"),
-    description: text("Short description"),
+    description: text("Short description", { maxLength: 200 }),
     price: text("Price", {}, "e.g. 6.00"),
     category: text("Category"),
     imageUrl: imageField("Photo"),
@@ -256,8 +258,8 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 60 }),
-        description: textarea("Description"),
+        heading: textarea("Heading", { maxLength: 30 }),
+        description: textarea("Description", { maxLength: 200 }),
         primaryLabel: text("Main button text", { group: "Buttons" }),
         primaryAction: cta("Main button goes to"),
         secondaryLabel: text("Second button text", {
@@ -276,28 +278,24 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           ],
         }),
         sideImages: {
-          type: "array",
+          type: "custom",
           label: "Side photos",
-          arrayFields: {
-            imageUrl: imageField("Photo"),
-            label: text("Label", { optional: true }) as unknown as Field<string | undefined>,
-          },
-          defaultItemProps: { imageUrl: null },
-          max: 4,
+          render: ({ value, onChange, readOnly, id }) => (
+            <ImagesField id={id} value={value} onChange={onChange} readOnly={readOnly} max={2} />
+          ),
           ...meta({ group: "Image", templates: ["sweet-pastel", "jackets", "iced-coffee", "plates"] }),
-        },
+        } as CustomField<{ imageUrl: string | null; label?: string }[]>,
         highlights: {
-          type: "array",
+          type: "custom",
           label: "Highlights",
-          arrayFields: { text: text("Text") },
-          defaultItemProps: { text: "New highlight" },
-          getItemSummary: (item: { text?: string }) => item.text || "Highlight",
-          max: 3,
+          render: ({ value, onChange, readOnly, id }) => (
+            <HighlightsField id={id} value={value} onChange={onChange} readOnly={readOnly} max={3} />
+          ),
           ...meta({
             group: "Extras",
             templates: ["sweet-pastel", "warm-bold", "clean-mono", "jackets", "iced-coffee", "plates"],
           }),
-        },
+        } as CustomField<{ text: string }[]>,
         badge: text("Badge", {
           group: "Extras",
           optional: true,
@@ -331,8 +329,8 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 80 }),
-        body: textarea("Paragraph"),
+        heading: textarea("Heading", { maxLength: 30 }),
+        body: textarea("Paragraph", { maxLength: 200 }),
         // Optional on older pages, so Puck sees `string | null | undefined`.
         imageUrl: imageField("Image", { templates: ["keyboards"] }) as unknown as Field<string | null | undefined>,
         ...layoutFields,
@@ -355,7 +353,7 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 60 }),
+        heading: textarea("Heading", { maxLength: 30 }),
         viewAllLabel: text("“View all” link text", { optional: true }),
         products: productFields,
         columns: columnsField,
@@ -380,7 +378,7 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 60 }),
+        heading: textarea("Heading", { maxLength: 30 }),
         searchPlaceholder: text("Search placeholder"),
         categories: {
           visible: false,
@@ -423,8 +421,8 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 80 }),
-        body: textarea("Your story"),
+        heading: textarea("Heading", { maxLength: 30 }),
+        body: textarea("Your story", { maxLength: 200 }),
         caption: text("Caption", {
           optional: true,
           templates: ["warm-bold", "clean-mono", "jackets", "keyboards", "iced-coffee", "plates"],
@@ -466,7 +464,7 @@ export const puckConfig: Config<BlockProps, SiteRootProps> = {
           { optional: true },
           "Optional · leave empty to hide",
         ),
-        heading: textarea("Heading", { maxLength: 60 }),
+        heading: textarea("Heading", { maxLength: 30 }),
         ...layoutFields,
       },
       defaultProps: { eyebrow: "", heading: "Come and see us", ...ALL_LAYOUT },

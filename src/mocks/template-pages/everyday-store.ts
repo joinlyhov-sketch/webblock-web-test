@@ -61,7 +61,7 @@ export const everydayStorePage: PageData = {
       props: {
         id: "everyday-store-hero",
         eyebrow: "",
-        heading: "Fresh flowers for\nevery moment.",
+        heading: "Fresh flowers,\nevery moment.",
         description: "Hand-tied bouquets, single stems and event flowers, arranged in our studio and delivered across town.",
         primaryLabel: "Shop flowers",
         primaryAction: "shop",

@@ -71,7 +71,7 @@ export function NewCategoryForm({
       }}
     >
       <ProductDialogHeader
-        icon={<Category />}
+        icon={<Category variant="Outline" />}
         title="New category"
         subtitle="Categories become the filter tabs on your website."
         onClose={onDone}
@@ -154,7 +154,7 @@ export function InlineCategoryCreator({
         onClick={() => setOpen(true)}
         className="mt-1.5 inline-flex items-center gap-1 rounded-md text-xs font-semibold text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/40"
       >
-        <Add aria-hidden className="size-3.5" /> New category
+        <Add variant="Outline" aria-hidden className="size-3.5" /> New category
       </button>
     );
   }
@@ -191,7 +191,7 @@ export function InlineCategoryCreator({
             }}
             className="shrink-0"
           >
-            <Add aria-hidden className="rotate-45" />
+            <Add variant="Outline" aria-hidden className="rotate-45" />
           </Button>
         )}
       </div>

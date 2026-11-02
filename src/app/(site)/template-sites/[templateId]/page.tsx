@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CleanMonoSite, EverydayStoreSite, IcedCoffeeSite, JacketsSite, KeyboardsSite, PlatesSite, SweetPastelSite, WarmBoldSite } from "@/features/template-sites";
+import { TemplateSiteRenderer } from "@/features/template-sites";
 import { getTemplateSiteView } from "@/features/templates";
 import { ApiError } from "@/lib/api/errors";
 
@@ -13,22 +13,5 @@ export default async function TemplateSitePage({ params }: { params: Promise<{ t
     if (e instanceof ApiError) notFound();
     throw e;
   });
-  switch (site.slug) {
-    case "everyday-store":
-      return <EverydayStoreSite content={site.content} />;
-    case "sweet-pastel":
-      return <SweetPastelSite content={site.content} />;
-    case "warm-bold":
-      return <WarmBoldSite content={site.content} />;
-    case "clean-mono":
-      return <CleanMonoSite content={site.content} />;
-    case "jackets":
-      return <JacketsSite content={site.content} />;
-    case "keyboards":
-      return <KeyboardsSite content={site.content} />;
-    case "iced-coffee":
-      return <IcedCoffeeSite content={site.content} />;
-    case "plates":
-      return <PlatesSite content={site.content} />;
-  }
+  return <TemplateSiteRenderer site={site} />;
 }

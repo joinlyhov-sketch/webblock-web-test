@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  
   images: {
     // 90 is for the landing page's template screenshots (small text blurs at the default 75).
     qualities: [75, 90],

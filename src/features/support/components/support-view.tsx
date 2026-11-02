@@ -38,7 +38,7 @@ export function SupportView({ data }: { data: SupportData }) {
         <aside className="flex flex-col gap-5">
           <section className="rounded-[20px] border border-border bg-background p-5 shadow-panel-sm">
             <h2 className="flex h-[23px] items-center gap-2.5 text-lg leading-[22.1px] font-semibold tracking-[-0.17px] text-foreground">
-              <Lamp aria-hidden className="size-[22px] text-primary" /> Quick answers
+              <Lamp variant="Outline" aria-hidden className="size-[22px] text-primary" /> Quick answers
             </h2>
             <Accordion items={data.faq} defaultOpenId={data.faq[0]?.id} />
           </section>
@@ -46,7 +46,7 @@ export function SupportView({ data }: { data: SupportData }) {
           <section className="flex flex-col gap-4 overflow-clip rounded-[20px] border border-border bg-linear-[134deg] from-help-from from-0% to-help-to to-[76.923%] p-5">
             <div className="flex items-start gap-3.5">
               <span className="flex shrink-0 rounded-full bg-help-icon p-3 text-primary">
-                <Headphone aria-hidden className="size-[26px]" />
+                <Headphone variant="Outline" aria-hidden className="size-[26px]" />
               </span>
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <h2 className="text-lg font-semibold text-foreground">Still need help?</h2>
@@ -59,11 +59,11 @@ export function SupportView({ data }: { data: SupportData }) {
               href={`mailto:${siteConfig.supportEmail}`}
               className="flex items-center gap-3 overflow-clip rounded-xl border border-border bg-background p-3.5 outline-none transition-colors hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40"
             >
-              <Sms aria-hidden className="size-[18px] shrink-0 text-primary" />
+              <Sms variant="Outline" aria-hidden className="size-[18px] shrink-0 text-primary" />
               <span className="min-w-0 flex-1 font-heading text-sm font-semibold text-primary">
                 {siteConfig.supportEmail}
               </span>
-              <ArrowRight2 aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+              <ArrowRight2 variant="Outline" aria-hidden className="size-4 shrink-0 text-muted-foreground" />
             </a>
           </section>
         </aside>

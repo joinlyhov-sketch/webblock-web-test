@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Danger, Notification, Sms } from "iconsax-reactjs";
+import { Notification } from "iconsax-reactjs";
 import { PageHeader } from "@/components/common/page-header";
 import { Pill } from "@/components/common/status-badge";
-import { Button } from "@/components/ui/button";
 import { liveSiteHref } from "@/config/site";
 import { cn } from "@/lib/utils";
 import type { Deployment } from "../types";
+import { DeployFailed } from "./deploy-failed";
 import { DeploySteps } from "./deploy-steps";
 import { DeploySuccessDialog } from "./deploy-success-dialog";
 
@@ -108,7 +107,7 @@ export function DeployProgress({
       : "Deploying your changes";
   const subtitle = failed
     ? first
-      ? "Nothing went live. Go back to the editor to deploy again once this is fixed."
+      ? "Nothing went live yet. Try again, or go back to the editor."
       : "Your current website stays online, so visitors won’t notice anything."
     : first
       ? "You can close this page. We’ll email you when your website is live."
@@ -140,39 +139,21 @@ export function DeployProgress({
         <DeploySteps deployment={deployment} />
       </div>
 
-      {(running || failed) && (
+      {failed && <DeployFailed deployment={deployment} editorHref={editorHref} />}
+
+      {running && (
         <div className="mt-4 flex max-w-[520px] items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3 shadow-card">
-          <span
-            className={cn(
-              "flex size-9 shrink-0 items-center justify-center rounded-full [&_svg]:size-4",
-              failed
-                ? "bg-danger-soft text-danger"
-                : "bg-brand-soft text-brand",
-            )}
-          >
-            {failed ? <Danger aria-hidden /> : <Notification aria-hidden />}
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand [&_svg]:size-4">
+            <Notification variant="Outline" aria-hidden />
           </span>
           <div className="flex flex-col text-left">
-            <p className="text-[15px] leading-[20px] font-semibold text-foreground">
-              {failed
-                ? "Something went wrong while deploying"
-                : "You can safely leave this page"}
-            </p>
+            <p className="text-[15px] leading-[20px] font-semibold text-foreground">You can safely leave this page</p>
             <p className="text-[14px] leading-[20px] text-muted-foreground">
-              {failed
-                ? "Send this error to the admin and we’ll email you when it’s fixed."
-                : first
-                  ? "We’ll keep building in the background and notify you when your website is live."
-                  : "We’ll keep deploying in the background and notify you when your changes are live."}
+              {first
+                ? "We’ll keep building in the background and notify you when your website is live."
+                : "We’ll keep deploying in the background and notify you when your changes are live."}
             </p>
           </div>
-          {failed && (
-            <Button asChild variant="soft" size="sm" className="shrink-0">
-              <Link href="/support">
-                <Sms aria-hidden /> Contact admin
-              </Link>
-            </Button>
-          )}
         </div>
       )}
 

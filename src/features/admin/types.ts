@@ -46,6 +46,10 @@ export type AdminWebsite = {
   name: string;
   domain: string;
   thumbnailUrl: string | null;
+  /** Logo the owner set in Business information; `null` when none. Filled by the API. */
+  logoUrl?: string | null;
+  /** Slug of the template the site was built from (its default logo shows without an uploaded one). */
+  templateSlug?: string;
   ownerId: string;
   ownerName: string;
   ownerEmail: string;
@@ -72,6 +76,10 @@ export type Deploy = {
   websiteId: string;
   websiteName: string;
   websiteThumbnailUrl: string | null;
+  /** Logo the owner set in Business information; `null` when none. Filled by the API. */
+  websiteLogoUrl?: string | null;
+  /** Template the site was built from (its default logo shows without an uploaded one). */
+  websiteTemplateSlug?: string;
   ownerName: string;
   number: number;
   status: DeployStatus;

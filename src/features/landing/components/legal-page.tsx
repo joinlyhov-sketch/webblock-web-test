@@ -77,7 +77,7 @@ export function LegalPage({ doc }: { doc: LegalDocument }) {
             href={doc.related.href}
             className="inline-flex items-center gap-1.5 self-start text-base font-medium text-brand-strong hover:text-brand-dark"
           >
-            Read our {doc.related.label.toLowerCase()} <ArrowRight aria-hidden className="size-4" />
+            Read our {doc.related.label.toLowerCase()} <ArrowRight variant="Outline" aria-hidden className="size-4" />
           </Link>
         </article>
       </div>

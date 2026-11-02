@@ -68,7 +68,7 @@ export function NewPasswordForm({
           onChange={(e) => setConfirm(e.target.value)}
           aria-invalid={!!errors.confirmPassword || undefined}
           aria-describedby="confirmPassword-msg"
-          trailing={matches ? <TickCircle aria-label="Passwords match" className="size-[17px] text-success" /> : undefined}
+          trailing={matches ? <TickCircle variant="Outline" aria-label="Passwords match" className="size-[17px] text-success" /> : undefined}
         />
       </Field>
       <Button type="submit" size="lg" className="w-full">

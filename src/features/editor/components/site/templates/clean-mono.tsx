@@ -357,7 +357,7 @@ function AllProducts(props: BlockRenderProps<AllProductsProps>) {
               </div>
               <label className="order-1 flex w-full items-center gap-2.5 border border-site-ink bg-site-surface px-3.5 py-3 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-site-ink @3xl:order-2 @3xl:w-[220px] @3xl:py-2.5 @5xl:w-[300px] @5xl:gap-3 @5xl:px-4 @5xl:py-3">
                 <span className="sr-only">Search products</span>
-                <SearchNormal1 aria-hidden className="size-[18px] shrink-0 text-site-muted" />
+                <SearchNormal1 variant="Outline" aria-hidden className="size-[18px] shrink-0 text-site-muted" />
                 <input
                   type="search"
                   value={browser.query}
@@ -640,12 +640,12 @@ function ContactPanel({ site }: { site: SiteRootProps }) {
                   FOCUS,
                 )}
               >
-                <cta.icon aria-hidden className="size-[18px] shrink-0" />
+                <cta.icon variant="Outline" aria-hidden className="size-[18px] shrink-0" />
                 <span className="min-w-0 flex-1">
                   <span className="block text-[15px] font-semibold">{cta.label}</span>
                   <span className={cn("block truncate text-[12px]", i === 0 ? "opacity-70" : "text-site-muted")}>{cta.detail}</span>
                 </span>
-                <ArrowRight aria-hidden className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight variant="Outline" aria-hidden className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
               </a>
             </li>
           ))}

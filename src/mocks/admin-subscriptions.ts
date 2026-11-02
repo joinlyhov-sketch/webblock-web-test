@@ -1,4 +1,3 @@
-import { mockCollection } from "@/lib/mock-state";
 import type { Payment, Plan, Subscription, SubscriptionStats } from "@/features/admin/types";
 import { PETAL_AND_STEM_ID, SOVANNARITH_ID } from "./session";
 import { at, daysAgo, daysFromNow } from "./time";
@@ -20,7 +19,7 @@ export const subscriptionStats: SubscriptionStats = {
 const U = "3f6c1e2a-8b4d-4c1e-9a2f-5d0e7b1c";
 const W = "9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b";
 
-export const subscriptions: Subscription[] = mockCollection("admin.subscriptions", [
+export const subscriptions: Subscription[] = [
   {
     id: "e4a6c8f0-3b5d-4f7a-8c9e-0a2c4e6a0401",
     userId: SOVANNARITH_ID,
@@ -49,7 +48,7 @@ export const subscriptions: Subscription[] = mockCollection("admin.subscriptions
     plan: "FREE_TRIAL",
     status: "ACTIVE",
     startAt: at("2026-11-01T09:30:00Z"),
-    endAt: at("2026-11-05T02:30:00Z"),
+    endAt: at("2026-11-15T09:30:00Z"),
     redeploysLeft: 0,
     redeployLimit: 0,
   },
@@ -131,7 +130,7 @@ export const subscriptions: Subscription[] = mockCollection("admin.subscriptions
     plan: "ULTRA",
     status: "ACTIVE",
     startAt: at("2026-08-26T11:00:00Z"),
-    endAt: at("2027-04-26T11:00:00Z"),
+    endAt: at("2026-11-26T11:00:00Z"),
     redeploysLeft: 92,
     redeployLimit: 100,
   },
@@ -164,10 +163,10 @@ export const subscriptions: Subscription[] = mockCollection("admin.subscriptions
     status: "ACTIVE",
     startAt: at("2026-03-08T09:15:00Z"),
     endAt: at("2026-11-08T09:15:00Z"),
-    redeploysLeft: 81,
+    redeploysLeft: 80,
     redeployLimit: 100,
   },
-]);
+];
 
 const S = "e4a6c8f0-3b5d-4f7a-8c9e-0a2c4e6a";
 const pay = (n: string, sub: string, plan: Payment["plan"], periodStart: string, amount: string, status: Payment["status"], createdAt: string): Payment => ({
@@ -180,16 +179,16 @@ const pay = (n: string, sub: string, plan: Payment["plan"], periodStart: string,
   createdAt,
 });
 
-export const payments: Payment[] = mockCollection("admin.payments", [
+export const payments: Payment[] = [
   pay("0503", "0403", "PLUS", at("2026-10-01T00:00:00Z"), "9.99", "PAID", at("2026-10-12T05:05:00Z")),
   pay("0504", "0404", "PRO", at("2026-11-01T00:00:00Z"), "19.99", "FAILED", at("2026-10-30T03:30:00Z")),
   pay("0505", "0404", "PRO", at("2026-10-01T00:00:00Z"), "19.99", "PAID", at("2026-10-03T03:30:00Z")),
   pay("0506", "0406", "PLUS", at("2026-10-01T00:00:00Z"), "9.99", "FAILED", at("2026-10-20T08:45:00Z")),
   pay("0507", "0407", "ULTRA", at("2026-10-01T00:00:00Z"), "39.99", "PAID", at("2026-10-26T11:00:00Z")),
   pay("0508", "0409", "ULTRA", at("2026-10-01T00:00:00Z"), "39.99", "PAID", at("2026-10-08T09:15:00Z")),
-]);
+];
 
-export const plans: Plan[] = mockCollection("admin.plans", [
+export const plans: Plan[] = [
   {
     id: "a0c2e4f6-5d7b-4c9e-8f1a-2b4d6f8a0601",
     code: "FREE_TRIAL",
@@ -243,4 +242,4 @@ export const plans: Plan[] = mockCollection("admin.plans", [
     subscriberCount: 123,
     mostPopular: false,
   },
-]);
+];

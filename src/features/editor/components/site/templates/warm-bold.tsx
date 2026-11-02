@@ -196,7 +196,7 @@ function Header() {
             onClick={() => setMenuOpen((v) => !v)}
             className={cn("rounded-sm p-1 text-site-ink @3xl:hidden", FOCUS)}
           >
-            <HamburgerMenu aria-hidden className="size-6" />
+            <HamburgerMenu variant="Outline" aria-hidden className="size-6" />
           </button>
         </div>
       </div>
@@ -461,7 +461,7 @@ function SearchField({ value, onChange, placeholder }: { value: string; onChange
   return (
     <label className="flex w-full items-center gap-2.5 border-b border-site-ink/50 pb-2.5 focus-within:border-site-accent @3xl:w-[240px] @5xl:w-[320px] @5xl:gap-3">
       <span className="sr-only">Search products</span>
-      <SearchNormal1 aria-hidden className="size-[18px] shrink-0 text-site-muted" />
+      <SearchNormal1 variant="Outline" aria-hidden className="size-[18px] shrink-0 text-site-muted" />
       <input
         type="search"
         value={value}
@@ -478,7 +478,7 @@ function Pager({ page, totalPages, onPage }: { page: number; totalPages: number;
   return (
     <nav aria-label="Product pages" className="flex items-center gap-[18px] font-site-display text-[13px] font-medium @3xl:gap-[22px] @5xl:text-[14px]">
       <button type="button" aria-label="Previous page" disabled={page === 0} onClick={() => onPage(page - 1)} className={arrow}>
-        <ArrowLeft2 aria-hidden className="size-3.5" />
+        <ArrowLeft2 variant="Outline" aria-hidden className="size-3.5" />
       </button>
       {Array.from({ length: totalPages }, (_, i) => (
         <button
@@ -503,7 +503,7 @@ function Pager({ page, totalPages, onPage }: { page: number; totalPages: number;
         onClick={() => onPage(page + 1)}
         className={arrow}
       >
-        <ArrowRight2 aria-hidden className="size-3.5" />
+        <ArrowRight2 variant="Outline" aria-hidden className="size-3.5" />
       </button>
     </nav>
   );
@@ -641,7 +641,7 @@ function About(props: BlockRenderProps<AboutProps>) {
 function InfoRow({ icon: Icon, label, value }: { icon: typeof Clock; label: string; value: string }) {
   return (
     <li className="flex items-center gap-3.5 py-3.5 first:pt-0 @5xl:gap-[18px] @5xl:py-4">
-      <Icon aria-hidden className="size-5 shrink-0 text-site-ink @5xl:size-6" />
+      <Icon variant="Outline" aria-hidden className="size-5 shrink-0 text-site-ink @5xl:size-6" />
       <div className="flex min-w-0 flex-col gap-1 @5xl:gap-1.5">
         <span className="font-site-display text-[10px] tracking-[0.1em] text-site-muted uppercase @5xl:text-[11px]">{label}</span>
         <span className="font-site-heading text-[18px] leading-snug font-semibold break-words text-site-ink @3xl:text-[19px] @5xl:text-[22px]">
@@ -661,7 +661,7 @@ function ContactRow({ href, icon: Icon, label }: { href: string; icon: typeof Ca
         FOCUS,
       )}
     >
-      <Icon aria-hidden className="size-5 shrink-0" />
+      <Icon variant="Outline" aria-hidden className="size-5 shrink-0" />
       <span className="flex-1">{label}</span>
       <span aria-hidden>{href.startsWith("https://") ? "↗" : "→"}</span>
     </a>
@@ -690,7 +690,7 @@ function VisitPanel() {
         <div className="flex flex-col gap-2.5">
           {phone && (
             <a href={telHref(phone)} className={cn(BUTTON_PRIMARY, "w-full")}>
-              <Call aria-hidden className="size-[18px]" />
+              <Call variant="Outline" aria-hidden className="size-[18px]" />
               Call us
             </a>
           )}

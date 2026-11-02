@@ -22,7 +22,7 @@ export function ProductImage({
         <Image src={src} alt={alt} fill unoptimized sizes={sizes} className="object-cover" />
       ) : (
         <span role="img" aria-label={alt} className="absolute inset-0 flex items-center justify-center text-placeholder">
-          <Gallery aria-hidden className="size-[30%] max-h-8 max-w-8" />
+          <Gallery variant="Outline" aria-hidden className="size-[30%] max-h-8 max-w-8" />
         </span>
       )}
     </span>

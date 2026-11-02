@@ -1,0 +1,145 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - complementary [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - link "WebBlock" [ref=f2e5] [cursor=pointer]:
+          - /url: /websites
+          - img "WebBlock" [ref=f2e6]
+        - button "Collapse sidebar" [expanded] [ref=f2e7] [cursor=pointer]
+      - navigation "Main" [ref=f2e11]:
+        - link "My Websites" [ref=f2e12] [cursor=pointer]:
+          - /url: /websites
+        - link "Templates" [ref=f2e18] [cursor=pointer]:
+          - /url: /templates
+        - link "Settings" [ref=f2e22] [cursor=pointer]:
+          - /url: /settings
+        - link "Contact Support" [ref=f2e27] [cursor=pointer]:
+          - /url: /support
+      - generic [ref=f2e32]:
+        - region "Your plan" [ref=f2e33]:
+          - generic [ref=f2e34]:
+            - generic [ref=f2e35]: Free trial
+            - generic [ref=f2e37]: 9 days left
+          - paragraph [ref=f2e38]: Petal & Stem is live on trial
+          - progressbar "Trial progress" [ref=f2e40]
+          - link "View plans" [ref=f2e42] [cursor=pointer]:
+            - /url: /billing/plans
+        - generic [ref=f2e43]:
+          - generic [ref=f2e44]: Sovannarith Soeun
+          - generic [ref=f2e46]:
+            - paragraph [ref=f2e47]: Sovannarith Soeun
+            - paragraph [ref=f2e48]: sovannarith@gmail.com
+          - button "Log out" [ref=f2e49] [cursor=pointer]
+    - main [ref=f2e54]:
+      - generic [ref=f2e55]:
+        - generic [ref=f2e57]:
+          - heading "My Websites" [level=1] [ref=f2e58]
+          - paragraph [ref=f2e59]: Pick a website to edit it, manage it or deploy changes.
+        - button "Notifications, 4 unread" [ref=f2e61] [cursor=pointer]
+      - generic [ref=f2e65]:
+        - navigation "Filter websites by status" [ref=f2e66]:
+          - button "All 4" [pressed] [ref=f2e67] [cursor=pointer]:
+            - text: All
+            - generic [ref=f2e68]: "4"
+          - button "Live 1" [ref=f2e69] [cursor=pointer]:
+            - text: Live
+            - generic [ref=f2e70]: "1"
+          - button "Draft 3" [ref=f2e71] [cursor=pointer]:
+            - text: Draft
+            - generic [ref=f2e72]: "3"
+          - button "Suspended 0" [ref=f2e73] [cursor=pointer]:
+            - text: Suspended
+            - generic [ref=f2e74]: "0"
+        - search [ref=f2e75]:
+          - searchbox "Search websites" [ref=f2e78]
+      - generic [ref=f2e80]:
+        - button "Start a new website Choose a template made for your business Browse templates" [ref=f2e81] [cursor=pointer]:
+          - generic [ref=f2e86]:
+            - generic [ref=f2e87]: Start a new website
+            - generic [ref=f2e88]: Choose a template made for your business
+          - generic [ref=f2e89]: Browse templates
+        - article [ref=f2e90]:
+          - generic [ref=f2e91]:
+            - img "Petal & Stem preview" [ref=f2e93]
+            - generic [ref=f2e95]:
+              - generic [ref=f2e96]: Free trial
+              - generic [ref=f2e98]: Live
+          - generic [ref=f2e103]:
+            - generic [ref=f2e104]:
+              - generic [ref=f2e105]:
+                - heading "Petal & Stem" [level=3] [ref=f2e106]
+                - paragraph [ref=f2e107]:
+                  - generic [ref=f2e112]: petalandstem.webblock.com
+              - button "More actions for Petal & Stem" [ref=f2e113] [cursor=pointer]
+            - generic [ref=f2e116]:
+              - generic [ref=f2e117]:
+                - generic [ref=f2e118]: Edited 2 hours ago · Florist
+                - generic [ref=f2e119]: Handmade
+              - generic [ref=f2e124]:
+                - link "Visit site" [ref=f2e125] [cursor=pointer]:
+                  - /url: /sites/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70
+                - link "Edit" [ref=f2e126] [cursor=pointer]:
+                  - /url: /websites/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70/edit
+        - article [ref=f2e127]:
+          - generic [ref=f2e128]:
+            - img "Maple & Rye Bakery preview" [ref=f2e130]
+            - generic [ref=f2e132]: Draft
+          - generic [ref=f2e137]:
+            - generic [ref=f2e138]:
+              - generic [ref=f2e139]:
+                - heading "Maple & Rye Bakery" [level=3] [ref=f2e140]
+                - paragraph [ref=f2e141]:
+                  - generic [ref=f2e146]: Not deployed yet
+              - button "More actions for Maple & Rye Bakery" [ref=f2e147] [cursor=pointer]
+            - generic [ref=f2e150]:
+              - generic [ref=f2e151]:
+                - generic [ref=f2e152]: Edited yesterday · Bakery
+                - generic [ref=f2e153]: Food & Beverages
+              - generic [ref=f2e159]:
+                - link "Preview" [ref=f2e160] [cursor=pointer]:
+                  - /url: /websites/b4f1c8d2-6e3a-4b9f-a2d7-1c5e8f0b3a64/preview?from=websites
+                - link "Edit" [ref=f2e161] [cursor=pointer]:
+                  - /url: /websites/b4f1c8d2-6e3a-4b9f-a2d7-1c5e8f0b3a64/edit
+        - article [ref=f2e162]:
+          - generic [ref=f2e163]:
+            - img "Lantern Café preview" [ref=f2e165]
+            - generic [ref=f2e167]: Draft
+          - generic [ref=f2e172]:
+            - generic [ref=f2e173]:
+              - generic [ref=f2e174]:
+                - heading "Lantern Café" [level=3] [ref=f2e175]
+                - paragraph [ref=f2e176]:
+                  - generic [ref=f2e181]: Not deployed yet
+              - button "More actions for Lantern Café" [ref=f2e182] [cursor=pointer]
+            - generic [ref=f2e185]:
+              - generic [ref=f2e186]:
+                - generic [ref=f2e187]: Edited 4 days ago · Café
+                - generic [ref=f2e188]: Food & Beverages
+              - generic [ref=f2e194]:
+                - link "Preview" [ref=f2e195] [cursor=pointer]:
+                  - /url: /websites/2a9c5e71-8d36-4c0b-b1f4-6e7d3a2c9f08/preview?from=websites
+                - link "Edit" [ref=f2e196] [cursor=pointer]:
+                  - /url: /websites/2a9c5e71-8d36-4c0b-b1f4-6e7d3a2c9f08/edit
+        - article [ref=f2e197]:
+          - generic [ref=f2e198]:
+            - img "Northpoint Audio preview" [ref=f2e200]
+            - generic [ref=f2e202]: Draft
+          - generic [ref=f2e207]:
+            - generic [ref=f2e208]:
+              - generic [ref=f2e209]:
+                - heading "Northpoint Audio" [level=3] [ref=f2e210]
+                - paragraph [ref=f2e211]:
+                  - generic [ref=f2e216]: Not deployed yet
+              - button "More actions for Northpoint Audio" [ref=f2e217] [cursor=pointer]
+            - generic [ref=f2e220]:
+              - generic [ref=f2e221]:
+                - generic [ref=f2e222]: Edited 3 hours ago · Audio store
+                - generic [ref=f2e223]: Technology
+              - generic [ref=f2e227]:
+                - link "Preview" [ref=f2e228] [cursor=pointer]:
+                  - /url: /websites/9e1b4d63-2f7a-4d85-8c30-a5b6c7d8e9f1/preview?from=websites
+                - link "Edit" [ref=f2e229] [cursor=pointer]:
+                  - /url: /websites/9e1b4d63-2f7a-4d85-8c30-a5b6c7d8e9f1/edit
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=f2e230]

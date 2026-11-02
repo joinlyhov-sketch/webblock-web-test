@@ -3,7 +3,7 @@ import { Add, Box } from "iconsax-reactjs";
 
 /** Blue icon tile + title + subtitle + close button, shared by the details and form popups. */
 export function ProductDialogHeader({
-  icon = <Box />,
+  icon = <Box variant="Outline" />,
   title,
   subtitle,
   onClose,
@@ -32,7 +32,7 @@ export function ProductDialogHeader({
         onClick={onClose}
         className="flex size-[26px] shrink-0 items-center justify-center rounded-lg bg-panel text-primary outline-none transition-colors hover:bg-brand-soft focus-visible:ring-3 focus-visible:ring-ring/40"
       >
-        <Add aria-hidden className="size-4 rotate-45" />
+        <Add variant="Outline" aria-hidden className="size-4 rotate-45" />
       </button>
     </div>
   );

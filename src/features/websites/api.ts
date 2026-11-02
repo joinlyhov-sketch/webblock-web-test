@@ -1,4 +1,3 @@
-import { mockApi, mockCollection } from "@/lib/mock-state";
 // Data access for websites. Mock now, Spring later: only these function bodies change.
 import { ApiError } from "@/lib/api/errors";
 import { delay } from "@/lib/api/delay";
@@ -6,7 +5,6 @@ import type { Page } from "@/lib/api/types";
 import { createBusinessInfo } from "@/features/business-info/api";
 import { setSiteOnline } from "@/features/monitoring/api";
 import { addTemplateProducts } from "@/features/products/api";
-import { settleDeployments } from "@/features/deploy/api";
 import { toPage } from "@/lib/table-query";
 import { businessTypes, websites as seed } from "@/mocks/websites";
 import { websiteOwners } from "@/mocks/session";
@@ -15,7 +13,8 @@ import { newWebsitePage, websitePages } from "@/mocks/website-pages";
 import type { BusinessDetails } from "./types";
 import type { Website, WebsiteStatus, WebsiteStatusCounts } from "./types";
 
-const store: Website[] = mockCollection("websites", seed);
+const globalForStore = globalThis as typeof globalThis & { __wbWebsites?: Website[] };
+const store: Website[] = (globalForStore.__wbWebsites ??= structuredClone(seed));
 
 function ownedBy(ownerId: string): Website[] {
   const ids = new Set(
@@ -29,12 +28,11 @@ export type ListWebsitesFilter = {
   q?: string;
 };
 
-export const listWebsites = mockApi(async function listWebsites(
+export async function listWebsites(
   ownerId: string,
   filter: ListWebsitesFilter = {},
 ): Promise<Page<Website>> {
   await delay();
-  await settleDeployments();
   const q = filter.q?.trim().toLowerCase();
   const items = ownedBy(ownerId)
     .filter((w) => !filter.status || w.status === filter.status)
@@ -46,11 +44,10 @@ export const listWebsites = mockApi(async function listWebsites(
         (w.domain ?? "").includes(q),
     );
   return toPage(items, { page: 0, size: 100 });
-});
+}
 
-export const countWebsites = mockApi(async function countWebsites(ownerId: string): Promise<WebsiteStatusCounts> {
+export async function countWebsites(ownerId: string): Promise<WebsiteStatusCounts> {
   await delay(100);
-  await settleDeployments();
   const mine = ownedBy(ownerId);
   const count = (status: WebsiteStatus) => mine.filter((w) => w.status === status).length;
   return {
@@ -59,17 +56,16 @@ export const countWebsites = mockApi(async function countWebsites(ownerId: strin
     DRAFT: count("DRAFT"),
     SUSPENDED: count("SUSPENDED"),
   };
-});
+}
 
-export const getWebsite = mockApi(async function getWebsite(websiteId: string): Promise<Website> {
+export async function getWebsite(websiteId: string): Promise<Website> {
   await delay(100);
-  await settleDeployments(websiteId);
   const website = store.find((w) => w.id === websiteId);
   if (!website) {
     throw new ApiError({ title: "Website not found", status: 404, detail: "That website no longer exists." });
   }
   return website;
-});
+}
 
 /** MOCK ONLY: Spring bumps the project's `updatedAt` itself whenever its page draft is saved. */
 export function touchWebsite(websiteId: string, at: string): void {
@@ -86,7 +82,7 @@ export type CreateWebsiteBody = {
   details: BusinessDetails;
 };
 
-export const createWebsite = mockApi(async function createWebsite(ownerId: string, body: CreateWebsiteBody): Promise<Website> {
+export async function createWebsite(ownerId: string, body: CreateWebsiteBody): Promise<Website> {
   await delay(400);
   if (ownedBy(ownerId).some((w) => w.name.toLowerCase() === body.name.toLowerCase())) {
     throw new ApiError({
@@ -127,27 +123,27 @@ export const createWebsite = mockApi(async function createWebsite(ownerId: strin
   });
   addTemplateProducts(website.id, templateCatalogue(page.draft));
   return website;
-});
+}
 
 /** GET /domains/check — is this public host free? A website may keep the host it already owns. */
-export const isDomainTaken = mockApi(async function isDomainTaken(host: string, exceptWebsiteId: string): Promise<boolean> {
+export async function isDomainTaken(host: string, exceptWebsiteId: string): Promise<boolean> {
   await delay(150);
   return store.some((w) => w.id !== exceptWebsiteId && w.domain === host);
-});
+}
 
 /**
  * MOCK ONLY: Spring does this when a deploy finishes. The website goes LIVE on its host.
  * (A suspended website stays suspended: only reactivating it brings it back.)
  */
-export const markWebsiteLive = mockApi(async function markWebsiteLive(websiteId: string, domain: string): Promise<Website> {
+export async function markWebsiteLive(websiteId: string, domain: string): Promise<Website> {
   const website = await getWebsite(websiteId);
   website.domain = domain;
   if (website.status !== "SUSPENDED") website.status = "LIVE";
   website.updatedAt = new Date().toISOString();
   return website;
-});
+}
 
-export const reactivateWebsite = mockApi(async function reactivateWebsite(websiteId: string): Promise<Website> {
+export async function reactivateWebsite(websiteId: string): Promise<Website> {
   const website = await getWebsite(websiteId);
   await delay(300);
   website.status = "LIVE";
@@ -156,9 +152,9 @@ export const reactivateWebsite = mockApi(async function reactivateWebsite(websit
   website.reactivatedAt = new Date().toISOString();
   website.updatedAt = website.reactivatedAt;
   return website;
-});
+}
 
-export const suspendWebsite = mockApi(async function suspendWebsite(websiteId: string): Promise<Website> {
+export async function suspendWebsite(websiteId: string): Promise<Website> {
   const website = await getWebsite(websiteId);
   await delay(300);
   website.status = "SUSPENDED";
@@ -167,13 +163,13 @@ export const suspendWebsite = mockApi(async function suspendWebsite(websiteId: s
   website.suspendedAt = new Date().toISOString();
   website.updatedAt = website.suspendedAt;
   return website;
-});
+}
 
 /**
  * DELETE /projects/{projectId} — removes a website that was never deployed.
  * The backend refuses (409) for live or suspended websites; the mock does the same.
  */
-export const deleteWebsite = mockApi(async function deleteWebsite(websiteId: string): Promise<void> {
+export async function deleteWebsite(websiteId: string): Promise<void> {
   const website = await getWebsite(websiteId);
   await delay(300);
   if (website.status !== "DRAFT") {
@@ -188,8 +184,8 @@ export const deleteWebsite = mockApi(async function deleteWebsite(websiteId: str
   if (owner !== -1) websiteOwners.splice(owner, 1);
   const page = websitePages.findIndex((p) => p.websiteId === websiteId);
   if (page !== -1) websitePages.splice(page, 1);
-});
+}
 
-export const listBusinessTypes = mockApi(async function listBusinessTypes(): Promise<string[]> {
+export async function listBusinessTypes(): Promise<string[]> {
   return businessTypes;
-});
+}

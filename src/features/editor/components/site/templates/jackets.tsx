@@ -487,7 +487,7 @@ function InfoCard({ icon: Icon, label, children, href }: { icon: typeof Call; la
   const body = (
     <>
       <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-site-tint-3 bg-site-accent text-site-tint-3 @5xl:size-11">
-        <Icon className="size-[18px]" />
+        <Icon variant="Outline" className="size-[18px]" />
       </span>
       <span className="flex min-w-0 flex-col">
         <span className="text-[10px] text-site-tint-3/65">{label}</span>
@@ -522,7 +522,7 @@ function VisitUs(props: BlockRenderProps<VisitUsProps>) {
               <div className="flex flex-col gap-3 rounded-[18px] border-2 border-site-tint-3 bg-site-tint-2 p-3.5 text-site-tint-3 shadow-[4px_4px_0_var(--site-tint-4)] @5xl:p-4">
                 <div className="flex items-center gap-3">
                   <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-site-tint-3 bg-site-accent @5xl:size-11">
-                    <Clock className="size-[18px]" />
+                    <Clock variant="Outline" className="size-[18px]" />
                   </span>
                   <span className="flex flex-col">
                     <span className="text-[10px] text-site-tint-3/65">Opening hours</span>
@@ -598,17 +598,17 @@ function Footer(props: BlockRenderProps<FooterProps>) {
             <div className="flex items-center gap-2">
               {site.telegram && (
                 <a href={telegramHref(site.telegram)} {...EXTERNAL_LINK} aria-label="Telegram" className={cn(circle, FOCUS)}>
-                  <Send2 aria-hidden className="size-4" />
+                  <Send2 variant="Outline" aria-hidden className="size-4" />
                 </a>
               )}
               {phone && (
                 <a href={telHref(phone)} aria-label="Call us" className={cn(circle, FOCUS)}>
-                  <Call aria-hidden className="size-4" />
+                  <Call variant="Outline" aria-hidden className="size-4" />
                 </a>
               )}
               {site.address && (
                 <a href={directionsHref(site.address)} {...EXTERNAL_LINK} aria-label="Get directions" className={cn(circle, FOCUS)}>
-                  <Location aria-hidden className="size-4" />
+                  <Location variant="Outline" aria-hidden className="size-4" />
                 </a>
               )}
             </div>

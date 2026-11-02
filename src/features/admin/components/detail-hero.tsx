@@ -43,7 +43,7 @@ export function DetailHero({
             className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand-soft bg-background px-3 py-1 text-sm font-medium text-brand hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none"
           >
             <span className="truncate">{link.label}</span>
-            <ExportSquare aria-hidden className="size-3.5 shrink-0" />
+            <ExportSquare variant="Outline" aria-hidden className="size-3.5 shrink-0" />
           </a>
         )}
         {chips && <div className="flex flex-wrap gap-1.5 pt-0.5">{chips}</div>}

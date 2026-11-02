@@ -12,7 +12,8 @@ import {
   Sms,
   Timer1,
 } from "iconsax-reactjs";
-import { Avatar, Thumbnail } from "@/components/common/avatar";
+import { Avatar } from "@/components/common/avatar";
+import { WebsiteLogo } from "./website-logo";
 import { DataTable } from "@/components/common/data-table";
 import { EmptyState } from "@/components/common/empty-state";
 import { KpiCard, KpiGrid } from "@/components/common/kpi-card";
@@ -93,25 +94,25 @@ export function UsersView({
           label="Total accounts"
           value={count.format(stats.totalAccounts)}
           tone="brand"
-          icon={<Profile2User />}
+          icon={<Profile2User variant="Outline" />}
         />
         <KpiCard
           label="On free trial"
           value={count.format(stats.onFreeTrial)}
           tone="violet"
-          icon={<Timer1 />}
+          icon={<Timer1 variant="Outline" />}
         />
         <KpiCard
           label="Paying"
           value={count.format(stats.paying)}
           tone="success"
-          icon={<CardIcon />}
+          icon={<CardIcon variant="Outline" />}
         />
         <KpiCard
           label="Live websites"
           value={count.format(stats.liveWebsites)}
           tone="teal"
-          icon={<Global />}
+          icon={<Global variant="Outline" />}
         />
       </KpiGrid>
       <DataTable
@@ -152,7 +153,7 @@ export function UsersView({
                 href={`/admin/users/export${exportQuery ? `?${exportQuery}` : ""}`}
                 download
               >
-                <ExportSquare />
+                <ExportSquare variant="Outline" />
                 Export CSV
               </a>
             </Button>
@@ -161,7 +162,7 @@ export function UsersView({
         empty={
           q || plan ? (
             <EmptyState
-              icon={<SearchNormal1 />}
+              icon={<SearchNormal1 variant="Outline" />}
               title={
                 q
                   ? `No accounts match “${q}”`
@@ -182,7 +183,7 @@ export function UsersView({
             />
           ) : (
             <EmptyState
-              icon={<Profile2User />}
+              icon={<Profile2User variant="Outline" />}
               title="No accounts yet"
               description="People who sign up show here."
             />
@@ -226,7 +227,6 @@ export function UsersView({
           {
             key: "plan",
             header: "Plan",
-            sortField: "plan",
             cell: (u) => <PlanBadge plan={u.plan} />,
           },
           {
@@ -242,7 +242,6 @@ export function UsersView({
           {
             key: "status",
             header: "Status",
-            sortField: "status",
             cell: (u) => <StatusBadge status={u.status} />,
           },
           {
@@ -309,7 +308,7 @@ function UserDetail({
 }) {
   return (
     <Modal title={user.fullName} hideTitle size="xl" closeHref={closeHref}>
-      <div className="relative isolate space-y-4 px-6 pt-7 pb-6">
+      <div className="relative isolate space-y-4 overflow-x-clip px-6 pt-7 pb-6">
         <HeroDecor layout="card" />
         <div className="flex items-center gap-[22px] pr-11 pl-2">
           <span className="relative shrink-0">
@@ -334,26 +333,26 @@ function UserDetail({
             </p>
             <div className="flex flex-wrap items-center gap-1.5 pt-2">
               <StatusBadge status={user.status} />
-              <Pill tone="info" icon={<Sms aria-hidden />}>
+              <Pill tone="info" icon={<Sms variant="Outline" aria-hidden />}>
                 {user.signInMethod === "GOOGLE" ? "Google sign-in" : "Email sign-in"}
               </Pill>
             </div>
           </div>
         </div>
-        <DetailCard title="Account details" icon={<Profile />}>
+        <DetailCard title="Account details" icon={<Profile variant="Outline" />}>
           <dl className="grid gap-3 pt-3.5 pb-4 sm:grid-cols-3">
             <InfoTile
-              icon={<DocumentText />}
+              icon={<DocumentText variant="Outline" />}
               label="Account ID"
               value={user.accountCode}
             />
             <InfoTile
-              icon={<Calendar1 />}
+              icon={<Calendar1 variant="Outline" />}
               label="Joined"
               value={formatDate(user.joinedAt)}
             />
             <InfoTile
-              icon={<Crown1 />}
+              icon={<Crown1 variant="Outline" />}
               label="Plan"
               value={
                 user.plan === "FREE_TRIAL"
@@ -366,13 +365,12 @@ function UserDetail({
         </DetailCard>
         <DetailCard
           title="Websites & status"
-          icon={<Global />}
+          icon={<Global variant="Outline" />}
           aside={`${websites.totalItems} ${websites.totalItems === 1 ? "website" : "websites"}`}
         >
           {websites.items.length ? (
-            <ul className="max-h-[192px] divide-y divide-border overflow-y-auto">
+            <ul className="divide-y divide-border">
               {websites.items.map((w) => {
-                const published = w.liveRelease !== null;
                 return (
                   <li key={w.id}>
                     <Link
@@ -380,23 +378,20 @@ function UserDetail({
                       scroll={false}
                       className="flex h-16 items-center gap-3 rounded-lg px-1 transition-colors outline-none hover:bg-muted focus-visible:bg-muted"
                     >
-                      <Thumbnail
-                        src={w.thumbnailUrl}
-                        className="h-8 w-10 rounded-lg"
+                      <WebsiteLogo
+                        logoUrl={w.logoUrl}
+                        templateSlug={w.templateSlug}
+                        className="size-9"
                       />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-bold text-foreground">
                           {w.name}
                         </span>
                         <span className="block truncate text-sm text-muted-foreground">
-                          {published ? w.domain : "Not deployed"}
+                          {w.domain || "Not deployed"}
                         </span>
                       </span>
-                      <StatusBadge
-                        status={
-                          published ? (w.releaseStatus ?? "LIVE") : "DRAFT"
-                        }
-                      />
+                      <StatusBadge status={w.releaseStatus ?? "DRAFT"} />
                     </Link>
                   </li>
                 );
@@ -412,22 +407,29 @@ function UserDetail({
           {subscriptionHref ? (
             <Button asChild variant="secondary" size="sm" className="flex-1">
               <Link href={subscriptionHref} scroll={false}>
-                <DocumentText />
+                <DocumentText variant="Outline" />
                 View subscription
               </Link>
             </Button>
           ) : (
             <Button variant="secondary" size="sm" className="flex-1" disabled>
-              <DocumentText />
+              <DocumentText variant="Outline" />
               No subscription
             </Button>
           )}
-          <Button asChild size="sm" className="flex-1">
-            <Link href={`/admin/websites?owner=${user.id}`}>
-              <ExportSquare />
+          {websites.totalItems > 0 ? (
+            <Button asChild size="sm" className="flex-1">
+              <Link href={`/admin/websites?owner=${user.id}`}>
+                <ExportSquare variant="Outline" />
+                View websites
+              </Link>
+            </Button>
+          ) : (
+            <Button size="sm" className="flex-1" disabled>
+              <ExportSquare variant="Outline" />
               View websites
-            </Link>
-          </Button>
+            </Button>
+          )}
         </div>
       </div>
     </Modal>

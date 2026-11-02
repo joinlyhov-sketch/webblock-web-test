@@ -15,7 +15,9 @@ export type Carousel3DItem = {
 };
 
 const CARD_WIDTH = 1.6;
-const FRAME = 0.035;
+/** Glass frame around each screenshot, and the thin light edge just inside it. */
+const FRAME = 0.022;
+const RIM = 0.012;
 const RADIUS = 0.06;
 const FOV = 30;
 /** Ring radius: how far the cards stand from the centre. */
@@ -161,7 +163,8 @@ function Carousel3DStage({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 50);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const frameColor = tokenColor("--color-border");
+    const frameColor = tokenColor("--color-glass-frame");
+    const rimColor = tokenColor("--color-glass-rim");
     const loadingColor = tokenColor("--color-muted");
     const loader = new THREE.TextureLoader();
     const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
@@ -172,9 +175,25 @@ function Carousel3DStage({
       const group = new THREE.Group();
 
       const frameGeometry = roundedPanel(CARD_WIDTH + FRAME * 2, height + FRAME * 2, RADIUS + FRAME);
-      const frameMaterial = new THREE.MeshBasicMaterial({ color: frameColor.clone() });
+      const frameMaterial = new THREE.MeshBasicMaterial({
+        color: frameColor.clone(),
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false,
+      });
       const frame = new THREE.Mesh(frameGeometry, frameMaterial);
       frame.position.z = -0.002;
+
+      // Thin light edge between the frame and the screenshot: the glass catching the light.
+      const rimGeometry = roundedPanel(CARD_WIDTH + RIM * 2, height + RIM * 2, RADIUS + RIM);
+      const rimMaterial = new THREE.MeshBasicMaterial({
+        color: rimColor.clone(),
+        transparent: true,
+        opacity: 0.45,
+        depthWrite: false,
+      });
+      const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+      rim.position.z = -0.001;
 
       const imageGeometry = roundedPanel(CARD_WIDTH, height, RADIUS);
       const imageMaterial = new THREE.MeshBasicMaterial({ color: loadingColor.clone() });
@@ -186,15 +205,37 @@ function Carousel3DStage({
         imageMaterial.map = texture;
         imageMaterial.needsUpdate = true;
         disposables.push(texture);
+
+        // Frosted glass: the screenshot shrunk to a few pixels (so it blurs when stretched back)
+        // and veiled in white, so the frame picks up the soft colours of the page behind it.
+        const canvas = document.createElement("canvas");
+        canvas.width = 24;
+        canvas.height = Math.max(8, Math.round(24 / item.aspect));
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.globalAlpha = 0.5;
+          ctx.drawImage(texture.image as CanvasImageSource, 0, 0, canvas.width, canvas.height);
+          const glass = new THREE.CanvasTexture(canvas);
+          glass.colorSpace = THREE.SRGBColorSpace;
+          glass.minFilter = THREE.LinearFilter;
+          glass.magFilter = THREE.LinearFilter;
+          frameMaterial.map = glass;
+          frameMaterial.color.set(0xffffff);
+          frameMaterial.needsUpdate = true;
+          disposables.push(glass);
+        }
         kick();
       });
 
       frame.userData.index = index;
       image.userData.index = index;
-      group.add(frame, image);
+      rim.userData.index = index;
+      group.add(frame, rim, image);
       scene.add(group);
-      disposables.push(frameGeometry, frameMaterial, imageGeometry, imageMaterial);
-      return { group, imageMaterial, height, hit: [frame, image] };
+      disposables.push(frameGeometry, frameMaterial, rimGeometry, rimMaterial, imageGeometry, imageMaterial);
+      return { group, imageMaterial, height, hit: [frame, rim, image] };
     });
     const hitTargets = cards.flatMap((card) => card.hit);
 

@@ -25,7 +25,7 @@ export function AuthHeader({
           href={backHref}
           className="inline-flex items-center gap-1.5 self-start rounded-md text-[13px] text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="size-4" />
+          <ArrowLeft variant="Outline" className="size-4" />
           Back
         </Link>
       )}

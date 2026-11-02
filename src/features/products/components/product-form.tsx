@@ -101,7 +101,7 @@ export function ProductForm({
         onClose={onDone}
       />
 
-      <div className="grid gap-5 border-b border-border py-4 sm:grid-cols-[226px_minmax(0,1fr)]">
+      <div className="grid gap-5 border-b border-border py-4 md:grid-cols-[226px_minmax(0,1fr)]">
         <div className="flex flex-col gap-2">
           <button
             type="button"
@@ -123,7 +123,7 @@ export function ProductForm({
             ) : (
               <>
                 <span aria-hidden className="flex size-8 items-center justify-center rounded-lg bg-brand-soft">
-                  <Export className="size-4" />
+                  <Export variant="Outline" className="size-4" />
                 </span>
                 Add a photo
               </>
@@ -233,7 +233,7 @@ export function ProductForm({
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-2 pt-4">
+      <div className="mobile-submit flex items-center justify-end gap-2 pt-4">
         <Button variant="secondary" size="sm" onClick={onDone} disabled={saving}>
           Cancel
         </Button>

@@ -94,7 +94,7 @@ export function ColorPicker({
           />
         </div>
         <Button variant="ghost" size="sm" disabled={value === null} onClick={() => onChange(null)}>
-          <ArrowRotateLeft /> Use palette colour
+          <ArrowRotateLeft variant="Outline" /> Use palette colour
         </Button>
       </PopoverContent>
     </Popover>

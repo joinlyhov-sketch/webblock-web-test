@@ -1,0 +1,221 @@
+- generic [active] [ref=f14e1]:
+  - main [ref=f14e2]:
+    - generic [ref=f14e5]:
+      - generic [ref=f14e6]:
+        - link "Back to my websites" [ref=f14e7] [cursor=pointer]:
+          - /url: /websites
+        - generic [ref=f14e8]:
+          - paragraph [ref=f14e9]: Petal & Stem
+          - paragraph [ref=f14e10]:
+            - generic [ref=f14e15]: petalandstem.webblock.com
+        - generic [ref=f14e16]:
+          - button "Undo" [disabled]
+          - button "Redo" [disabled]
+        - radiogroup "Device" [ref=f14e17]:
+          - radio "Desktop" [checked] [ref=f14e18] [cursor=pointer]
+          - radio "Tablet" [ref=f14e23] [cursor=pointer]
+          - radio "Mobile" [ref=f14e26] [cursor=pointer]
+        - button "Save draft" [ref=f14e30] [cursor=pointer]
+        - link "Portal" [ref=f14e32] [cursor=pointer]:
+          - /url: /portal/7d3e9b2a-1c4f-4a8e-b6d5-3f2e1a9c8b70
+        - button "Preview" [ref=f14e33] [cursor=pointer]
+        - button "Deploy" [ref=f14e34] [cursor=pointer]
+      - generic [ref=f14e35]:
+        - complementary "Page" [ref=f14e36]:
+          - generic [ref=f14e37]:
+            - generic [ref=f14e38]:
+              - heading "Page structure" [level=2] [ref=f14e39]
+              - generic [ref=f14e40]: Drag to reorder
+              - button "Hide page panel" [expanded] [ref=f14e41] [cursor=pointer]
+            - list [ref=f14e42]:
+              - listitem [ref=f14e43]:
+                - button "Hero" [ref=f14e44] [cursor=pointer]
+              - listitem [ref=f14e50]:
+                - button "Product Cards" [ref=f14e51] [cursor=pointer]
+              - listitem [ref=f14e59]:
+                - button "All products" [ref=f14e60] [cursor=pointer]
+              - listitem [ref=f14e66]:
+                - button "About" [ref=f14e67] [cursor=pointer]
+              - listitem [ref=f14e74]:
+                - button "Visit us" [ref=f14e75] [cursor=pointer]
+              - listitem [ref=f14e82]:
+                - button "Footer" [ref=f14e83] [cursor=pointer]
+          - generic [ref=f14e90]:
+            - heading "Add a block" [level=2] [ref=f14e91]
+            - generic [ref=f14e93]:
+              - generic [ref=f14e95]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Hero
+                        - generic: Big heading, image, button
+                      - button "Add Hero"
+                - generic [ref=f14e98]:
+                  - generic [ref=f14e102]:
+                    - generic [ref=f14e103]: Hero
+                    - generic [ref=f14e104]: Big heading, image, button
+                  - button "Add Hero" [ref=f14e105] [cursor=pointer]
+              - generic [ref=f14e107]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Text
+                        - generic: Heading and paragraph
+                      - button "Add Text"
+                - generic [ref=f14e110]:
+                  - generic [ref=f14e116]:
+                    - generic [ref=f14e117]: Text
+                    - generic [ref=f14e118]: Heading and paragraph
+                  - button "Add Text" [ref=f14e119] [cursor=pointer]
+              - generic [ref=f14e121]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Product Cards
+                        - generic: A short row of featured picks
+                      - button "Add Product Cards"
+                - generic [ref=f14e124]:
+                  - generic [ref=f14e130]:
+                    - generic [ref=f14e131]: Product Cards
+                    - generic [ref=f14e132]: A short row of featured picks
+                  - button "Add Product Cards" [ref=f14e133] [cursor=pointer]
+              - generic [ref=f14e135]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: All products
+                        - generic: "Full catalogue: categories, search, pages"
+                      - button "Add All products"
+                - generic [ref=f14e138]:
+                  - generic [ref=f14e142]:
+                    - generic [ref=f14e143]: All products
+                    - generic [ref=f14e144]: "Full catalogue: categories, search, pages"
+                  - button "Add All products" [ref=f14e145] [cursor=pointer]
+              - generic [ref=f14e147]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: About
+                        - generic: Your story
+                      - button "Add About"
+                - generic [ref=f14e150]:
+                  - generic [ref=f14e155]:
+                    - generic [ref=f14e156]: About
+                    - generic [ref=f14e157]: Your story
+                  - button "Add About" [ref=f14e158] [cursor=pointer]
+              - generic [ref=f14e160]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Visit us
+                        - generic: Map, hours & contact
+                      - button "Add Visit us"
+                - generic [ref=f14e163]:
+                  - generic [ref=f14e168]:
+                    - generic [ref=f14e169]: Visit us
+                    - generic [ref=f14e170]: Map, hours & contact
+                  - button "Add Visit us" [ref=f14e171] [cursor=pointer]
+              - generic [ref=f14e173]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Footer
+                        - generic: Contact and links
+                      - button "Add Footer"
+                - generic [ref=f14e176]:
+                  - generic [ref=f14e181]:
+                    - generic [ref=f14e182]: Footer
+                    - generic [ref=f14e183]: Contact and links
+                  - button "Add Footer" [ref=f14e184] [cursor=pointer]
+        - generic [ref=f14e189]:
+          - generic [ref=f14e191]:
+            - link "Petal & Stem" [ref=f14e192] [cursor=pointer]:
+              - /url: "#top"
+              - generic [ref=f14e193]: ❀ Petal & Stem
+            - generic [ref=f14e194]:
+              - navigation "Main" [ref=f14e195]:
+                - link "Home" [ref=f14e196] [cursor=pointer]:
+                  - /url: "#top"
+                - link "Shop" [ref=f14e197] [cursor=pointer]:
+                  - /url: "#shop"
+                - link "Visit us" [ref=f14e198] [cursor=pointer]:
+                  - /url: "#visit"
+              - generic [ref=f14e199]: Open now · until 6:00 PM
+              - button "Contact" [ref=f14e201] [cursor=pointer]
+          - main
+        - complementary "Block settings" [ref=f14e202]:
+          - button "WebBlock AI WebBlock AI Ask AI to edit your site" [ref=f14e205] [cursor=pointer]:
+            - img "WebBlock AI" [ref=f14e206]
+            - generic [ref=f14e207]:
+              - generic [ref=f14e208]: WebBlock AI
+              - generic [ref=f14e209]: Ask AI to edit your site
+          - generic [ref=f14e215]:
+            - paragraph [ref=f14e216]: Site settings
+            - paragraph [ref=f14e217]: Business info · select a section to edit it
+          - tablist "Settings" [ref=f14e219]:
+            - tab "Content" [selected] [ref=f14e220] [cursor=pointer]
+            - tab "Layout & Design" [ref=f14e221] [cursor=pointer]
+          - tabpanel [ref=f14e222]:
+            - generic [ref=f14e223]:
+              - paragraph [ref=f14e224]: Business
+              - generic [ref=f14e225]:
+                - generic [ref=f14e226]: Business name
+                - textbox "Business name" [disabled] [ref=f14e228]: Petal & Stem
+                - paragraph [ref=f14e229]: From your business details
+              - generic [ref=f14e234]:
+                - generic [ref=f14e235]: Status badge (optional)
+                - textbox "Status badge (optional)" [ref=f14e237]:
+                  - /placeholder: e.g. Open now · until 6:00 PM
+                  - text: Open now · until 6:00 PM
+            - generic [ref=f14e238]:
+              - paragraph [ref=f14e239]: Hours
+              - generic [ref=f14e240]:
+                - generic [ref=f14e241]: Opening hours (short)
+                - textbox "Opening hours (short)" [disabled] [ref=f14e243]: 9:00 AM – 6:00 PM
+                - paragraph [ref=f14e244]: From your business details
+              - generic [ref=f14e249]:
+                - generic [ref=f14e250]: Opening hours (week)
+                - textbox "Opening hours (week)" [disabled] [ref=f14e252]: Mon – Fri 9:00 AM – 6:00 PM · Sat – Sun closed
+                - paragraph [ref=f14e253]: From your business details
+            - generic [ref=f14e258]:
+              - paragraph [ref=f14e259]: Contact
+              - generic [ref=f14e260]:
+                - generic [ref=f14e261]: Address
+                - textbox "Address" [disabled] [ref=f14e263]: 18 Garden Lane, Phnom Penh
+                - paragraph [ref=f14e264]: From your business details
+              - generic [ref=f14e269]:
+                - generic [ref=f14e270]: Phone numbers
+                - textbox "Phone numbers" [disabled] [ref=f14e272]: 012 345 678
+                - paragraph [ref=f14e273]: From your business details
+              - generic [ref=f14e278]:
+                - generic [ref=f14e279]: Email
+                - textbox "Email" [disabled] [ref=f14e281]: hello@petalandstem.com
+                - paragraph [ref=f14e282]: From your business details
+              - generic [ref=f14e287]:
+                - generic [ref=f14e288]: Telegram username (optional)
+                - textbox "Telegram username (optional)" [ref=f14e290]:
+                  - /placeholder: without @
+                  - text: petalandstem
+            - generic [ref=f14e291]:
+              - paragraph [ref=f14e292]: Social
+              - generic [ref=f14e293]:
+                - generic [ref=f14e294]: Facebook link (optional)
+                - textbox "Facebook link (optional)" [ref=f14e296]:
+                  - /placeholder: https://
+                  - text: https://facebook.com/petalandstem
+              - generic [ref=f14e297]:
+                - generic [ref=f14e298]: Instagram link (optional)
+                - textbox "Instagram link (optional)" [ref=f14e300]:
+                  - /placeholder: https://
+                  - text: https://instagram.com/petalandstem
+            - paragraph [ref=f14e301]: These details appear in the header, the Visit us section, the footer and the Contact popup.
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=f14e302]

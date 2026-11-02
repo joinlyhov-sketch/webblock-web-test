@@ -50,7 +50,7 @@ export function PasswordRules({ password }: { password: string }) {
             key={rule.label}
             className={cn("flex items-center gap-2 text-[13px]", met ? "text-success" : "text-muted-foreground")}
           >
-            <TickCircle className="size-[15px]" />
+            <TickCircle variant="Outline" className="size-[15px]" />
             {rule.label}
           </li>
         );

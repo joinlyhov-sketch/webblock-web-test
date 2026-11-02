@@ -51,7 +51,7 @@ export function BillingView({ data }: { data: BillingData }) {
           <div className="flex flex-col gap-3">
             <CardHeader
               tone="soft"
-              icon={<Refresh2 />}
+              icon={<Refresh2 variant="Outline" />}
               title={paid ? "Renew plan" : "Choose a plan"}
               description={paid ? `Renews on ${endDate}` : `Trial ends on ${endDate}`}
               action={<DaysRing daysLeft={daysLeft} totalDays={data.periodDays} ring={tone.ring} />}
@@ -135,7 +135,7 @@ function CurrentPlanCard({ subscription, endDate }: { subscription: Subscription
           {shimmer ? (
             <span aria-hidden className="size-[18px] bg-[url('/images/settings/plan-card-icon.svg')] bg-contain bg-no-repeat" />
           ) : (
-            <Card aria-hidden className="size-[18px]" />
+            <Card variant="Outline" aria-hidden className="size-[18px]" />
           )}{" "}
           Current plan
         </p>

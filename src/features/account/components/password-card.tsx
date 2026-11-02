@@ -28,7 +28,7 @@ export function PasswordCard({ hasPassword }: { hasPassword: boolean }) {
 
   return (
     <SettingsCard
-      icon={<Lock1 />}
+      icon={<Lock1 variant="Outline" />}
       title={hasPassword ? "Password" : "Set a password"}
       description={
         hasPassword

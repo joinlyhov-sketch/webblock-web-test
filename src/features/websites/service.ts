@@ -1,4 +1,3 @@
-import { mockApi } from "@/lib/mock-state";
 // Website logic. Pages call the read functions, Server Actions call the write functions.
 // Nothing here knows whether data comes from the mock or from Spring.
 import type { ActionResult } from "@/lib/actions/result";
@@ -51,12 +50,12 @@ export function parseInitialFilter(searchParams: SearchParams): { status: Status
 }
 
 /** Every website of the owner. The My Websites screen filters this list in the browser. */
-export const getAllWebsites = mockApi(async function getAllWebsites(ownerId: string): Promise<Website[]> {
+export async function getAllWebsites(ownerId: string): Promise<Website[]> {
   const page = await listWebsites(ownerId, {});
   return page.items;
-});
+}
 
-export const getWebsitesView = mockApi(async function getWebsitesView(
+export async function getWebsitesView(
   ownerId: string,
   searchParams: SearchParams,
 ): Promise<WebsitesView> {
@@ -73,11 +72,11 @@ export const getWebsitesView = mockApi(async function getWebsitesView(
     q,
     isEmpty: counts.ALL === 0,
   };
-});
+}
 
-export const getBusinessTypes = mockApi(async function getBusinessTypes(): Promise<string[]> {
+export async function getBusinessTypes(): Promise<string[]> {
   return listBusinessTypes();
-});
+}
 
 function parseHours(raw: string): OpeningHour[] {
   try {
@@ -89,7 +88,7 @@ function parseHours(raw: string): OpeningHour[] {
 }
 
 /** Creates a draft website from a template and the business form. Returns the new website id. */
-export const createWebsiteFromTemplate = mockApi(async function createWebsiteFromTemplate(
+export async function createWebsiteFromTemplate(
   ownerId: string,
   templateId: string,
   formData: FormData,
@@ -141,9 +140,9 @@ export const createWebsiteFromTemplate = mockApi(async function createWebsiteFro
     if (e instanceof ApiError) return { ok: false, message: e.message, values };
     throw e;
   }
-});
+}
 
-export const reactivate = mockApi(async function reactivate(websiteId: string): Promise<ActionResult> {
+export async function reactivate(websiteId: string): Promise<ActionResult> {
   try {
     const website = await reactivateWebsite(websiteId);
     return { ok: true, data: undefined, message: `${website.name} is live again` };
@@ -151,9 +150,9 @@ export const reactivate = mockApi(async function reactivate(websiteId: string): 
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}
 
-export const remove = mockApi(async function remove(websiteId: string): Promise<ActionResult> {
+export async function remove(websiteId: string): Promise<ActionResult> {
   try {
     await deleteWebsite(websiteId);
     return { ok: true, data: undefined, message: "Website deleted" };
@@ -161,9 +160,9 @@ export const remove = mockApi(async function remove(websiteId: string): Promise<
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}
 
-export const suspend = mockApi(async function suspend(websiteId: string): Promise<ActionResult> {
+export async function suspend(websiteId: string): Promise<ActionResult> {
   try {
     const website = await suspendWebsite(websiteId);
     return { ok: true, data: undefined, message: `${website.name} is offline` };
@@ -171,4 +170,4 @@ export const suspend = mockApi(async function suspend(websiteId: string): Promis
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}

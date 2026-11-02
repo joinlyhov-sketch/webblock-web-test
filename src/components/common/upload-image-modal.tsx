@@ -64,7 +64,7 @@ function UploadForm({ rule, onClose, onUpload }: Pick<UploadImageModalProps, "ru
           onClick={onClose}
           className="flex size-[18px] items-center justify-center rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
         >
-          <Add aria-hidden className="size-[18px] rotate-45" />
+          <Add variant="Outline" aria-hidden className="size-[18px] rotate-45" />
         </button>
       </div>
 
@@ -110,7 +110,7 @@ function UploadForm({ rule, onClose, onUpload }: Pick<UploadImageModalProps, "ru
           ) : (
             <>
               <span aria-hidden className="flex size-10 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                <Export className="size-[19px]" />
+                <Export variant="Outline" className="size-[19px]" />
               </span>
               <p className="text-[13px] leading-[19.5px] font-bold">Drag a photo here</p>
               <p className="text-xs leading-[18px] text-hint-strong">

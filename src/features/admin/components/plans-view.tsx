@@ -41,31 +41,31 @@ function features(plan: Plan, previous: Plan | undefined): Feature[] {
   const stacked = previous !== undefined && previous.code !== "FREE_TRIAL";
   const lines: (Feature | null)[] = [
     stacked
-      ? { icon: <TickCircle />, text: `Everything in ${previous.name}` }
+      ? { icon: <TickCircle variant="Outline" />, text: `Everything in ${previous.name}` }
       : null,
     plan.trialDays
-      ? { icon: <Clock />, text: `Free for ${plan.trialDays} days` }
+      ? { icon: <Clock variant="Outline" />, text: `Free for ${plan.trialDays} days` }
       : null,
     {
-      icon: <Global />,
+      icon: <Global variant="Outline" />,
       text:
         plan.websiteLimit === 1
           ? "1 website"
           : `Up to ${plan.websiteLimit} websites`,
     },
     {
-      icon: <Send2 />,
+      icon: <Send2 variant="Outline" />,
       text: plan.redeploysPerMonth === 0 ? "First deploy only" : `${plan.redeploysPerMonth} redeploys a month`,
     },
     {
-      icon: <Box />,
+      icon: <Box variant="Outline" />,
       text: `Up to ${count.format(plan.productLimit)} products`,
     },
     stacked && previous.monitoring === plan.monitoring
       ? null
       : plan.monitoring === "Logs"
-        ? { icon: <DocumentText />, text: "Logs" }
-        : { icon: <Activity />, text: plan.monitoring },
+        ? { icon: <DocumentText variant="Outline" />, text: "Logs" }
+        : { icon: <Activity variant="Outline" />, text: plan.monitoring },
   ];
   return lines.filter((f) => f !== null);
 }
@@ -91,13 +91,13 @@ export function PlansView({
         href="/admin/subscriptions"
         className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground-soft hover:text-primary"
       >
-        <ArrowLeft aria-hidden className="size-4" />
+        <ArrowLeft variant="Outline" aria-hidden className="size-4" />
         All subscriptions
       </Link>
 
       <Callout
         className="mb-5"
-        icon={<InfoCircle />}
+        icon={<InfoCircle variant="Outline" />}
         title="Changes apply to new subscriptions and renewals. Current subscribers keep their price until their next renewal. Billing stays monthly only."
       />
 
@@ -198,7 +198,7 @@ function PlanCard({
         )}
       >
         <Link href={editHref} scroll={false}>
-          <Edit2 aria-hidden className="size-[18px]" />
+          <Edit2 variant="Outline" aria-hidden className="size-[18px]" />
           Edit plan
         </Link>
       </Button>

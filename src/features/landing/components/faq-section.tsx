@@ -23,7 +23,7 @@ export function FaqSection() {
 
           <div className="flex flex-col items-start gap-4 rounded-[22px] border border-background/90 bg-background p-[22px] shadow-soft">
             <span className="rounded-xl border border-background/80 bg-brand/10 p-2.5 text-brand">
-              <Message aria-hidden className="size-5" />
+              <Message variant="Outline" aria-hidden className="size-5" />
             </span>
             <h3 className="text-lg font-semibold text-foreground">Still have a question?</h3>
             <p className="text-[15px] leading-7 text-foreground-soft">
@@ -35,7 +35,7 @@ export function FaqSection() {
             </p>
             <Button asChild size="lp-md">
               <a href={supportHref}>
-                Mail to us <ArrowRight aria-hidden className="size-3.5!" />
+                Mail to us <ArrowRight variant="Outline" aria-hidden className="size-3.5!" />
               </a>
             </Button>
           </div>
@@ -47,7 +47,7 @@ export function FaqSection() {
               <RevealItem key={item.question} y={12}>
                 <AccordionItem value={`faq-${i}`} className="rounded-[14px] border-b-0 bg-background px-5 py-[18px]">
                   <AccordionTrigger className="items-center gap-3.5 py-0 text-lg font-normal text-foreground data-[state=open]:text-brand [&>svg]:size-5 [&>svg]:translate-y-0">
-                    <MessageQuestion aria-hidden className="size-5 shrink-0 text-brand" />
+                    <MessageQuestion variant="Outline" aria-hidden className="size-5 shrink-0 text-brand" />
                     <span className="flex-1">{item.question}</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2.5 pb-0 pl-[34px] text-base text-foreground-soft">

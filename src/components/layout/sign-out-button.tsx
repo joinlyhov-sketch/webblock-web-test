@@ -18,7 +18,7 @@ export function SignOutButton({ description }: { description: string }) {
         onClick={() => setConfirmOpen(true)}
         className="flex size-[18px] shrink-0 items-center justify-center rounded-md text-foreground-soft outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
       >
-        <Logout aria-hidden className="size-[18px]" />
+        <Logout variant="Outline" aria-hidden className="size-[18px]" />
       </button>
 
       <ConfirmDialog
@@ -26,7 +26,7 @@ export function SignOutButton({ description }: { description: string }) {
         onClose={() => setConfirmOpen(false)}
         onConfirm={() => startSignOut(() => signOutAction())}
         loading={signingOut}
-        icon={<Logout />}
+        icon={<Logout variant="Outline" />}
         title="Log out of WebBlock?"
         description={description}
         confirmLabel="Log out"

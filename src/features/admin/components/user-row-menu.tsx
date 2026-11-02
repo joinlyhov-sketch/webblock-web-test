@@ -25,11 +25,11 @@ export function UserRowMenu({
       <ActionMenu
         label={`Actions for ${user.fullName}`}
         items={[
-          { label: "View details", icon: <Eye />, href: detailHref },
+          { label: "View details", icon: <Eye variant="Outline" />, href: detailHref },
           suspended
             ? {
                 label: "Reactivate user",
-                icon: <TickCircle />,
+                icon: <TickCircle variant="Outline" />,
                 onSelect: () =>
                   run(
                     () => reactivateUserAction(user.id),
@@ -38,7 +38,7 @@ export function UserRowMenu({
               }
             : {
                 label: "Suspend user",
-                icon: <Forbidden2 />,
+                icon: <Forbidden2 variant="Outline" />,
                 danger: true,
                 onSelect: () => setConfirm(true),
               },
@@ -48,7 +48,7 @@ export function UserRowMenu({
         open={confirm}
         onOpenChange={setConfirm}
         pending={pending}
-        icon={<Forbidden2 />}
+        icon={<Forbidden2 variant="Outline" />}
         title={`Suspend ${user.fullName}?`}
         description="They won't be able to sign in or edit their websites. Their websites and data are kept, so you can reactivate them any time."
         confirmLabel="Suspend user"

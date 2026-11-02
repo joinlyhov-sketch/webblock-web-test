@@ -7,7 +7,6 @@ import {
   Profile2User,
   Send2,
 } from "iconsax-reactjs";
-import { Thumbnail } from "@/components/common/avatar";
 import { Card, CardHeader } from "@/components/common/card";
 import { AreaTrendChart, DonutBreakdown } from "@/components/common/charts";
 import { CompactTable } from "@/components/common/compact-table";
@@ -22,10 +21,13 @@ import {
 } from "@/lib/format";
 import type {
   AdminOverview,
+  AdminWebsite,
   AttentionKind,
   Deploy,
 } from "../types";
 import { AdminPageHeader } from "./admin-page-header";
+import { WebsiteDetail } from "./websites-view";
+import { WebsiteLogo } from "./website-logo";
 
 // Figma "Needs attention": soft red, pink, yellow, blue — used for the donut and its legend.
 const ATTENTION = {
@@ -36,7 +38,7 @@ const ATTENTION = {
   },
   PLAN_EXPIRED: {
     title: "Plan expired · site offline",
-    color: "chart-pink",
+    color: "chart-purple",
     href: "/admin/subscriptions?status=EXPIRED",
   },
   PAYMENTS_PAST_DUE: {
@@ -58,9 +60,12 @@ const ATTENTION = {
 export function OverviewView({
   overview,
   deploys,
+  detail,
 }: {
   overview: AdminOverview;
   deploys: Page<Deploy>;
+  /** The website opened with `?website=<id>`, shown as a popup on this page. */
+  detail: { website: AdminWebsite; deploys: Page<Deploy> } | null;
 }) {
 
   return (
@@ -75,25 +80,25 @@ export function OverviewView({
           label="New accounts"
           value={overview.newAccounts}
           tone="brand"
-          icon={<Profile2User />}
+          icon={<Profile2User variant="Outline" />}
         />
         <KpiCard
           label="Websites deployed"
           value={overview.websitesPublished}
           tone="teal"
-          icon={<Global />}
+          icon={<Global variant="Outline" />}
         />
         <KpiCard
           label="Monthly revenue"
           value={formatPriceShort(overview.monthlyRevenue, "USD")}
           tone="success"
-          icon={<DollarCircle />}
+          icon={<DollarCircle variant="Outline" />}
         />
         <KpiCard
           label="Failed deploys"
           value={overview.failedDeploys}
           tone="danger"
-          icon={<Danger />}
+          icon={<Danger variant="Outline" />}
         />
       </KpiGrid>
 
@@ -116,7 +121,7 @@ export function OverviewView({
         <Card className="flex flex-col gap-3 px-[22px] py-4">
           <CardHeader
             title="Needs attention"
-            icon={<Notification />}
+            icon={<Notification variant="Outline" />}
           />
           <DonutBreakdown
             segments={overview.attention.map((a) => ({
@@ -130,6 +135,13 @@ export function OverviewView({
       </div>
 
       <RecentDeploys deploys={deploys} />
+      {detail && (
+        <WebsiteDetail
+          website={detail.website}
+          deploys={detail.deploys}
+          closeHref="/admin"
+        />
+      )}
     </>
   );
 }
@@ -154,9 +166,10 @@ function RecentDeploys({ deploys }: { deploys: Page<Deploy> }) {
         label="Recent deploys"
         rows={deploys.items}
         rowKey={(d) => d.id}
+        rowClassName={() => "relative cursor-pointer"}
         empty={
           <EmptyState
-            icon={<Send2 />}
+            icon={<Send2 variant="Outline" />}
             title="No deploys yet"
             description="Deploys show here as soon as an owner deploys a website."
           />
@@ -168,10 +181,15 @@ function RecentDeploys({ deploys }: { deploys: Page<Deploy> }) {
             header: "Website",
             cell: (d) => (
               <Link
-                href={`/admin/websites?website=${d.websiteId}`}
-                className="inline-flex items-center gap-2.5 font-semibold text-foreground hover:text-primary"
+                href={`/admin?website=${d.websiteId}`}
+                scroll={false}
+                className="inline-flex items-center gap-2.5 font-semibold text-foreground hover:text-primary after:absolute after:inset-0 after:content-['']"
               >
-                <Thumbnail src={d.websiteThumbnailUrl} size="sm" />
+                <WebsiteLogo
+                  logoUrl={d.websiteLogoUrl}
+                  templateSlug={d.websiteTemplateSlug}
+                  className="size-8 text-[16px]"
+                />
                 {d.websiteName}
               </Link>
             ),

@@ -31,7 +31,7 @@ export function PasswordInput({
             aria-pressed={visible}
             className="rounded text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary"
           >
-            {visible ? <EyeSlash className="size-[17px]" /> : <Eye className="size-[17px]" />}
+            {visible ? <EyeSlash variant="Outline" className="size-[17px]" /> : <Eye variant="Outline" className="size-[17px]" />}
           </button>
         )}
       </span>

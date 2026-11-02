@@ -23,7 +23,6 @@ yarn.lock
 
 # production
 /build
-/.data/
 
 # misc
 .DS_Store
@@ -49,3 +48,9 @@ next-env.d.ts
 # Claude Code personal files (shared setup in .claude/ IS committed)
 CLAUDE.local.md
 .claude/settings.local.json
+
+# playwright
+/test-results
+/playwright-report
+/tests/.auth
+/screenshots

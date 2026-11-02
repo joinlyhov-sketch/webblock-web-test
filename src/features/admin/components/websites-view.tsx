@@ -20,7 +20,8 @@ import {
   Timer1,
   Wifi,
 } from "iconsax-reactjs";
-import { Avatar, Thumbnail } from "@/components/common/avatar";
+import { Avatar } from "@/components/common/avatar";
+import { WebsiteLogo } from "./website-logo";
 import { Callout } from "@/components/common/callout";
 import { DetailList } from "@/components/common/card";
 import { DataTable } from "@/components/common/data-table";
@@ -116,7 +117,7 @@ export function WebsitesView({
                 className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-soft px-3 text-[13px] font-medium text-brand-strong hover:bg-brand/20"
               >
                 Owner: {websites.items[0].ownerName}
-                <Add
+                <Add variant="Outline"
                   aria-label="Remove owner filter"
                   className="size-4 rotate-45"
                 />
@@ -158,7 +159,7 @@ export function WebsitesView({
         empty={
           filtered ? (
             <EmptyState
-              icon={<SearchNormal1 />}
+              icon={<SearchNormal1 variant="Outline" />}
               title="No websites found"
               description="Nothing matches this filter. Try another status or clear your search."
               action={
@@ -169,7 +170,7 @@ export function WebsitesView({
             />
           ) : (
             <EmptyState
-              icon={<Global />}
+              icon={<Global variant="Outline" />}
               title="No websites yet"
               description="Websites show here once owners create them."
             />
@@ -188,7 +189,7 @@ export function WebsitesView({
                 scroll={false}
                 className="group flex min-w-0 items-center gap-3 outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-3 focus-visible:after:ring-ring/40"
               >
-                <Thumbnail src={w.thumbnailUrl} />
+                <WebsiteLogo logoUrl={w.logoUrl} templateSlug={w.templateSlug} />
                 <span className="min-w-0">
                   <span className="block max-w-[260px] truncate font-semibold text-foreground group-hover:text-primary">
                     {w.name}
@@ -209,13 +210,11 @@ export function WebsitesView({
           {
             key: "site",
             header: "Site",
-            sortField: "siteStatus",
             cell: (w) => <StatusBadge status={w.siteStatus} />,
           },
           {
             key: "release",
             header: "Latest release",
-            sortField: "releaseStatus",
             cell: (w) =>
               w.releaseStatus ? (
                 <StatusBadge status={w.releaseStatus} />
@@ -260,7 +259,7 @@ function deployCallout(latest: Deploy | undefined) {
     return (
       <Callout
         tone="neutral"
-        icon={<Edit2 />}
+        icon={<Edit2 variant="Outline" />}
         title="Not deployed yet"
         description="The owner hasn't deployed this website."
       />
@@ -274,7 +273,7 @@ function deployCallout(latest: Deploy | undefined) {
     case "GOING_LIVE":
       return (
         <Callout
-          icon={<Clock />}
+          icon={<Clock variant="Outline" />}
           title={`Deploy #${latest.number} in progress`}
           description={`Step ${latest.currentStep} of ${latest.totalSteps} · ${latest.stepLabel}`}
         />
@@ -283,7 +282,7 @@ function deployCallout(latest: Deploy | undefined) {
       return (
         <Callout
           tone="danger"
-          icon={<Danger />}
+          icon={<Danger variant="Outline" />}
           title={`Deploy #${latest.number} failed`}
           description={`Stopped at step ${latest.currentStep} of ${latest.totalSteps} · ${latest.stepLabel}${took}`}
         />
@@ -293,7 +292,7 @@ function deployCallout(latest: Deploy | undefined) {
       return (
         <Callout
           tone="success"
-          icon={<TickCircle variant="Bold" />}
+          icon={<TickCircle variant="Outline" />}
           title={`Deploy #${latest.number} succeeded`}
           description={`All ${latest.totalSteps} steps passed${took}`}
         />
@@ -325,23 +324,23 @@ export function WebsiteDetail({
     >
       <DetailHero
         media={
-          <Thumbnail
-            src={website.thumbnailUrl}
-            size="lg"
-            className="aspect-square w-[128px] rounded-[22px] border-4 border-background shadow-card"
+          <WebsiteLogo
+            logoUrl={website.logoUrl}
+            templateSlug={website.templateSlug}
+            className="size-[128px] border-4 border-background text-[56px] shadow-card"
           />
         }
         badge={
           website.releaseStatus ? (
             <StatusBadge status={website.releaseStatus} />
           ) : (
-            <StatusBadge status="NOT_DEPLOYED" />
+            <StatusBadge status="DRAFT" />
           )
         }
         title={website.name}
         link={
           website.liveRelease
-            ? { href: `https://${website.domain}`, label: website.domain }
+            ? { href: `/sites/${website.id}`, label: website.domain }
             : undefined
         }
         chips={
@@ -359,7 +358,7 @@ export function WebsiteDetail({
               {website.ownerName}
             </HeroChip>
             {latest && (
-              <HeroChip icon={<Calendar1 />}>
+              <HeroChip icon={<Calendar1 variant="Outline" />}>
                 Deploy #{latest.number} · {formatDayMonthYear(latest.startedAt)}
               </HeroChip>
             )}
@@ -368,15 +367,20 @@ export function WebsiteDetail({
       />
       <div className="space-y-5 px-6 py-5">
         {deployCallout(latest)}
-        <DetailCard title="Recent deploys" icon={<Refresh2 />} aside={`${deploys.items.length} deploys`}>
+        <DetailCard title="Recent deploys" icon={<Refresh2 variant="Outline" />} aside={`${deploys.items.length} deploys`}>
           {deploys.items.length ? (
             <ul className="divide-y divide-border text-sm">
               {deploys.items.map((d) => (
                 <li
                   key={d.id}
-                  className="grid grid-cols-[40px_96px_1fr_auto] items-center gap-3 px-1 py-3"
+                  className="grid grid-cols-[40px_32px_96px_1fr_auto] items-center gap-3 px-1 py-3"
                 >
                   <span className="font-semibold text-brand">#{d.number}</span>
+                  <WebsiteLogo
+                    logoUrl={website.logoUrl}
+                    templateSlug={website.templateSlug}
+                    className="size-8 text-[16px]"
+                  />
                   <span className="text-foreground-soft">
                     {formatDayMonthYear(d.startedAt)}
                   </span>
@@ -397,12 +401,12 @@ export function WebsiteDetail({
             </p>
           )}
         </DetailCard>
-        <DetailCard title="Site details" icon={<Setting2 />}>
+        <DetailCard title="Site details" icon={<Setting2 variant="Outline" />}>
           <DetailList
             className="rounded-none border-0 [&>div]:px-1 [&>div]:py-3"
             items={[
               {
-                icon: <ShieldTick />,
+                icon: <ShieldTick variant="Outline" />,
                 label: "SSL certificate",
                 value: website.sslValidUntil ? (
                   <span className="inline-flex items-center gap-2">
@@ -417,7 +421,7 @@ export function WebsiteDetail({
                 ),
               },
               {
-                icon: <Crown1 />,
+                icon: <Crown1 variant="Outline" />,
                 label: "Plan",
                 // The plan keeps its colour (grey, blue, gold, violet) like everywhere else.
                 value: (
@@ -432,22 +436,25 @@ export function WebsiteDetail({
                 ),
               },
               {
-                icon: <Box />,
+                icon: <Box variant="Outline" />,
                 label: "Products",
                 value: `${website.productCount} of ${website.productLimit.toLocaleString("en-US")}`,
               },
               {
-                icon: <Timer1 />,
+                icon: <Timer1 variant="Outline" />,
                 label: "Redeploys left",
-                value: `${website.redeploysLeft} of ${website.redeployLimit}`,
+                value:
+                  website.redeployLimit === 0
+                    ? "First deploy only"
+                    : `${website.redeploysLeft} of ${website.redeployLimit}`,
               },
             ]}
           />
         </DetailCard>
-        <DetailCard title="Hosting & routing" icon={<Hierarchy />}>
+        <DetailCard title="Hosting & routing" icon={<Hierarchy variant="Outline" />}>
           <dl className="grid grid-cols-2 gap-2.5 py-3.5">
             <HostingTile
-              icon={<Wifi />}
+              icon={<Wifi variant="Outline" />}
               iconTone={SITE_ICON_TONE[website.siteStatus]}
               label="Hosting"
               value={<StatusBadge status={website.siteStatus} />}
@@ -458,7 +465,7 @@ export function WebsiteDetail({
               }
             />
             <HostingTile
-              icon={<Routing />}
+              icon={<Routing variant="Outline" />}
               iconTone={website.routingStatus === "UPDATING" ? "brand" : "success"}
               label="Routing"
               value={<StatusBadge status={website.routingStatus} />}
@@ -469,21 +476,25 @@ export function WebsiteDetail({
               }
             />
             <HostingTile
-              icon={<Link21 />}
+              icon={<Link21 variant="Outline" />}
               iconTone={website.liveRelease ? "brand" : "muted"}
               label="Live release"
-              value={website.liveRelease ?? "—"}
+              value={website.liveRelease ?? "None"}
               hint={
-                liveDeploy
-                  ? `deploy #${liveDeploy.number}`
+                liveDeploy && liveDeploy === latest
+                  ? "latest deploy"
                   : website.liveRelease
                     ? "earlier deploy"
                     : "not live yet"
               }
             />
             <HostingTile
-              icon={<Danger />}
-              iconTone={SITE_ICON_TONE[website.siteStatus]}
+              icon={<Danger variant="Outline" />}
+              iconTone={
+                website.siteStatus === "ONLINE"
+                  ? "muted"
+                  : SITE_ICON_TONE[website.siteStatus]
+              }
               label="Offline reason"
               value={offline.reason}
               hint={offline.hint}
@@ -494,14 +505,16 @@ export function WebsiteDetail({
     </Modal>
   );
 }
-// Soft icon colour says what the state means (green = healthy, blue = in progress, amber = not started,
-// red = problem). The cards stay white so the tinted icon still shows.
-const ICON_TONE = {
-  success: "bg-success-soft text-success",
-  brand: "bg-brand-soft text-brand",
-  warning: "bg-warning-soft text-warning",
-  danger: "bg-danger-soft text-danger",
-  muted: "bg-muted text-muted-foreground",
+// Same look as the KPI card, without its tinted glass: a white card, a short accent bar on the left edge
+// and an icon tile with a thin tinted ring. Green = healthy, blue = routing, violet = release,
+// amber = not started, red = problem.
+const TILE_TONE = {
+  success: { bar: "bg-success", icon: "text-success inset-ring-success/15" },
+  brand: { bar: "bg-brand", icon: "text-brand inset-ring-brand/15" },
+  violet: { bar: "bg-violet", icon: "text-violet inset-ring-violet/15" },
+  warning: { bar: "bg-warning", icon: "text-warning inset-ring-warning/15" },
+  danger: { bar: "bg-danger", icon: "text-danger inset-ring-danger/15" },
+  muted: { bar: "bg-border", icon: "text-muted-foreground inset-ring-border" },
 };
 
 const SITE_ICON_TONE = {
@@ -509,11 +522,9 @@ const SITE_ICON_TONE = {
   NOT_DEPLOYED: "warning",
   OFFLINE_BILLING: "danger",
   SUSPENDED: "danger",
-} satisfies Record<SiteStatus, keyof typeof ICON_TONE>;
+} satisfies Record<SiteStatus, keyof typeof TILE_TONE>;
 
-const TILE_CARD = "border-border bg-background";
-
-/** One card of "Hosting & routing": round icon on the left; label, value and hint stacked beside it. */
+/** One card of "Hosting & routing": label and icon on top, value below, hint under it. */
 function HostingTile({
   icon,
   label,
@@ -525,20 +536,24 @@ function HostingTile({
   label: string;
   value: ReactNode;
   hint?: string;
-  iconTone: keyof typeof ICON_TONE;
+  iconTone: keyof typeof TILE_TONE;
 }) {
+  const tone = TILE_TONE[iconTone];
   return (
-    <div className={`flex min-w-0 items-center gap-3 rounded-2xl border px-3.5 py-3 ${TILE_CARD}`}>
-      <span
-        aria-hidden
-        className={`grid size-10 shrink-0 place-items-center rounded-full [&_svg]:size-5 ${ICON_TONE[iconTone]}`}
-      >
-        {icon}
-      </span>
-      <div className="min-w-0 space-y-0.5">
-        <dt className="text-[15px] text-muted-foreground">{label}</dt>
-        <dd className="text-lg leading-6 font-bold break-words text-foreground">{value}</dd>
-        {hint && <dd className="truncate text-sm text-placeholder">{hint}</dd>}
+    <div className="relative flex min-w-0 flex-col justify-between gap-3 overflow-hidden rounded-2xl border border-border/80 bg-background px-5 py-4 shadow-kpi">
+      <span aria-hidden className={`absolute top-4 bottom-4 left-0 w-1 rounded-r-full ${tone.bar}`} />
+      <div className="flex items-start justify-between gap-3">
+        <dt className="pt-1 text-sm leading-5 font-medium text-muted-foreground">{label}</dt>
+        <span
+          aria-hidden
+          className={`grid size-9 shrink-0 place-items-center rounded-xl bg-background shadow-button inset-ring-1 [&_svg]:size-[18px] ${tone.icon}`}
+        >
+          {icon}
+        </span>
+      </div>
+      <div className="min-w-0">
+        <dd className="font-heading text-lg leading-7 font-bold break-words text-foreground">{value}</dd>
+        {hint && <dd className="truncate text-[13px] text-muted-foreground">{hint}</dd>}
       </div>
     </div>
   );

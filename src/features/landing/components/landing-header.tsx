@@ -15,13 +15,13 @@ export function LandingHeader() {
 
         <nav aria-label="Main" className="hidden flex-1 items-center justify-center gap-1 lg:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
               href={link.href}
               className="rounded-full px-3 py-2.5 text-base text-foreground outline-none transition-colors hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

@@ -90,7 +90,7 @@ export function ScrollStrip({
             />
           </div>
           <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
-            Scroll <ArrowRight className="size-3.5" />
+            Scroll <ArrowRight variant="Outline" className="size-3.5" />
           </span>
         </div>
       )}

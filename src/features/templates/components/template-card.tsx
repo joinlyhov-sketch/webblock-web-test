@@ -37,7 +37,7 @@ export function TemplateCard({
         <div className="flex flex-col gap-[7px]">
           <h3 className="font-heading text-[17px] font-semibold text-foreground">{template.name}</h3>
           <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
-            <Layer aria-hidden className="size-3.5 shrink-0" />
+            <Layer variant="Outline" aria-hidden className="size-3.5 shrink-0" />
             <span className="truncate">{template.description}</span>
           </p>
         </div>
@@ -53,7 +53,7 @@ export function TemplateCard({
             onClick={() => onUse(template)}
             className="flex min-h-[31px] flex-1 items-center justify-center gap-1 rounded-full bg-primary px-2.5 py-1.5 text-[13px] leading-none font-semibold whitespace-nowrap text-primary-foreground outline-none transition-[background-color,scale] duration-150 hover:bg-brand motion-safe:active:scale-97 focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:ring-offset-2 [&_svg]:size-[18px] [&_svg]:shrink-0"
           >
-            <Add aria-hidden /> Use template
+            <Add variant="Outline" aria-hidden /> Use template
           </button>
         </div>
       </div>

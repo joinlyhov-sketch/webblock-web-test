@@ -69,7 +69,7 @@ export function NotificationBell({ state, className }: { state: NotificationsSta
           className={cn("relative", className)}
           aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}
         >
-          <Notification className={cn("origin-[50%_8%]", unread > 0 && "motion-safe:animate-bell-ring")} />
+          <Notification variant="Outline" className={cn("origin-[50%_8%]", unread > 0 && "motion-safe:animate-bell-ring")} />
           {unread > 0 && (
             <span aria-hidden className="absolute top-2 right-2.5 grid size-2">
               <span className="absolute inset-0 rounded-full bg-primary motion-safe:animate-dot-ping" />
@@ -161,9 +161,9 @@ export function NotificationList({
         {shown.length === 0 && (
           <li className="px-5 py-4">
             {tab === "unread" ? (
-              <EmptyState icon={<TickCircle />} title="You're all caught up" description="New activity will show here." />
+              <EmptyState icon={<TickCircle variant="Outline" />} title="You're all caught up" description="New activity will show here." />
             ) : (
-              <EmptyState icon={<NotificationBing />} title="No notifications yet" />
+              <EmptyState icon={<NotificationBing variant="Outline" />} title="No notifications yet" />
             )}
           </li>
         )}

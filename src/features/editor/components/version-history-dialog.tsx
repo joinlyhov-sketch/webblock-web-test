@@ -6,6 +6,7 @@ import { listVersionsAction, restoreVersionAction } from "../actions";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { Modal } from "@/components/common/modal";
 import { toast } from "@/components/common/toast";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { formatDateTime, formatRelativeTime } from "@/lib/format";
 import type { PageVersion } from "../types";
@@ -77,13 +78,13 @@ export function VersionHistoryDialog({
             onClick={onClose}
             className="flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
           >
-            <Add aria-hidden className="size-5 rotate-45" />
+            <Add variant="Outline" aria-hidden className="size-5 rotate-45" />
           </button>
         </div>
 
         <ul className="flex max-h-[360px] flex-col gap-2 overflow-y-auto px-6 pb-6" aria-busy={versions === null && !error}>
           {versions === null && !error && [0, 1, 2].map((i) => (
-            <li key={i} className="h-[60px] animate-pulse rounded-xl bg-muted" />
+            <li key={i}><Skeleton className="h-[60px] rounded-xl" /></li>
           ))}
           {error && <li role="alert" className="py-6 text-center text-[13px] text-danger">{error}</li>}
           {versions?.length === 0 && (
@@ -92,7 +93,7 @@ export function VersionHistoryDialog({
           {versions?.map((version) => (
             <li key={version.id} className="flex items-center gap-3 rounded-xl border border-border px-4 py-3">
               <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full bg-primary-soft text-brand">
-                {version.current ? <TickCircle className="size-[18px]" /> : <Clock className="size-[18px]" />}
+                {version.current ? <TickCircle variant="Outline" className="size-[18px]" /> : <Clock variant="Outline" className="size-[18px]" />}
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold">{formatDateTime(version.publishedAt)}</p>
@@ -116,7 +117,7 @@ export function VersionHistoryDialog({
         onConfirm={restore}
         loading={pending}
         tone="primary"
-        icon={<Clock />}
+        icon={<Clock variant="Outline" />}
         title="Restore this version?"
         description={
           target

@@ -44,6 +44,7 @@ export function CompactTable<T>({
   const align = (column: CompactColumn<T>) => (column.align === "end" ? "text-right" : undefined);
 
   return (
+    <div data-responsive-table="cards" data-compact-table>
     <Table aria-label={label} className={cn("min-w-[640px]", dense ? "text-[13px]" : "text-sm", className)}>
       <TableHeader className="bg-transparent">
         <TableRow className="border-0 [&>th]:bg-muted [&>th:first-child]:rounded-l-[10px] [&>th:last-child]:rounded-r-[10px]">
@@ -67,6 +68,7 @@ export function CompactTable<T>({
               {columns.map((column) => (
                 <TableCell
                   key={column.key}
+                  data-label={typeof column.header === "string" ? column.header : column.key}
                   className={cn(dense ? "h-auto py-2.5" : "h-[53px] py-2", align(column), column.className)}
                 >
                   {column.cell(row, index)}
@@ -77,5 +79,6 @@ export function CompactTable<T>({
         )}
       </TableBody>
     </Table>
+    </div>
   );
 }

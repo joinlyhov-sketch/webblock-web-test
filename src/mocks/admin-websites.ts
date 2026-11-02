@@ -1,4 +1,3 @@
-import { mockCollection } from "@/lib/mock-state";
 import type { AdminWebsite, Deploy } from "@/features/admin/types";
 import { SOVANNARITH_TRIAL_END } from "./admin-subscriptions";
 import { at, daysAgo, hoursAgo } from "./time";
@@ -17,7 +16,7 @@ const SOVANNARITH = {
   ownerAvatarUrl: "/mock/avatars/sovannarith-soeun.jpg",
 };
 
-export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
+export const adminWebsites: AdminWebsite[] = [
   {
     id: PETAL_AND_STEM_ID,
     name: "Petal & Stem",
@@ -156,7 +155,7 @@ export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
     lastDeployAt: at("2026-09-29T08:00:00Z"),
     liveRelease: "R-2949",
     plan: "ULTRA",
-    planEndsAt: at("2027-04-26T11:00:00Z"),
+    planEndsAt: at("2026-11-26T11:00:00Z"),
     productCount: 312,
     productLimit: 1000,
     redeploysLeft: 92,
@@ -197,7 +196,7 @@ export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
     lastDeployAt: null,
     liveRelease: null,
     plan: "ULTRA",
-    planEndsAt: at("2027-04-26T11:00:00Z"),
+    planEndsAt: at("2026-11-26T11:00:00Z"),
     productCount: 0,
     productLimit: 1000,
     redeploysLeft: 100,
@@ -263,7 +262,7 @@ export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
     lastDeployAt: at("2026-11-01T11:32:00Z"),
     liveRelease: null,
     plan: "ULTRA",
-    planEndsAt: at("2027-04-26T11:00:00Z"),
+    planEndsAt: at("2026-11-26T11:00:00Z"),
     productCount: 15,
     productLimit: 1000,
     redeploysLeft: 100,
@@ -307,23 +306,23 @@ export const adminWebsites: AdminWebsite[] = mockCollection("admin.websites", [
     lastDeployAt: at("2026-11-01T10:42:00Z"),
     liveRelease: null,
     plan: "FREE_TRIAL",
-    planEndsAt: at("2026-11-05T02:30:00Z"),
+    planEndsAt: at("2026-11-15T09:30:00Z"),
     productCount: 8,
     productLimit: 30,
     redeploysLeft: 0,
     redeployLimit: 0,
     sslValidUntil: null,
   },
-]);
+];
 
-export const adminDeploys: Deploy[] = mockCollection("admin.deploys", [
+export const adminDeploys: Deploy[] = [
   {
     id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0302",
     websiteId: "9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0210",
     websiteName: "Riverfish Kitchen",
     websiteThumbnailUrl: null,
     ownerName: "Bora Sam",
-    number: 3,
+    number: 1,
     status: "LIVE",
     currentStep: null,
     totalSteps: 7,
@@ -400,6 +399,20 @@ export const adminDeploys: Deploy[] = mockCollection("admin.deploys", [
     stepLabel: "Go live",
     startedAt: at("2026-10-01T04:40:00Z"),
     durationSeconds: 210,
+  },
+  {
+    id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0322",
+    websiteId: "9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0206",
+    websiteName: "Hollow & Co.",
+    websiteThumbnailUrl: "/mock/websites/hollow-and-co.jpg",
+    ownerName: "Sreyleak Chan",
+    number: 3,
+    status: "LIVE",
+    currentStep: null,
+    totalSteps: 7,
+    stepLabel: null,
+    startedAt: at("2026-09-24T06:10:00Z"),
+    durationSeconds: 124,
   },
   {
     id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0308",
@@ -500,7 +513,7 @@ export const adminDeploys: Deploy[] = mockCollection("admin.deploys", [
     durationSeconds: null,
   },
   {
-    id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0320",
+    id: "c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0321",
     websiteId: "9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0211",
     websiteName: "Mao Print House",
     websiteThumbnailUrl: null,
@@ -513,4 +526,4 @@ export const adminDeploys: Deploy[] = mockCollection("admin.deploys", [
     startedAt: at("2026-11-01T08:58:00Z"),
     durationSeconds: null,
   },
-]);
+];

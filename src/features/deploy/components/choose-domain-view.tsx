@@ -22,17 +22,17 @@ import type { DomainCheck } from "../types";
 
 const PERKS = [
   {
-    icon: <ShieldTick aria-hidden />,
+    icon: <ShieldTick variant="Outline" aria-hidden />,
     title: "Free SSL",
     detail: "Secure https:// address, included",
   },
   {
-    icon: <Flash aria-hidden />,
+    icon: <Flash variant="Outline" aria-hidden />,
     title: "Live in minutes",
     detail: "Your site goes online right after deploy",
   },
   {
-    icon: <Wallet aria-hidden />,
+    icon: <Wallet variant="Outline" aria-hidden />,
     title: "No payment",
     detail: "The WebBlock address is free to use",
   },
@@ -137,7 +137,7 @@ export function ChooseDomainView({
               {DOMAIN_SUFFIX}
             </span>
             {available && (
-              <Pill tone="success" icon={<TickCircle aria-hidden />} className="ml-2">
+              <Pill tone="success" icon={<TickCircle variant="Outline" aria-hidden />} className="ml-2">
                 Available
               </Pill>
             )}
@@ -182,10 +182,10 @@ export function ChooseDomainView({
         </div>
 
         <Button type="submit" size="lg" loading={pending} disabled={!available}>
-          {!pending && <Send2 aria-hidden />} Use free address &amp; deploy
+          {!pending && <Send2 variant="Outline" aria-hidden />} Use free address &amp; deploy
         </Button>
         <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-          <Lock1 aria-hidden className="size-3.5" /> {typed || "yourname"}
+          <Lock1 variant="Outline" aria-hidden className="size-3.5" /> {typed || "yourname"}
           {DOMAIN_SUFFIX}
         </p>
       </form>

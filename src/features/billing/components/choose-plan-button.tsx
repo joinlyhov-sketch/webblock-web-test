@@ -72,7 +72,7 @@ export function ChoosePlanButton({ plan, planName, price, mode, label, from, for
         onClose={() => setOpen(false)}
         onConfirm={confirm}
         loading={pending}
-        icon={<InfoCircle />}
+        icon={<InfoCircle variant="Outline" />}
         title={COPY[mode].title(planName)}
         // Only a payment made for a deploy puts the website online right after.
         description={`${cost} ${forWebsite && mode === "subscribe" ? "You’ll pay by KHQR on the next step and your website deploys right after." : COPY[mode].detail}`}

@@ -85,7 +85,7 @@ export function EmailStepForm({
         </Field>
         <Button type="submit" size="lg" className="mt-1 w-full">
           {isRegister ? "Continue" : "Send code"}
-          <ArrowRight />
+          <ArrowRight variant="Outline" />
         </Button>
       </form>
       <FormFooter>

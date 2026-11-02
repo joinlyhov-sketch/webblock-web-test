@@ -89,7 +89,7 @@ function BrowserPreview() {
         <span className="size-3 shrink-0 rounded-full bg-warning/40" />
         <span className="size-3 shrink-0 rounded-full bg-success/40" />
         <span className="mx-auto flex h-[29px] min-w-0 items-center gap-[7px] rounded-full border border-border bg-background px-4 text-sm text-muted-foreground">
-          <Lock className="size-3.5 shrink-0" />
+          <Lock variant="Outline" className="size-3.5 shrink-0" />
           <span className="truncate">petalandstem.webblock.com</span>
         </span>
       </div>

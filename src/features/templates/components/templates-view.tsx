@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { PageHeader } from "@/components/common/page-header";
 import { PillSelect } from "@/components/common/filter-select";
 import { SearchInput } from "@/components/common/search-input";
@@ -24,17 +25,18 @@ export function TemplatesView({
   initialFilter: { q: string; category: string };
 }) {
   const [query, setQuery] = useState(initialFilter.q);
+  const debouncedQuery = useDebouncedValue(query);
   const [category, setCategory] = useState(initialFilter.category);
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (query.trim()) params.set("q", query.trim());
+    if (debouncedQuery.trim()) params.set("q", debouncedQuery.trim());
     if (category) params.set("category", category);
     const search = params.toString();
     window.history.replaceState(window.history.state, "", search ? `?${search}` : window.location.pathname);
-  }, [query, category]);
+  }, [debouncedQuery, category]);
 
-  const q = query.trim().toLowerCase();
+  const q = debouncedQuery.trim().toLowerCase();
   const visible = useMemo(
     () =>
       templates
@@ -45,7 +47,7 @@ export function TemplatesView({
 
   return (
     <>
-      <section className="relative h-[357px] shrink-0 overflow-hidden rounded-[28px] border border-border bg-linear-to-b from-[#fbfcff] to-[#f1f5fd]">
+      <section data-stable-gutter className="relative h-[357px] shrink-0 overflow-hidden rounded-[28px] border border-border bg-linear-to-b from-[#fbfcff] to-[#f1f5fd]">
         {/* Dot grid, fading out toward every edge (mask is a gradient, so no box edge is ever visible). */}
         <div
           aria-hidden

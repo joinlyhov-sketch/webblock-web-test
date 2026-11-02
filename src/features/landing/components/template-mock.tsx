@@ -170,7 +170,7 @@ export function BrowserMock({
                 : "h-3.5 gap-1 rounded-[3px] border-[0.5px] px-1.5 text-[6px] leading-[9px]",
             )}
           >
-            <Lock1 aria-hidden className={cn("shrink-0", lg ? "size-[11px]" : "size-[5.5px]")} />
+            <Lock1 variant="Outline" aria-hidden className={cn("shrink-0", lg ? "size-[11px]" : "size-[5.5px]")} />
             <span className="truncate">{template.domain}</span>
           </figcaption>
         </div>

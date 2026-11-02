@@ -90,25 +90,25 @@ export function SubscriptionsView({
           label="Monthly revenue"
           value={formatPriceShort(stats.monthlyRevenue, "USD")}
           tone="success"
-          icon={<DollarCircle />}
+          icon={<DollarCircle variant="Outline" />}
         />
         <KpiCard
           label="Active plans"
           value={stats.activePlans}
           tone="brand"
-          icon={<CardIcon />}
+          icon={<CardIcon variant="Outline" />}
         />
         <KpiCard
           label="Trials ending ≤ 3 days"
           value={stats.trialsEndingSoon}
           tone="violet"
-          icon={<Timer1 />}
+          icon={<Timer1 variant="Outline" />}
         />
         <KpiCard
           label="Pending"
           value={stats.pending}
           tone="warning"
-          icon={<Danger />}
+          icon={<Danger variant="Outline" />}
         />
       </KpiGrid>
       <DataTable
@@ -167,7 +167,7 @@ export function SubscriptionsView({
         empty={
           filtered ? (
             <EmptyState
-              icon={<SearchNormal1 />}
+              icon={<SearchNormal1 variant="Outline" />}
               title="No subscriptions found"
               description="Nothing matches this filter. Try another plan or status."
               action={
@@ -178,7 +178,7 @@ export function SubscriptionsView({
             />
           ) : (
             <EmptyState
-              icon={<CardIcon />}
+              icon={<CardIcon variant="Outline" />}
               title="No subscriptions yet"
               description="Trials and paid plans show here."
             />
@@ -216,13 +216,11 @@ export function SubscriptionsView({
           {
             key: "plan",
             header: "Plan",
-            sortField: "plan",
             cell: (s) => <PlanBadge plan={s.plan} />,
           },
           {
             key: "status",
             header: "Status",
-            sortField: "status",
             cell: (s) => <StatusBadge status={s.status} />,
           },
           {
@@ -279,7 +277,7 @@ function statusCallout(s: Subscription) {
       return (
         <Callout
           tone="success"
-          icon={<TickCircle />}
+          icon={<TickCircle variant="Outline" />}
           title="Subscription active"
           description={`${plan} · renews ${formatDate(s.endAt)}`}
         />
@@ -287,7 +285,7 @@ function statusCallout(s: Subscription) {
     case "PENDING":
       return (
         <Callout
-          icon={<Clock />}
+          icon={<Clock variant="Outline" />}
           title="Waiting for payment"
           description={`${plan} · due ${formatDate(s.endAt)}`}
         />
@@ -296,7 +294,7 @@ function statusCallout(s: Subscription) {
       return (
         <Callout
           tone="neutral"
-          icon={<MinusCirlce />}
+          icon={<MinusCirlce variant="Outline" />}
           title="Subscription canceled"
           description={`${plan} · no further payments`}
         />
@@ -305,7 +303,7 @@ function statusCallout(s: Subscription) {
       return (
         <Callout
           tone="danger"
-          icon={<Timer1 />}
+          icon={<Timer1 variant="Outline" />}
           title="Subscription expired"
           description={`Ended ${formatDate(s.endAt)} · the website is offline`}
         />
@@ -341,34 +339,34 @@ export function SubscriptionDetail({
         }
         badge={<StatusBadge status={s.status} />}
         title={s.userName}
-        link={{ href: `https://${s.websiteDomain}`, label: s.websiteDomain }}
+        link={{ href: `/sites/${s.websiteId}`, label: s.websiteDomain }}
         chips={
           <>
-            <HeroChip icon={<Sms />}>{s.userEmail}</HeroChip>
-            <HeroChip icon={<Crown1 />}>{planLabel(s.plan)} plan</HeroChip>
+            <HeroChip icon={<Sms variant="Outline" />}>{s.userEmail}</HeroChip>
+            <HeroChip icon={<Crown1 variant="Outline" />}>{planLabel(s.plan)} plan</HeroChip>
           </>
         }
       />
       <div className="space-y-5 px-6 py-5">
         {statusCallout(s)}
-        <DetailCard title="Subscription details" icon={<DocumentText />}>
+        <DetailCard title="Subscription details" icon={<DocumentText variant="Outline" />}>
           <DetailList
             className="rounded-none border-0 [&>div]:px-1"
             items={[
-              { icon: <Crown1 />, label: "Plan", value: <PlanBadge plan={s.plan} /> },
-              { icon: <Global />, label: "Project", value: s.websiteName },
-              { icon: <TickCircle />, label: "Status", value: <StatusBadge status={s.status} /> },
-              { icon: <CalendarAdd />, label: "Start date", value: formatDate(s.startAt) },
-              { icon: <CalendarRemove />, label: "End date", value: formatDate(s.endAt) },
+              { icon: <Crown1 variant="Outline" />, label: "Plan", value: <PlanBadge plan={s.plan} /> },
+              { icon: <Global variant="Outline" />, label: "Project", value: s.websiteName },
+              { icon: <TickCircle variant="Outline" />, label: "Status", value: <StatusBadge status={s.status} /> },
+              { icon: <CalendarAdd variant="Outline" />, label: "Start date", value: formatDate(s.startAt) },
+              { icon: <CalendarRemove variant="Outline" />, label: "End date", value: formatDate(s.endAt) },
               {
-                icon: <Refresh2 />,
+                icon: <Refresh2 variant="Outline" />,
                 label: "Redeploys left",
                 value: redeploysText(s),
               },
             ]}
           />
         </DetailCard>
-        <DetailCard title="Payment history" icon={<Wallet2 />} aside={`${payments.items.length} payments`}>
+        <DetailCard title="Payment history" icon={<Wallet2 variant="Outline" />} aside={`${payments.items.length} payments`}>
           {payments.items.length ? (
             <ul className="divide-y divide-border text-sm">
               {payments.items.map((p) => (
@@ -383,7 +381,7 @@ export function SubscriptionDetail({
                       p.status === "FAILED" ? "bg-danger-soft text-danger" : "bg-success-soft text-success",
                     )}
                   >
-                    {p.status === "FAILED" ? <Danger /> : <Receipt2 />}
+                    {p.status === "FAILED" ? <Danger variant="Outline" /> : <Receipt2 variant="Outline" />}
                   </span>
                   <span className="font-semibold text-brand">
                     {planLabel(p.plan)} plan · {formatMonth(p.periodStart)}

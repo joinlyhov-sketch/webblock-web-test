@@ -53,7 +53,7 @@ export function PipelineView({
         rowClassName="relative cursor-pointer"
         toolbar={
           <div className="w-full space-y-3">
-            <CardHeader title="Latest deploys" icon={<Hierarchy />} />
+            <CardHeader title="Latest deploys" icon={<Hierarchy variant="Outline" />} />
             <div className="flex flex-wrap items-center gap-3">
               <SegmentedTabs
                 size="sm"
@@ -79,7 +79,7 @@ export function PipelineView({
         }
         empty={
           <EmptyState
-            icon={<SearchNormal1 />}
+            icon={<SearchNormal1 variant="Outline" />}
             title={
               stage
                 ? `No websites in ${STAGE_LABEL[stage as PipelineStage] ?? "this stage"} right now`
@@ -132,7 +132,6 @@ export function PipelineView({
           {
             key: "request",
             header: "Generation request",
-            sortField: "requestStatus",
             cell: (r) => (
               <StatusBadge
                 status={r.requestStatus}
@@ -147,7 +146,6 @@ export function PipelineView({
           {
             key: "release",
             header: "Release",
-            sortField: "releaseState",
             cell: (r) => <StatusBadge status={r.releaseState} />,
           },
           {

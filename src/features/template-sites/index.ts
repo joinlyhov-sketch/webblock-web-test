@@ -7,4 +7,5 @@ export { EverydayStoreSite } from "./components/everyday-store-site";
 export { PlatesSite } from "./components/plates-site";
 export { SweetPastelSite } from "./components/sweet-pastel-site";
 export { WarmBoldSite } from "./components/warm-bold-site";
+export { TemplateSiteRenderer } from "./components/template-site-renderer";
 export type * from "./types";

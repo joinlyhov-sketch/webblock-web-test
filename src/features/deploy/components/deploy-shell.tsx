@@ -58,7 +58,7 @@ export function DeployShell({
       <header className="absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-4 px-5 pt-5">
         <div className="ml-auto flex items-center gap-2.5 rounded-2xl bg-background py-2 pr-4 pl-2 shadow-card">
           <span className="flex size-8 items-center justify-center rounded-[10px] bg-primary text-primary-foreground [&_svg]:size-4">
-            <Element3 aria-hidden />
+            <Element3 variant="Outline" aria-hidden />
           </span>
           <span className="flex flex-col">
             <span className="max-w-[200px] truncate text-[14px] leading-[18px] font-semibold text-foreground">

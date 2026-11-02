@@ -434,7 +434,7 @@ function hourRows(site: SiteRootProps): { day: string; hours: string }[] {
 function IconTile({ icon: Icon }: { icon: typeof Call }) {
   return (
     <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-site-accent-soft text-site-accent">
-      <Icon className="size-[18px]" />
+      <Icon variant="Outline" className="size-[18px]" />
     </span>
   );
 }

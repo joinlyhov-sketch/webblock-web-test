@@ -87,7 +87,7 @@ function ContactOwnerForm({ website, onDone }: { website: ContactOwnerWebsite; o
           className="pointer-events-none absolute -top-1 right-12 h-14 w-24 bg-[radial-gradient(var(--color-decor-dot)_1.2px,transparent_1.2px)] bg-size-[10px_10px] mask-l-from-10% opacity-70"
         />
         <span className="relative grid size-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary [&_svg]:size-[18px]">
-          <Sms />
+          <Sms variant="Outline" />
         </span>
         <div className="relative min-w-0 pr-8">
           <h2 className="truncate text-[15px] leading-5 font-semibold text-foreground">Email {website.ownerName}</h2>
@@ -159,7 +159,7 @@ function ContactOwnerForm({ website, onDone }: { website: ContactOwnerWebsite; o
           Cancel
         </Button>
         <Button type="submit" size="sm" loading={pending}>
-          {!pending && <Send2 />}
+          {!pending && <Send2 variant="Outline" />}
           Send
         </Button>
       </div>

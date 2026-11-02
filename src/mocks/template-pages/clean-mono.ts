@@ -101,7 +101,7 @@ export const cleanMonoPage: PageData = {
       props: {
         id: "clean-mono-about",
         eyebrow: "04 — ABOUT THE STORE",
-        heading: "A small audio shop with a listening bar. Take your time — nobody will hover.",
+        heading: "Take your time. Nobody hovers.",
         body: "",
         imageUrl: `${IMG}/listening-bar.webp`,
         caption: "THE LISTENING BAR — FLOOR 2, SORYA CENTER",

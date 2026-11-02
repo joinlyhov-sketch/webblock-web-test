@@ -54,7 +54,7 @@ export function StatePill({ tone, children }: { tone: PillTone; children: ReactN
         PILL_TONE[tone],
       )}
     >
-      <Clock aria-hidden className="size-4" />
+      <Clock variant="Outline" aria-hidden className="size-4" />
       {children}
     </span>
   );
@@ -118,7 +118,7 @@ export function KhqrPanel({ order, state }: { order: PaymentOrder; state: KhqrSt
           </>
         ) : (
           <p className="flex items-center gap-2 text-[14px] leading-[20px] text-muted-foreground">
-            <Refresh2 aria-hidden className="size-3.5 motion-safe:animate-spin" /> Waiting for payment…
+            <Refresh2 variant="Outline" aria-hidden className="size-3.5 motion-safe:animate-spin" /> Waiting for payment…
           </p>
         )}
       </div>
@@ -190,23 +190,23 @@ export function PaymentSummary({ order, trialDaysLeft }: { order: PaymentOrder; 
         <div className="flex min-w-0 flex-col gap-0.5">
           <p className="text-base leading-[21.5px] font-bold text-foreground">{order.websiteName}</p>
           <p className="flex items-center gap-[5px] text-[14px] leading-[20px] text-muted-foreground">
-            <Global aria-hidden className="size-3" /> {order.websiteDomain}
+            <Global variant="Outline" aria-hidden className="size-3" /> {order.websiteDomain}
           </p>
         </div>
       </div>
 
       <ul className="flex flex-col gap-3.5">
         <LineItem
-          icon={<Crown aria-hidden />}
+          icon={<Crown variant="Outline" aria-hidden />}
           label={`${order.planName} plan · monthly`}
           value={<span className="text-base leading-[23px] font-medium text-foreground">{price} / mo</span>}
         />
         <LineItem
-          icon={<Clock aria-hidden />}
+          icon={<Clock variant="Outline" aria-hidden />}
           label={lineLabel}
           value={<Pill tone="brand">{linePill}</Pill>}
         />
-        <LineItem icon={<ShieldTick aria-hidden />} label="SSL certificate" value={<Pill tone="success">Free</Pill>} />
+        <LineItem icon={<ShieldTick variant="Outline" aria-hidden />} label="SSL certificate" value={<Pill tone="success">Free</Pill>} />
       </ul>
 
       <div className="border-t border-dashed border-dashed-line/60" />
@@ -253,7 +253,7 @@ export function PaymentSuccessPanel({ order, next }: { order: PaymentOrder; next
         <div className="flex items-center gap-3.5">
           <span className="relative flex size-10 shrink-0 items-center justify-center rounded-full bg-success-soft text-success motion-safe:animate-check-pop">
             <span aria-hidden className="absolute inset-0 rounded-full bg-success-soft motion-safe:animate-halo-ripple" />
-            <Check aria-hidden className="relative size-[18px]" />
+            <Check variant="Outline" aria-hidden className="relative size-[18px]" />
           </span>
           <div className="flex flex-col gap-0.5">
             <p className="text-[24px] leading-[21.5px] font-semibold text-foreground">
@@ -274,12 +274,12 @@ export function PaymentSuccessPanel({ order, next }: { order: PaymentOrder; next
           ))}
         </dl>
         <p className="flex items-center gap-2 text-[14px] leading-[20px] text-success">
-          <Check aria-hidden className="size-3.5" /> Payment confirmed · {next.label}
+          <Check variant="Outline" aria-hidden className="size-3.5" /> Payment confirmed · {next.label}
         </p>
         <RedirectAfterPaid href={next.href} />
       </div>
       <p className="flex items-center gap-2.5 rounded-[20px] px-3.5 py-3 text-[14px] leading-[20px] text-muted-foreground">
-        <Lock1 aria-hidden className="size-[14px] shrink-0" />
+        <Lock1 variant="Outline" aria-hidden className="size-[14px] shrink-0" />
         A receipt has been sent to your email. You can also download it any time from Settings › Billing.
       </p>
     </div>

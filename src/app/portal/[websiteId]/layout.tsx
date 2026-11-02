@@ -10,9 +10,9 @@ export default async function PortalLayout({
 }) {
   const { websiteId } = await params;
   return (
-    <div className="flex min-h-dvh">
+    <div data-mobile-ui className="flex min-h-dvh max-lg:flex-col">
       <OwnerSidebar websiteId={websiteId} />
-      <main className="page-motion flex min-w-0 flex-1 flex-col gap-6 px-page pt-8 pb-12">{children}</main>
+      <main className="dashboard-content flex min-w-0 flex-1 flex-col gap-6 px-page pt-8 pb-12">{children}</main>
     </div>
   );
 }

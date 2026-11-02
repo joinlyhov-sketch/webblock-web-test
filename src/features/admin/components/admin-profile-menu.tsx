@@ -58,8 +58,8 @@ export function AdminProfileMenu({ profile }: { profile: AdminProfile }) {
           <span className="absolute -top-10 -left-8 size-28 rounded-full bg-primary/15 blur-2xl" />
           <span className="absolute -top-12 -right-6 size-32 rounded-full bg-violet-border blur-2xl" />
           {/* Little sparkles in the empty corners. */}
-          <MagicStar variant="Bold" className="absolute top-4 right-6 size-3.5 text-brand-border" />
-          <MagicStar variant="Bold" className="absolute top-9 left-7 size-2.5 text-brand-border" />
+          <MagicStar variant="Outline" className="absolute top-4 right-6 size-3.5 text-brand-border" />
+          <MagicStar variant="Outline" className="absolute top-9 left-7 size-2.5 text-brand-border" />
         </div>
 
         <div className="-mt-10 flex flex-col items-center px-4 text-center">
@@ -78,15 +78,15 @@ export function AdminProfileMenu({ profile }: { profile: AdminProfile }) {
           <p className="mt-3 max-w-full truncate font-heading text-lg leading-6 font-semibold text-foreground">
             {profile.fullName}
           </p>
-          <Pill tone="brand" icon={<ShieldTick aria-hidden />} className="mt-1.5">
+          <Pill tone="brand" icon={<ShieldTick variant="Outline" aria-hidden />} className="mt-1.5">
             {profile.title}
           </Pill>
         </div>
 
         <ul className="m-4 mt-5 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface/60 motion-safe:animate-fade-up motion-safe:[animation-delay:80ms]">
-          <ProfileRow icon={<Sms />} label="Email" value={profile.email} />
+          <ProfileRow icon={<Sms variant="Outline" />} label="Email" value={profile.email} />
           <ProfileRow
-            icon={<Personalcard />}
+            icon={<Personalcard variant="Outline" />}
             label="Account ID"
             value={profile.accountCode}
             mono
@@ -98,15 +98,15 @@ export function AdminProfileMenu({ profile }: { profile: AdminProfile }) {
                 className="grid size-7 shrink-0 place-items-center rounded-lg text-foreground-soft outline-none transition-colors hover:bg-background hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
               >
                 {copied ? (
-                  <TickCircle className="size-4 text-success" />
+                  <TickCircle variant="Outline" className="size-4 text-success" />
                 ) : (
-                  <Copy className="size-4" />
+                  <Copy variant="Outline" className="size-4" />
                 )}
               </button>
             }
           />
           <ProfileRow
-            icon={<Calendar />}
+            icon={<Calendar variant="Outline" />}
             label="Joined"
             value={formatDate(profile.joinedAt)}
           />

@@ -23,7 +23,7 @@ export function NewWebsiteCard({
         className="group flex min-h-[316px] flex-col items-center justify-center gap-3 rounded-[20px] border border-dashed border-dashed-line bg-background outline-none transition-[background-color,border-color,scale] duration-200 ease-out hover:border-primary hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 motion-safe:active:scale-[0.99]"
       >
         <span aria-hidden className="flex size-[52px] items-center justify-center rounded-2xl bg-brand-soft text-primary">
-          <Add className="size-6" />
+          <Add variant="Outline" className="size-6" />
         </span>
         <span className="flex flex-col items-center">
           <span className="font-heading text-[17px] leading-[22.1px] font-semibold tracking-[-0.17px] text-foreground">

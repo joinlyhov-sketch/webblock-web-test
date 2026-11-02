@@ -79,7 +79,7 @@ export function ProfileCard({
 
   return (
     <SettingsCard
-      icon={<User />}
+      icon={<User variant="Outline" />}
       title="Profile"
       description="This is how WebBlock knows you"
       className="w-full xl:w-[684px] xl:shrink-0 xl:self-stretch"
@@ -100,7 +100,7 @@ export function ProfileCard({
                 onClick={() => setUploadOpen(true)}
                 className="absolute top-[54px] left-[54px] flex size-[26px] items-center justify-center rounded-full border-2 border-background bg-brand text-primary-foreground outline-none transition-transform hover:scale-105 focus-visible:ring-3 focus-visible:ring-ring/40"
               >
-                <Camera aria-hidden className="size-3.5" />
+                <Camera variant="Outline" aria-hidden className="size-3.5" />
               </button>
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">

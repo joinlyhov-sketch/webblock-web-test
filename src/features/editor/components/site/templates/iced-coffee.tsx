@@ -441,7 +441,7 @@ function InfoCard({ icon: Icon, label, children, href }: { icon: typeof Call; la
   const body = (
     <>
       <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-site-alt text-site-ink">
-        <Icon className="size-[18px]" />
+        <Icon variant="Outline" className="size-[18px]" />
       </span>
       <span className="flex min-w-0 flex-col">
         <span className="text-[10px] text-site-muted">{label}</span>
@@ -476,7 +476,7 @@ function VisitUs(props: BlockRenderProps<VisitUsProps>) {
               <div className={cn(CARD, "flex flex-col gap-3 p-4 @5xl:p-5")}>
                 <div className="flex items-center gap-3">
                   <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-site-alt text-site-ink">
-                    <Clock className="size-[18px]" />
+                    <Clock variant="Outline" className="size-[18px]" />
                   </span>
                   <span className="flex flex-col">
                     <span className="text-[10px] text-site-muted">Opening hours</span>

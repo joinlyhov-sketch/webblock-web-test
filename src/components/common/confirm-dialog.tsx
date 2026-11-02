@@ -105,7 +105,7 @@ export function ConfirmDialog({
                   danger ? "text-danger" : "text-brand",
                 )}
               >
-                {icon ?? <Danger />}
+                {icon ?? <Danger variant="Outline" />}
               </span>
             </span>
           </div>
@@ -149,7 +149,7 @@ export function ConfirmDialog({
               danger ? "bg-danger-soft text-danger" : "bg-brand-soft text-brand",
             )}
           >
-            {icon ?? <Danger />}
+            {icon ?? <Danger variant="Outline" />}
           </span>
           <DialogTitle className="text-[17px] font-semibold text-foreground">{title}</DialogTitle>
           <DialogDescription className="mt-1.5 text-[13px] leading-5 text-muted-foreground">

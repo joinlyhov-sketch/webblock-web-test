@@ -40,7 +40,7 @@ export function FilterMenu({
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="sm" className={cn("font-medium", className)}>
-          <ArrowDown2 aria-hidden />
+          <ArrowDown2 variant="Outline" aria-hidden />
           {label}: {current}
         </Button>
       </DropdownMenuTrigger>
@@ -56,7 +56,7 @@ export function FilterMenu({
                 className={cn(option.active && "text-primary")}
               >
                 <span className="flex-1">{option.label}</span>
-                {option.active && <TickCircle aria-hidden />}
+                {option.active && <TickCircle variant="Outline" aria-hidden />}
               </Link>
             </DropdownMenuItem>
           </Fragment>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { DM_Sans, Familjen_Grotesk } from "next/font/google";
 import { Toaster } from "@/components/common/toast";
@@ -15,6 +15,8 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export const metadata: Metadata = {
   title: { default: siteConfig.name, template: `%s · ${siteConfig.name}` },

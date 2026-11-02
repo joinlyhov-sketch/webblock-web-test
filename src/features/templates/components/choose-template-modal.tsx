@@ -70,7 +70,7 @@ function TemplatePicker({
       <div className="flex items-center justify-between gap-4 p-[15px]">
         <div className="flex items-center gap-3">
           <span aria-hidden className="flex size-9 items-center justify-center rounded-[10px] bg-chip text-primary">
-            <LayoutMaximize className="size-[18px]" />
+            <LayoutMaximize variant="Outline" className="size-[18px]" />
           </span>
           <div>
             <h2 className="text-[17px] leading-[22.1px] font-semibold tracking-[-0.17px]">Start a new website</h2>
@@ -83,7 +83,7 @@ function TemplatePicker({
           onClick={onClose}
           className="flex size-9 items-center justify-center rounded-full text-foreground-soft outline-none transition-colors hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40"
         >
-          <Add aria-hidden className="size-[18px] rotate-45" />
+          <Add variant="Outline" aria-hidden className="size-[18px] rotate-45" />
         </button>
       </div>
       <div className="mx-6 h-px shrink-0 bg-border" />
@@ -91,7 +91,7 @@ function TemplatePicker({
       <div className="flex min-h-0 flex-col gap-[15px] overflow-y-auto p-[15px]">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <label className="flex h-11 w-[400px] max-w-full items-center gap-2.5 rounded-full border border-border bg-background px-[14px] focus-within:border-primary focus-within:ring-3 focus-within:ring-ring/25">
-            <SearchNormal1 aria-hidden className="size-[17px] shrink-0 text-placeholder" />
+            <SearchNormal1 variant="Outline" aria-hidden className="size-[17px] shrink-0 text-placeholder" />
             <input
               type="search"
               value={q}
@@ -119,7 +119,7 @@ function TemplatePicker({
 
         {shown.length === 0 ? (
           <EmptyState
-            icon={<Layer />}
+            icon={<Layer variant="Outline" />}
             title="No templates found"
             description="Try another category or search, or choose All to see every template."
           />

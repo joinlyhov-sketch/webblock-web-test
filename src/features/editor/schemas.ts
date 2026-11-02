@@ -40,7 +40,7 @@ const product = z.object({
   // product allows there must also save here, since the owner's products are copied into these blocks.
   name: text(120).min(1, "Every product needs a name."),
   // Some templates (e.g. Keyboards) also append spec chips after a "|" in the description.
-  description: text(300),
+  description: text(200),
   price: z
     .string()
     .regex(/^\d{1,9}(\.\d{1,2})?$/, "Prices are numbers like 6.00."),
@@ -55,8 +55,8 @@ export const blocksSchema = z.discriminatedUnion("type", [
       id,
       ...layout,
       eyebrow: text(60),
-      heading: text(60).min(1, "The hero needs a heading."),
-      description: text(400),
+      heading: text(30).min(1, "The hero needs a heading."),
+      description: text(200),
       primaryLabel: text(40),
       primaryAction: ctaAction,
       secondaryLabel: text(40),
@@ -73,8 +73,8 @@ export const blocksSchema = z.discriminatedUnion("type", [
       id,
       ...layout,
       eyebrow: text(60),
-      heading: text(80),
-      body: text(2000),
+      heading: text(30),
+      body: text(200),
       imageUrl: imageUrl.optional(),
     }),
   }),
@@ -85,7 +85,7 @@ export const blocksSchema = z.discriminatedUnion("type", [
       ...layout,
       columns,
       eyebrow: text(60),
-      heading: text(60),
+      heading: text(30),
       viewAllLabel: text(40),
       products: z.array(product).max(12),
     }),
@@ -97,7 +97,7 @@ export const blocksSchema = z.discriminatedUnion("type", [
       ...layout,
       columns,
       eyebrow: text(60),
-      heading: text(60),
+      heading: text(30),
       searchPlaceholder: text(60),
       categories: z.array(z.object({ name: text(40).min(1) })).max(12),
       products: z.array(product).max(200),
@@ -110,8 +110,8 @@ export const blocksSchema = z.discriminatedUnion("type", [
       id,
       ...layout,
       eyebrow: text(60),
-      heading: text(80),
-      body: text(2000),
+      heading: text(30),
+      body: text(200),
       imageUrl,
       secondImageUrl: imageUrl.optional(),
       caption: text(120),
@@ -120,7 +120,7 @@ export const blocksSchema = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal("VisitUs"),
-    props: z.object({ id, ...layout, eyebrow: text(60), heading: text(60) }),
+    props: z.object({ id, ...layout, eyebrow: text(60), heading: text(30) }),
   }),
   z.object({
     type: z.literal("Footer"),

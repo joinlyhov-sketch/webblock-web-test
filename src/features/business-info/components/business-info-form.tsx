@@ -126,8 +126,9 @@ export function BusinessInfoForm({
           logoUrl={logoPreview}
           label="Preview: goes live on your next deploy"
         />
-        <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-3">
-          <div className="relative">
+        <div className="flex flex-col gap-4 px-4 pt-4 pb-3 sm:flex-row sm:items-center">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+          <div className="relative shrink-0">
             {/* The whole logo opens the upload popup: a drop zone is easier to hit than the small badge. */}
             <button
               type="button"
@@ -141,7 +142,7 @@ export function BusinessInfoForm({
                 aria-hidden
                 className="absolute -right-1 -bottom-1 flex size-6 items-center justify-center rounded-full border-2 border-background bg-brand-soft text-brand-strong transition-colors group-hover:bg-primary-soft"
               >
-                <Camera className="size-3" />
+                <Camera variant="Outline" className="size-3" />
               </span>
             </button>
             {/* Holds the picked logo for the form submit; people choose it in the popup. */}
@@ -170,7 +171,8 @@ export function BusinessInfoForm({
               )}
             </BusinessIdentity>
           </div>
-          <div className="flex items-center gap-2">
+          </div>
+          <div className="flex items-center gap-2 max-lg:hidden">
             <Button asChild variant="secondary" aria-disabled={saving}>
               <Link href={pathname} scroll={false}>
                 Cancel
@@ -207,7 +209,7 @@ export function BusinessInfoForm({
                 id="info-phone"
                 name="phone"
                 type="tel"
-                icon={<Mobile />}
+                icon={<Mobile variant="Outline" />}
                 iconClassName="left-3"
                 defaultValue={values?.phone ?? info.phone}
                 aria-invalid={!!error("phone")}
@@ -221,7 +223,7 @@ export function BusinessInfoForm({
                 name="email"
                 maxLength={LIMITS.email}
                 type="email"
-                icon={<Sms />}
+                icon={<Sms variant="Outline" />}
                 iconClassName="left-3"
                 defaultValue={values?.email ?? info.email}
                 aria-invalid={!!error("email")}
@@ -238,7 +240,7 @@ export function BusinessInfoForm({
                 id="info-address"
                 name="address"
                 maxLength={LIMITS.address}
-                icon={<Location />}
+                icon={<Location variant="Outline" />}
                 iconClassName="left-3"
                 defaultValue={values?.address ?? info.address}
                 aria-invalid={!!error("address")}
@@ -254,7 +256,7 @@ export function BusinessInfoForm({
                 type="url"
                 inputMode="url"
                 placeholder="https://maps.app.goo.gl/…"
-                icon={<LinkIcon />}
+                icon={<LinkIcon variant="Outline" />}
                 iconClassName="left-3"
                 defaultValue={values?.mapsUrl ?? info.mapsUrl ?? ""}
                 aria-invalid={!!error("mapsUrl")}
@@ -271,7 +273,7 @@ export function BusinessInfoForm({
             <legend className="sr-only">Opening hours</legend>
             <div
               aria-hidden
-              className="grid grid-cols-[minmax(0,1fr)_120px_120px] gap-x-2 border-b border-border pb-2 text-xs text-muted-foreground sm:grid-cols-[minmax(0,1fr)_110px_110px]"
+              className="hidden gap-x-2 border-b border-border pb-2 text-xs text-muted-foreground sm:grid sm:grid-cols-[minmax(0,1fr)_110px_110px]"
             >
               <span>Day</span>
               <span>Opens</span>
@@ -283,9 +285,9 @@ export function BusinessInfoForm({
               return (
                 <div
                   key={hour.day}
-                  className="grid min-h-[56px] grid-cols-[minmax(0,1fr)_120px_120px] items-center gap-x-2 border-b border-border py-2 last:border-0 sm:grid-cols-[minmax(0,1fr)_110px_110px]"
+                  className="grid min-h-[56px] grid-cols-2 items-center gap-2 border-b border-border py-2 last:border-0 sm:grid-cols-[minmax(0,1fr)_110px_110px]"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 max-sm:col-span-2">
                     <span className="w-[88px] text-sm text-foreground">{label}</span>
                     <Switch
                       checked={hour.open}
@@ -322,6 +324,7 @@ export function BusinessInfoForm({
           </fieldset>
         </InfoCard>
       </div>
+      <div className="mobile-submit flex justify-end gap-2 lg:hidden"><Button asChild variant="secondary"><Link href={pathname} scroll={false}>Cancel</Link></Button><Button type="submit" loading={saving}>Save changes</Button></div>
     </form>
   );
 }

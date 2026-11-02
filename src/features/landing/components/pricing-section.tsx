@@ -49,7 +49,7 @@ function PricingDecor() {
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 hidden 2xl:block">
       <Pop className="absolute top-30 right-27" delay={0.2}>
         <span className="flex size-20 items-center justify-center rounded-full bg-linear-135 from-plan-plus-light to-brand-strong to-70% text-primary-foreground shadow-button-hover">
-          <Tag className="size-8" />
+          <Tag variant="Outline" className="size-8" />
         </span>
       </Pop>
       <Image src="/landing/decor/dashed-path-right.svg" alt="" width={133} height={88} className="absolute top-[156px] right-[-21px]" />
@@ -57,7 +57,7 @@ function PricingDecor() {
       <Pop className="absolute top-[560px] left-[112px]" delay={0.4}>
         <span className="relative flex size-[84px] items-center justify-center rounded-full bg-background shadow-float">
           <span className="flex size-[60px] items-center justify-center rounded-full bg-brand-soft text-brand">
-            <ShieldTick className="size-7" />
+            <ShieldTick variant="Outline" className="size-7" />
           </span>
           <span className="absolute top-[62px] left-[62px] size-4 rounded-full border-[3px] border-background bg-success" />
         </span>

@@ -1,9 +1,12 @@
-import { mockApi, mockCollection } from "@/lib/mock-state";
 // Admin Portal data access. Mock now; when Spring is ready only the function bodies change.
 // Every function maps to one endpoint under /api/admin (noted above each).
+import { getBusinessInfo } from "@/features/business-info/api";
+import { getTemplateSite } from "@/features/templates/api";
+import { getWebsite as getOwnedWebsite } from "@/features/websites/api";
 import { ApiError } from "@/lib/api/errors";
 import type { Page } from "@/lib/api/types";
 import { toPage, type TableQuery } from "@/lib/table-query";
+import { activityLog } from "@/mocks/admin-activity";
 import { adminNotifications } from "@/mocks/admin-notifications";
 import { adminOverview } from "@/mocks/admin-overview";
 import { adminProfile } from "@/mocks/admin-profile";
@@ -15,12 +18,14 @@ import {
 import { userAccounts } from "@/mocks/admin-users";
 import { adminDeploys, adminWebsites } from "@/mocks/admin-websites";
 import { daysAgo } from "@/mocks/time";
+import type { ActivityAction } from "./monitoring/types";
 import type {
   AdminNotification,
   AdminOverview,
   AdminProfile,
   AttentionItem,
   NotificationFilters,
+  NotificationKind,
   AdminWebsite,
   Deploy,
   Payment,
@@ -35,7 +40,109 @@ import type {
   WebsiteFilters,
 } from "./types";
 
-const delay = (ms = 250) => new Promise((resolve) => setTimeout(resolve, ms));
+/** Every read waits a moment, then first lets running deploys move forward (the backend does this on its own). */
+const delay = async (ms = 250) => {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+  settleDeploys();
+};
+
+// ── Live state: deploys that progress, and events that other screens show ────
+
+const PIPELINE_STEPS = 7;
+/** How long each of the 7 pipeline steps takes in the mock, so a deploy visibly finishes in about 30 seconds. */
+const STEP_MS = 4_000;
+const STEP_TITLES = [
+  "Request received",
+  "Generate code",
+  "Save to Git",
+  "Build",
+  "Start privately",
+  "Go live",
+  "Live",
+];
+
+/** Deploys started from this portal, with when they started. Spring runs the real pipeline instead. */
+const runningDeploys = new Map<string, number>();
+/** Every deploy started here, finished or not (the Monitoring screen shows their steps). */
+export const redeployedIds = new Set<string>();
+
+// Deploys already in progress in the seed data keep moving from the step they are on.
+// Mao Print House's run is stuck (Monitoring shows no heartbeat): it stays at its step until the backend retries it.
+const STALLED_DEPLOY_IDS = new Set(["c7e1a3b5-2d4f-4e6a-9b8c-1d3f5a7c0321"]);
+for (const d of adminDeploys) {
+  if (d.status !== "GOING_LIVE" || STALLED_DEPLOY_IDS.has(d.id)) continue;
+  runningDeploys.set(d.id, Date.now() - ((d.currentStep ?? 1) - 1) * STEP_MS);
+  redeployedIds.add(d.id);
+}
+
+/** Moves each running deploy to the step its age says; at the last step it goes live and updates its website. */
+export function settleDeploys() {
+  const now = Date.now();
+  for (const [deployId, startedMs] of runningDeploys) {
+    const deploy = adminDeploys.find((d) => d.id === deployId);
+    const website = adminWebsites.find((w) => w.id === deploy?.websiteId);
+    if (!deploy || !website) {
+      runningDeploys.delete(deployId);
+      continue;
+    }
+    const elapsed = now - startedMs;
+    const step = Math.min(PIPELINE_STEPS, 1 + Math.floor(elapsed / STEP_MS));
+    if (step < PIPELINE_STEPS) {
+      deploy.currentStep = step;
+      deploy.stepLabel = STEP_TITLES[step - 1];
+      continue;
+    }
+    // Went live: this release replaces the one before it.
+    for (const d of adminDeploys) {
+      if (d.websiteId === deploy.websiteId && d.status === "LIVE") d.status = "REPLACED";
+    }
+    deploy.status = "LIVE";
+    deploy.currentStep = null;
+    deploy.stepLabel = null;
+    deploy.durationSeconds = Math.round(elapsed / 1000);
+    website.releaseStatus = "LIVE";
+    website.routingStatus = "STABLE";
+    website.liveRelease = `R-${2900 + Math.floor(startedMs / 1000) % 1000}`;
+    if (website.siteStatus === "NOT_DEPLOYED") website.siteStatus = "ONLINE";
+    website.lastDeployAt = deploy.startedAt;
+    // A first deploy also gets its SSL certificate (90 days, like Let's Encrypt).
+    website.sslValidUntil ??= new Date(now + 90 * 86_400_000).toISOString();
+    runningDeploys.delete(deployId);
+  }
+}
+
+/** One line in Monitoring > Activity log, done by the signed-in admin. Newest first. */
+function logActivity(
+  action: ActivityAction,
+  targetName: string,
+  targetDetail: string,
+  actorEmail: string | null = adminProfile.email,
+) {
+  activityLog.unshift({
+    id: crypto.randomUUID(),
+    action,
+    targetName,
+    targetDetail,
+    actorEmail,
+    result: "SUCCEEDED",
+    createdAt: new Date().toISOString(),
+  });
+}
+
+/** One unread item in the notification bell and the Notifications page. */
+function notify(kind: NotificationKind, website: AdminWebsite, message: string) {
+  adminNotifications.unshift({
+    id: crypto.randomUUID(),
+    kind,
+    actorId: website.ownerId,
+    actorName: website.ownerName,
+    actorAvatarUrl: website.ownerAvatarUrl,
+    message,
+    link: `/admin/websites?website=${website.id}`,
+    createdAt: new Date().toISOString(),
+    readAt: null,
+  });
+}
 
 /** Spring-style sort on any top-level field; nulls last. */
 function sorted<T>(items: T[], sort: TableQuery["sort"]): T[] {
@@ -102,7 +209,7 @@ function latestMonthRevenue() {
 }
 
 /** GET /api/admin/overview */
-export const getOverview = mockApi(async function getOverview(): Promise<AdminOverview> {
+export async function getOverview(): Promise<AdminOverview> {
   await delay();
   const failedSites = adminWebsites
     .filter((w) => w.releaseStatus === "FAILED")
@@ -169,12 +276,12 @@ export const getOverview = mockApi(async function getOverview(): Promise<AdminOv
     revenueByMonth,
     attention,
   };
-});
+}
 
 // ── Users ────────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/users?q=&page=&size=&sort= */
-export const listUsers = mockApi(async function listUsers(
+export async function listUsers(
   filters: UserFilters,
   query: TableQuery,
 ): Promise<Page<UserAccount>> {
@@ -185,10 +292,10 @@ export const listUsers = mockApi(async function listUsers(
       (!filters.plan || u.plan === filters.plan),
   );
   return toPage(sorted(items, query.sort), query);
-});
+}
 
 /** GET /api/admin/users/stats */
-export const getUserStats = mockApi(async function getUserStats(): Promise<UserStats> {
+export async function getUserStats(): Promise<UserStats> {
   await delay(150);
   return {
     totalAccounts: userAccounts.length,
@@ -196,16 +303,16 @@ export const getUserStats = mockApi(async function getUserStats(): Promise<UserS
     paying: userAccounts.filter((u) => isPaid(u.plan) && u.status === "ACTIVE").length,
     liveWebsites: liveSites().length,
   };
-});
+}
 
 /** GET /api/admin/users/{userId} */
-export const getUser = mockApi(async function getUser(userId: string): Promise<UserAccount> {
+export async function getUser(userId: string): Promise<UserAccount> {
   await delay(150);
   return userAccounts.find((u) => u.id === userId) ?? notFound("User");
-});
+}
 
 /** GET /api/admin/users/export.csv?q= — the CSV file body. */
-export const exportUsersCsv = mockApi(async function exportUsersCsv(filters: UserFilters): Promise<string> {
+export async function exportUsersCsv(filters: UserFilters): Promise<string> {
   await delay();
   const cell = (v: string | number) => `"${String(v).replaceAll('"', '""')}"`;
   const rows = userAccounts
@@ -220,10 +327,10 @@ export const exportUsersCsv = mockApi(async function exportUsersCsv(filters: Use
         .join(","),
     );
   return ["Name,Email,Websites,Plan,Status,Joined", ...rows].join("\n");
-});
+}
 
 /** POST /api/admin/users/{userId}/suspend */
-export const suspendUser = mockApi(async function suspendUser(userId: string): Promise<UserAccount> {
+export async function suspendUser(userId: string): Promise<UserAccount> {
   await delay();
   const user = userAccounts.find((u) => u.id === userId) ?? notFound("User");
   if (user.status === "SUSPENDED") {
@@ -234,21 +341,29 @@ export const suspendUser = mockApi(async function suspendUser(userId: string): P
     });
   }
   user.status = "SUSPENDED";
+  // Their websites go offline with the account. Content is kept.
+  for (const w of adminWebsites.filter((x) => x.ownerId === user.id)) w.siteStatus = "SUSPENDED";
+  logActivity("SUSPEND_USER", user.fullName, user.email);
   return user;
-});
+}
 
 /** POST /api/admin/users/{userId}/reactivate */
-export const reactivateUser = mockApi(async function reactivateUser(userId: string): Promise<UserAccount> {
+export async function reactivateUser(userId: string): Promise<UserAccount> {
   await delay();
   const user = userAccounts.find((u) => u.id === userId) ?? notFound("User");
   user.status = "ACTIVE";
+  // Websites that went offline with the account come back.
+  for (const w of adminWebsites.filter((x) => x.ownerId === user.id && x.siteStatus === "SUSPENDED")) {
+    w.siteStatus = w.liveRelease ? "ONLINE" : "NOT_DEPLOYED";
+  }
+  logActivity("REACTIVATE_USER", user.fullName, user.email);
   return user;
-});
+}
 
 // ── Websites ─────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/projects?q=&release=&ownerId=&page=&size=&sort= */
-export const listWebsites = mockApi(async function listWebsites(
+export async function listWebsites(
   filters: WebsiteFilters,
   query: TableQuery,
 ): Promise<Page<AdminWebsite>> {
@@ -260,17 +375,31 @@ export const listWebsites = mockApi(async function listWebsites(
       (!filters.plan || w.plan === filters.plan) &&
       (!filters.ownerId || w.ownerId === filters.ownerId),
   );
-  return toPage(sorted(items, query.sort), query);
-});
+  const page = toPage(sorted(items, query.sort), query);
+  return { ...page, items: await Promise.all(page.items.map(withLogo)) };
+}
+
+/** Adds the logo from the website's Business information (GET /projects/{id}/business-info). */
+async function withLogo(website: AdminWebsite): Promise<AdminWebsite> {
+  const [info, owned] = await Promise.all([
+    getBusinessInfo(website.id).catch(() => null),
+    getOwnedWebsite(website.id).catch(() => null),
+  ]);
+  // Mock only: sites the websites mock does not know get a template picked from their id.
+  const hash = [...website.id].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  const templateId = owned?.templateId ?? `c1a7e3f0-4b2d-4a6c-9e18-5d3f7b2a1c0${(hash % 8) + 1}`;
+  const template = await getTemplateSite(templateId).catch(() => null);
+  return { ...website, logoUrl: info?.logoUrl ?? null, templateSlug: template?.slug };
+}
 
 /** GET /api/admin/projects/{projectId} */
-export const getWebsite = mockApi(async function getWebsite(websiteId: string): Promise<AdminWebsite> {
+export async function getWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay(150);
-  return adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
-});
+  return withLogo(adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website"));
+}
 
 /** GET /api/admin/deploys?projectId=&page=&size= — newest first. */
-export const listDeploys = mockApi(async function listDeploys(
+export async function listDeploys(
   filters: { websiteId?: string },
   query: TableQuery,
 ): Promise<Page<Deploy>> {
@@ -278,16 +407,26 @@ export const listDeploys = mockApi(async function listDeploys(
   const items = adminDeploys
     .filter((d) => !filters.websiteId || d.websiteId === filters.websiteId)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
-  return toPage(items, query);
-});
+  const page = toPage(items, query);
+  // Mock only: Spring returns the website's logo on each deploy.
+  const withLogos = await Promise.all(
+    page.items.map(async (d) => {
+      const website = adminWebsites.find((w) => w.id === d.websiteId);
+      if (!website) return d;
+      const { logoUrl, templateSlug } = await withLogo(website);
+      return { ...d, websiteLogoUrl: logoUrl, websiteTemplateSlug: templateSlug };
+    }),
+  );
+  return { ...page, items: withLogos };
+}
 
-const redeployKeys = mockCollection("admin.redeployKeys", new Map<string, Deploy>());
+const redeployKeys = new Map<string, Deploy>();
 
 /**
  * POST /api/admin/projects/{projectId}/redeploy (Idempotency-Key header).
  * The backend runs the pipeline and its retries; we only trigger it and show the state.
  */
-export const redeployWebsite = mockApi(async function redeployWebsite(
+export async function redeployWebsite(
   websiteId: string,
   idempotencyKey: string,
 ): Promise<Deploy> {
@@ -329,8 +468,8 @@ export const redeployWebsite = mockApi(async function redeployWebsite(
     number: Math.max(0, ...previous.map((d) => d.number)) + 1,
     status: "GOING_LIVE",
     currentStep: 1,
-    totalSteps: 5,
-    stepLabel: "Request received",
+    totalSteps: PIPELINE_STEPS,
+    stepLabel: STEP_TITLES[0],
     startedAt: new Date().toISOString(),
     durationSeconds: null,
   };
@@ -340,44 +479,56 @@ export const redeployWebsite = mockApi(async function redeployWebsite(
   website.lastDeployAt = deploy.startedAt;
   website.redeploysLeft -= 1;
   redeployKeys.set(idempotencyKey, deploy);
+  runningDeploys.set(deploy.id, Date.now());
+  redeployedIds.add(deploy.id);
+  notify("REDEPLOY_REQUESTED", website, `Requested a redeploy for ${website.name}.`);
   return deploy;
-});
+}
 
 /** POST /api/admin/projects/{projectId}/suspend — takes the site offline, content is kept. */
-export const suspendWebsite = mockApi(async function suspendWebsite(websiteId: string): Promise<AdminWebsite> {
+export async function suspendWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay();
   const website =
     adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
   website.siteStatus = "SUSPENDED";
+  logActivity("SUSPEND_HOSTING", website.name, website.domain);
   return website;
-});
+}
 
 /** POST /api/admin/projects/{projectId}/contact-owner — the backend emails the website's owner. */
-export const contactWebsiteOwner = mockApi(async function contactWebsiteOwner(
+export async function contactWebsiteOwner(
   websiteId: string,
   email: { subject: string; message: string },
 ): Promise<void> {
   await delay();
   const website = adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
-  // Persist the demo outbox; Spring will send the real email.
+  // Mock outbox (resets on restart); Spring sends the real email.
   ownerEmailOutbox.push({ to: website.ownerEmail, ...email, sentAt: new Date().toISOString() });
-});
+}
 
-const ownerEmailOutbox: { to: string; subject: string; message: string; sentAt: string }[] = mockCollection("admin.ownerEmailOutbox", []);
+const ownerEmailOutbox: { to: string; subject: string; message: string; sentAt: string }[] = [];
 
 /** POST /api/admin/projects/{projectId}/resume */
-export const resumeWebsite = mockApi(async function resumeWebsite(websiteId: string): Promise<AdminWebsite> {
+export async function resumeWebsite(websiteId: string): Promise<AdminWebsite> {
   await delay();
   const website =
     adminWebsites.find((w) => w.id === websiteId) ?? notFound("Website");
+  if (userAccounts.find((u) => u.id === website.ownerId)?.status === "SUSPENDED") {
+    throw new ApiError({
+      title: "Conflict",
+      status: 409,
+      detail: `Reactivate ${website.ownerName}'s account first.`,
+    });
+  }
   website.siteStatus = website.liveRelease ? "ONLINE" : "NOT_DEPLOYED";
+  logActivity("RESUME_HOSTING", website.name, website.domain);
   return website;
-});
+}
 
 // ── Subscriptions ────────────────────────────────────────────────────────────
 
 /** GET /api/admin/subscriptions?q=&status=&plan=&page=&size=&sort= */
-export const listSubscriptions = mockApi(async function listSubscriptions(
+export async function listSubscriptions(
   filters: SubscriptionFilters,
   query: TableQuery,
 ): Promise<Page<Subscription>> {
@@ -389,10 +540,10 @@ export const listSubscriptions = mockApi(async function listSubscriptions(
       (!filters.plan || s.plan === filters.plan),
   );
   return toPage(sorted(items, query.sort), query);
-});
+}
 
 /** GET /api/admin/subscriptions/stats */
-export const getSubscriptionStats = mockApi(async function getSubscriptionStats(): Promise<SubscriptionStats> {
+export async function getSubscriptionStats(): Promise<SubscriptionStats> {
   await delay(150);
   return {
     monthlyRevenue: latestMonthRevenue().total.toFixed(2),
@@ -400,10 +551,10 @@ export const getSubscriptionStats = mockApi(async function getSubscriptionStats(
     trialsEndingSoon: trialsEnding().length,
     pending: subscriptions.filter((s) => s.status === "PENDING").length,
   };
-});
+}
 
 /** GET /api/admin/subscriptions/{subscriptionId} */
-export const getSubscription = mockApi(async function getSubscription(
+export async function getSubscription(
   subscriptionId: string,
 ): Promise<Subscription> {
   await delay(150);
@@ -411,10 +562,10 @@ export const getSubscription = mockApi(async function getSubscription(
     subscriptions.find((s) => s.id === subscriptionId) ??
     notFound("Subscription")
   );
-});
+}
 
 /** GET /api/admin/subscriptions/{subscriptionId}/payments — newest first. */
-export const listPayments = mockApi(async function listPayments(
+export async function listPayments(
   subscriptionId: string,
   query: TableQuery,
 ): Promise<Page<Payment>> {
@@ -423,24 +574,24 @@ export const listPayments = mockApi(async function listPayments(
     .filter((p) => p.subscriptionId === subscriptionId)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return toPage(items, query);
-});
+}
 
 // ── Plans ────────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/plans */
-export const listPlans = mockApi(async function listPlans(): Promise<Page<Plan>> {
+export async function listPlans(): Promise<Page<Plan>> {
   await delay();
   return toPage(plans, { page: 0, size: plans.length });
-});
+}
 
 /** GET /api/admin/plans/{planId} */
-export const getPlan = mockApi(async function getPlan(planId: string): Promise<Plan> {
+export async function getPlan(planId: string): Promise<Plan> {
   await delay(150);
   return plans.find((p) => p.id === planId) ?? notFound("Plan");
-});
+}
 
 /** PUT /api/admin/plans/{planId} — applies to new subscriptions and renewals. */
-export const updatePlan = mockApi(async function updatePlan(
+export async function updatePlan(
   planId: string,
   input: PlanInput,
 ): Promise<Plan> {
@@ -448,12 +599,12 @@ export const updatePlan = mockApi(async function updatePlan(
   const plan = plans.find((p) => p.id === planId) ?? notFound("Plan");
   Object.assign(plan, input);
   return plan;
-});
+}
 
 // ── Notifications ────────────────────────────────────────────────────────────
 
 /** GET /api/admin/notifications?unread=&page=&size= — newest first. */
-export const listNotifications = mockApi(async function listNotifications(
+export async function listNotifications(
   filters: NotificationFilters,
   query: TableQuery,
 ): Promise<Page<AdminNotification>> {
@@ -462,16 +613,16 @@ export const listNotifications = mockApi(async function listNotifications(
     .filter((n) => !filters.unread || n.readAt === null)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return toPage(items, query);
-});
+}
 
 /** GET /api/admin/notifications/unread-count */
-export const getUnreadNotificationCount = mockApi(async function getUnreadNotificationCount(): Promise<number> {
+export async function getUnreadNotificationCount(): Promise<number> {
   await delay(100);
   return adminNotifications.filter((n) => n.readAt === null).length;
-});
+}
 
 /** POST /api/admin/notifications/{notificationId}/read */
-export const markNotificationRead = mockApi(async function markNotificationRead(
+export async function markNotificationRead(
   notificationId: string,
 ): Promise<AdminNotification> {
   await delay(150);
@@ -480,19 +631,19 @@ export const markNotificationRead = mockApi(async function markNotificationRead(
     notFound("Notification");
   notification.readAt ??= new Date().toISOString();
   return notification;
-});
+}
 
 /** POST /api/admin/notifications/read-all */
-export const markAllNotificationsRead = mockApi(async function markAllNotificationsRead(): Promise<void> {
+export async function markAllNotificationsRead(): Promise<void> {
   await delay(150);
   const now = new Date().toISOString();
   for (const n of adminNotifications) n.readAt ??= now;
-});
+}
 
 // ── Profile ──────────────────────────────────────────────────────────────────
 
 /** GET /api/admin/me — the signed-in admin (Spring reads who from the session). */
-export const getAdminProfile = mockApi(async function getAdminProfile(): Promise<AdminProfile> {
+export async function getAdminProfile(): Promise<AdminProfile> {
   await delay(100);
   return adminProfile;
-});
+}

@@ -1,4 +1,3 @@
-import { mockApi } from "@/lib/mock-state";
 // Product logic. Pages call the read functions, Server Actions call the write functions.
 // Nothing here knows whether data comes from the mock or from Spring.
 import { z } from "zod";
@@ -64,17 +63,17 @@ export function parseInitialProductsFilter(searchParams: SearchParams): Products
 }
 
 /** One request for the whole catalogue of a website (the mock has a few dozen products at most). */
-export const getProductsData = mockApi(async function getProductsData(websiteId: string): Promise<ProductsData> {
+export async function getProductsData(websiteId: string): Promise<ProductsData> {
   const [website, categories, all] = await Promise.all([
     getWebsite(websiteId),
     listProductCategories(websiteId),
     listProducts(websiteId, { page: 0, size: ALL_PRODUCTS }),
   ]);
   return { websiteId, domain: website.domain, products: all.items, categories };
-});
+}
 
 /** Creates a product, or updates `productId` when it is set. */
-export const saveProduct = mockApi(async function saveProduct(
+export async function saveProduct(
   websiteId: string,
   productId: string | null,
   formData: FormData,
@@ -123,9 +122,9 @@ export const saveProduct = mockApi(async function saveProduct(
     if (e instanceof ApiError) return { ok: false, message: e.message, values };
     throw e;
   }
-});
+}
 
-export const removeProduct = mockApi(async function removeProduct(websiteId: string, productId: string): Promise<ActionResult> {
+export async function removeProduct(websiteId: string, productId: string): Promise<ActionResult> {
   try {
     const product = await deleteProduct(websiteId, productId);
     return { ok: true, data: undefined, message: `${product.name} was removed` };
@@ -133,10 +132,10 @@ export const removeProduct = mockApi(async function removeProduct(websiteId: str
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}
 
 /** Adds a product category. Returns its name so the tabs and the form can show it at once. */
-export const addCategory = mockApi(async function addCategory(websiteId: string, formData: FormData): Promise<ActionResult<string>> {
+export async function addCategory(websiteId: string, formData: FormData): Promise<ActionResult<string>> {
   const values = { name: formText(formData, "name") };
   const parsed = categoryInput.safeParse(values);
   if (!parsed.success) {
@@ -155,4 +154,4 @@ export const addCategory = mockApi(async function addCategory(websiteId: string,
     if (e instanceof ApiError) return { ok: false, message: e.message, fieldErrors: { name: [e.message] }, values };
     throw e;
   }
-});
+}

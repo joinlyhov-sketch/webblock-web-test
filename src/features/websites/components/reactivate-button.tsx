@@ -37,7 +37,7 @@ export function ReactivateButton({
         })
       }
     >
-      {variant === "primary" && <Refresh2 aria-hidden />} Reactivate
+      {variant === "primary" && <Refresh2 variant="Outline" aria-hidden />} Reactivate
     </Button>
   );
 }

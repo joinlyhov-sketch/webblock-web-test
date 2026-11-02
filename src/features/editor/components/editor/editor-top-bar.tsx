@@ -62,7 +62,7 @@ export function EditorTopBar({
     <header className="flex h-16 shrink-0 items-center gap-3 border-b border-border bg-background px-5">
       <Button asChild variant="ghost" size="icon" aria-label="Back to my websites">
         <Link href="/websites" onClick={onBack}>
-          <ArrowLeft />
+          <ArrowLeft variant="Outline" />
         </Link>
       </Button>
       <LogoMark className="h-[30px]" />
@@ -70,7 +70,7 @@ export function EditorTopBar({
         <p className="truncate text-[13px] leading-[19.5px] font-semibold text-foreground">{siteName}</p>
         {portalHref && domain ? (
           <p className="flex items-center gap-1 text-xs leading-[18px] text-muted-foreground">
-            <Global aria-hidden className="size-[11px] shrink-0" />
+            <Global variant="Outline" aria-hidden className="size-[11px] shrink-0" />
             <span className="truncate">{domain}</span>
           </p>
         ) : (
@@ -82,7 +82,7 @@ export function EditorTopBar({
       <div className="flex-1" />
       <div className="flex gap-2">
         <Button variant="secondary" size="icon" className="rounded-full" aria-label="Undo" title="Undo (Ctrl+Z)" disabled={!history.hasPast} onClick={history.back}>
-          <Undo />
+          <Undo variant="Outline" />
         </Button>
         <Button
           variant="secondary"
@@ -93,14 +93,14 @@ export function EditorTopBar({
           disabled={!history.hasFuture}
           onClick={history.forward}
         >
-          <Redo />
+          <Redo variant="Outline" />
         </Button>
       </div>
       <DeviceSwitcher value={device} onChange={onDeviceChange} />
       <div className="flex-1" />
 
       <Button variant={portalHref ? "ghost" : "secondary"} onClick={onSave} loading={busy === "save"} disabled={busy !== null}>
-        {busy !== "save" && <Export />} Save draft
+        {busy !== "save" && <Export variant="Outline" />} Save draft
       </Button>
       {portalHref && (
         <>
@@ -108,16 +108,16 @@ export function EditorTopBar({
           <Button asChild variant="secondary">
             {/* The portal opens in its own tab, so the editor (and any unsaved work) stays open here. */}
             <Link href={portalHref} target="_blank" rel="noopener noreferrer">
-              <ExportSquare /> Portal
+              <ExportSquare variant="Outline" /> Portal
             </Link>
           </Button>
         </>
       )}
       <Button variant="secondary" onClick={onPreview} loading={busy === "preview"} disabled={busy !== null}>
-        {busy !== "preview" && <Eye />} Preview
+        {busy !== "preview" && <Eye variant="Outline" />} Preview
       </Button>
       <Button onClick={onDeploy} loading={busy === "deploy"} disabled={busy !== null}>
-        {busy !== "deploy" && <Rocket />} Deploy
+        {busy !== "deploy" && <Rocket variant="Outline" />} Deploy
       </Button>
     </header>
   );

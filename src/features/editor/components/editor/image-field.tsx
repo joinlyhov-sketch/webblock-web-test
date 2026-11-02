@@ -50,18 +50,18 @@ export function ImageField({
           {value ? (
             <Image src={value} alt="" fill sizes="84px" className="object-cover" />
           ) : (
-            <Gallery aria-hidden className="absolute inset-0 m-auto size-6 text-placeholder" />
+            <Gallery variant="Outline" aria-hidden className="absolute inset-0 m-auto size-6 text-placeholder" />
           )}
         </div>
         <div className="min-w-0">
           <p className="truncate text-[13px] font-semibold text-foreground">{name}</p>
-          <p className="text-xs text-muted-foreground">{value ? "Shown at 4:3" : "A placeholder is shown"}</p>
+          {!value && <p className="text-xs text-muted-foreground">A placeholder is shown</p>}
         </div>
       </div>
 
       <div className="flex items-center gap-2">
         <Button variant="secondary" size="sm" className="flex-1" disabled={readOnly} onClick={() => setUploading(true)}>
-          <Export /> Upload image
+          <Export variant="Outline" /> Upload image
         </Button>
         <Button
           variant="secondary"
@@ -70,7 +70,7 @@ export function ImageField({
           disabled={readOnly || !value}
           onClick={() => onChange(null)}
         >
-          <Trash />
+          <Trash variant="Outline" />
         </Button>
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import { useCallback, useTransition } from "react";
 
 /**
  * Change one URL search param (filters, search, rows per page). Empty or `null` removes it and the
@@ -13,8 +13,9 @@ export function useUrlParam() {
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
 
-  function setParam(name: string, value: string | null) {
-    const params = new URLSearchParams(searchParams.toString());
+  const setParam = useCallback((name: string, value: string | null) => {
+    // Read the latest URL so a debounced search preserves filters changed while typing.
+    const params = new URLSearchParams(window.location.search);
     if (value) params.set(name, value);
     else params.delete(name);
     params.delete("page");
@@ -22,7 +23,7 @@ export function useUrlParam() {
     startTransition(() => {
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
     });
-  }
+  }, [pathname, router]);
 
   return { setParam, pending, searchParams };
 }

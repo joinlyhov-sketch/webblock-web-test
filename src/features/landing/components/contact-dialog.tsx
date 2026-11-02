@@ -131,13 +131,13 @@ function ContactForm({ onClose }: { onClose: () => void }) {
         onClick={onClose}
         className="absolute top-4 right-4 flex size-9 items-center justify-center rounded-full text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/40"
       >
-        <CloseCircle aria-hidden className="size-5" />
+        <CloseCircle variant="Outline" aria-hidden className="size-5" />
       </button>
 
       {sentTo ? (
         <div className="flex flex-col items-center gap-4 py-4 text-center">
           <span className="flex size-14 items-center justify-center rounded-full bg-success-soft text-success">
-            <TickCircle aria-hidden className="size-7" />
+            <TickCircle variant="Outline" aria-hidden className="size-7" />
           </span>
           <h2 className="font-heading text-2xl font-semibold text-foreground">Message sent</h2>
           <p className="text-[15px] leading-6 text-foreground-soft">
@@ -164,7 +164,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
                 name="name"
                 autoComplete="name"
                 maxLength={LIMITS.name}
-                icon={<Profile />}
+                icon={<Profile variant="Outline" />}
                 iconClassName={fieldIconClass}
                 className={fieldClass}
                 placeholder="e.g. Sokha Chan"
@@ -180,7 +180,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
                 type="email"
                 autoComplete="email"
                 maxLength={LIMITS.email}
-                icon={<Sms />}
+                icon={<Sms variant="Outline" />}
                 iconClassName={fieldIconClass}
                 className={fieldClass}
                 placeholder="you@example.com"

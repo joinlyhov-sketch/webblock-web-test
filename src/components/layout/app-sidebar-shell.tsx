@@ -43,7 +43,7 @@ export function AppSidebarShell({
           onClick={toggle}
           className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground-soft outline-none transition-colors hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40"
         >
-          <SidebarLeft aria-hidden className="size-4" />
+          <SidebarLeft variant="Outline" aria-hidden className="size-4" />
         </button>
       </div>
 
@@ -65,7 +65,7 @@ export function AppSidebarShell({
             onClick={() => setConfirmOpen(true)}
             className="flex size-[18px] shrink-0 items-center justify-center rounded-md text-foreground-soft outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
           >
-            <Logout aria-hidden className="size-[18px]" />
+            <Logout variant="Outline" aria-hidden className="size-[18px]" />
           </button>
         </div>
       </div>
@@ -75,7 +75,7 @@ export function AppSidebarShell({
         onClose={() => setConfirmOpen(false)}
         onConfirm={() => startSignOut(() => signOutAction())}
         loading={signingOut}
-        icon={<Logout />}
+        icon={<Logout variant="Outline" />}
         title="Log out of WebBlock?"
         description="You’ll need to sign in again to manage and deploy your websites."
         confirmLabel="Log out"

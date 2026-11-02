@@ -13,7 +13,7 @@ export function GoogleCard({
   hasPassword: boolean;
 }) {
   return (
-    <SettingsCard icon={<Link21 />} title="Sign in with Google" description="Connected accounts" headerClassName="pb-4">
+    <SettingsCard icon={<Link21 variant="Outline" />} title="Sign in with Google" description="Connected accounts" headerClassName="pb-4">
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3.5">
           <span className="flex size-[46px] shrink-0 items-center justify-center rounded-full border border-border bg-background shadow-surface">

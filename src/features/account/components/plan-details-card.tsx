@@ -33,7 +33,7 @@ export function PlanDetailsCard({ subscription, daysLeft }: PlanDetailsCardProps
         <CardHeader
           tone="brand"
           tileClassName={TONE_STYLE[tone].tile}
-          icon={<DocumentText />}
+          icon={<DocumentText variant="Outline" />}
           title="Plan details"
           description={subtitle}
           action={
@@ -129,7 +129,7 @@ function PlanDetailsDialog({
             onClick={onClose}
             className="flex size-[34px] shrink-0 items-center justify-center rounded-[10px] bg-panel text-muted-foreground outline-none transition-colors hover:bg-primary-soft hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
           >
-            <Add aria-hidden className="size-[18px] rotate-45" />
+            <Add variant="Outline" aria-hidden className="size-[18px] rotate-45" />
           </button>
         </div>
         <hr className="border-border" />
@@ -172,7 +172,7 @@ function PlanDetailsDialog({
           <ul className="grid grid-cols-1 gap-x-4 gap-y-2.5 sm:grid-cols-2">
             {(paid ? [...subscription.includes, "Pay monthly by KHQR"] : subscription.includes).map((item) => (
               <li key={item} className="flex items-center gap-2 text-[13px]">
-                <TickCircle aria-hidden className="size-4 shrink-0 text-brand" />
+                <TickCircle variant="Outline" aria-hidden className="size-4 shrink-0 text-brand" />
                 {item}
               </li>
             ))}

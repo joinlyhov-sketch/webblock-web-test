@@ -6,11 +6,11 @@ import { AuthShowcase, type Headline } from "./auth-showcase";
 /** Two-column auth frame: logo + centred 424px form on the left, marketing panel on the right. */
 export function AuthShell({ headline, children }: { headline: Headline; children: ReactNode }) {
   return (
-    <div className="relative flex min-h-dvh gap-6 overflow-hidden bg-background p-4 sm:p-6">
+    <div className="relative max-lg:ml-[calc(100vw-100%)] flex min-h-dvh gap-6 overflow-hidden bg-background p-4 sm:p-6">
       <Deco />
       <div className="relative flex min-w-0 flex-1 flex-col px-2 py-2 sm:px-8">
         <AuthLogo />
-        <main className="flex flex-1 items-center justify-center py-10">
+        <main className="flex flex-1 items-center justify-center py-8 sm:py-10">
           <div className="flex w-full max-w-[424px] flex-col gap-[18px] motion-safe:animate-fade-up">{children}</div>
         </main>
       </div>
@@ -31,9 +31,9 @@ function Deco() {
     <Image src="/images/auth/deco.svg" alt="" width={917} height={1192} className="absolute top-0 left-0 max-w-none" />
   );
   const slice =
-    "pointer-events-none absolute -left-[109px] w-[917px] overflow-hidden motion-safe:animate-fade-in-slow [@media(max-height:820px)]:hidden";
+    "pointer-events-none absolute -left-[109px] w-[917px] overflow-hidden max-sm:hidden motion-safe:animate-fade-in-slow [@media(max-height:820px)]:hidden";
   return (
-    <div aria-hidden>
+    <div aria-hidden className="pointer-events-none max-lg:absolute max-lg:inset-0">
       {/* SVG y 0–820: dots. */}
       <div className={`${slice} top-6 h-[820px]`}>{svg}</div>
       {/* SVG y 820–1192: rings. Bottom −99px puts the ring centre (y 1012) 81px above the page bottom. */}

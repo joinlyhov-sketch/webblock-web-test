@@ -1,4 +1,3 @@
-import { mockApi } from "@/lib/mock-state";
 // Profile, password, photo, subscription and billing history logic.
 import type { ActionResult } from "@/lib/actions/result";
 import {
@@ -35,9 +34,9 @@ const MIN_PASSWORD_LENGTH = 8;
 
 // ── Reads ────────────────────────────────────────────────────────────────────
 
-export const getProfileView = mockApi(async function getProfileView(userId: string): Promise<Profile> {
+export async function getProfileView(userId: string): Promise<Profile> {
   return getProfile(userId);
-});
+}
 
 const BILLING_PERIOD_MS = 30 * 24 * 3_600_000;
 
@@ -53,13 +52,13 @@ function trialProgress(subscription: Subscription): number {
  * The account's plan. One plan covers every website the user has online, so My Websites shows it
  * on each live card. No subscription yet means the free trial.
  */
-export const getCurrentPlan = mockApi(async function getCurrentPlan(userId: string): Promise<PlanCode> {
+export async function getCurrentPlan(userId: string): Promise<PlanCode> {
   const subscription = await getSubscription(userId).catch(() => null);
   return subscription?.plan ?? "FREE_TRIAL";
-});
+}
 
 /** Data for the trial card and the user row at the bottom of the sidebar. */
-export const getSidebarView = mockApi(async function getSidebarView(
+export async function getSidebarView(
   userId: string,
 ): Promise<{ profile: Profile; summary: SidebarSummary }> {
   await settlePendingPayments(userId);
@@ -91,7 +90,7 @@ export const getSidebarView = mockApi(async function getSidebarView(
       ...live,
     },
   };
-});
+}
 
 /**
  * The plan's usage counted from real data, so it always matches the websites and products on screen:
@@ -144,7 +143,7 @@ function first(value: string | string[] | undefined): string {
   return (Array.isArray(value) ? value[0] : value) ?? "";
 }
 
-export const getBillingView = mockApi(async function getBillingView(
+export async function getBillingView(
   userId: string,
   searchParams: SearchParams,
 ): Promise<BillingView> {
@@ -179,16 +178,16 @@ export const getBillingView = mockApi(async function getBillingView(
       sort: query.sort,
     },
   };
-});
+}
 
 /** Both Settings tabs in one request, so switching tabs never goes back to the server. */
-export const getSettingsView = mockApi(async function getSettingsView(
+export async function getSettingsView(
   userId: string,
   searchParams: SearchParams,
 ): Promise<{ profile: Profile; billing: BillingView }> {
   const [profile, billing] = await Promise.all([getProfileView(userId), getBillingView(userId, searchParams)]);
   return { profile, billing };
-});
+}
 
 // ── Writes ───────────────────────────────────────────────────────────────────
 
@@ -196,7 +195,7 @@ function identityOf(profile: Profile): ProfileIdentity {
   return { fullName: profile.fullName, initials: profile.initials, avatarUrl: profile.avatarUrl };
 }
 
-export const saveProfile = mockApi(async function saveProfile(userId: string, formData: FormData): Promise<ActionResult<ProfileIdentity>> {
+export async function saveProfile(userId: string, formData: FormData): Promise<ActionResult<ProfileIdentity>> {
   const fullName = formText(formData, "fullName");
   const c = createCollector();
   c.text("fullName", fullName, "Full name", { min: 2, max: FULL_NAME_MAX });
@@ -215,9 +214,9 @@ export const saveProfile = mockApi(async function saveProfile(userId: string, fo
     if (e instanceof ApiError) return { ok: false, message: e.message, values: { fullName } };
     throw e;
   }
-});
+}
 
-export const changePassword = mockApi(async function changePassword(userId: string, formData: FormData): Promise<ActionResult> {
+export async function changePassword(userId: string, formData: FormData): Promise<ActionResult> {
   const currentPassword = String(formData.get("currentPassword") ?? "");
   const password = String(formData.get("password") ?? "");
   const confirm = String(formData.get("confirmPassword") ?? "");
@@ -245,9 +244,9 @@ export const changePassword = mockApi(async function changePassword(userId: stri
     }
     throw e;
   }
-});
+}
 
-export const saveAvatar = mockApi(async function saveAvatar(userId: string, formData: FormData): Promise<ActionResult<ProfileIdentity>> {
+export async function saveAvatar(userId: string, formData: FormData): Promise<ActionResult<ProfileIdentity>> {
   const file = formFile(formData, "photo");
   if (!file) return { ok: false, message: "Choose a photo first." };
   const problem = checkImage(file, AVATAR_RULE);
@@ -259,9 +258,9 @@ export const saveAvatar = mockApi(async function saveAvatar(userId: string, form
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}
 
-export const removeAvatar = mockApi(async function removeAvatar(userId: string): Promise<ActionResult<ProfileIdentity>> {
+export async function removeAvatar(userId: string): Promise<ActionResult<ProfileIdentity>> {
   try {
     const profile = await updateAvatar(userId, null);
     return { ok: true, data: identityOf(profile), message: "Photo removed" };
@@ -269,4 +268,4 @@ export const removeAvatar = mockApi(async function removeAvatar(userId: string):
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}

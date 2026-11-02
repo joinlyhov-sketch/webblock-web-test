@@ -47,7 +47,7 @@ export function SiteTopPreview({
       {/* A caption bar under the site, never on top of it: every header keeps its logo top-left. */}
       {label && (
         <p className="flex items-center gap-1.5 border-t border-border bg-background px-3 py-2 text-xs font-medium text-foreground-soft">
-          <Eye aria-hidden className="size-3.5 shrink-0 text-brand" />
+          <Eye variant="Outline" aria-hidden className="size-3.5 shrink-0 text-brand" />
           {label}
         </p>
       )}

@@ -1,4 +1,3 @@
-import { mockApi } from "@/lib/mock-state";
 // Read-only monitoring data for one website. Mock now, Spring later: only these function bodies change.
 // The backend runs deploys, retries and uptime checks; the frontend only displays the results.
 import { ApiError } from "@/lib/api/errors";
@@ -64,7 +63,7 @@ function ensureFirstDeploy(websiteId: string): void {
 }
 
 /** GET /projects/{projectId}/status — `null` when the website has never been deployed. */
-export const getSiteStatus = mockApi(async function getSiteStatus(websiteId: string): Promise<SiteStatus | null> {
+export async function getSiteStatus(websiteId: string): Promise<SiteStatus | null> {
   await delay(150);
   const known = siteStatus.find((s) => s.websiteId === websiteId);
   if (known) return known;
@@ -74,24 +73,24 @@ export const getSiteStatus = mockApi(async function getSiteStatus(websiteId: str
     return siteStatus.find((s) => s.websiteId === websiteId) ?? null;
   }
   return null;
-});
+}
 
 /** GET /projects/{projectId}/deploys?page=&size= — newest first. */
-export const listDeploys = mockApi(async function listDeploys(websiteId: string, query: Pick<TableQuery, "page" | "size">): Promise<Page<Deploy>> {
+export async function listDeploys(websiteId: string, query: Pick<TableQuery, "page" | "size">): Promise<Page<Deploy>> {
   await delay();
   ensureFirstDeploy(websiteId);
   const mine = deploys.filter((d) => d.websiteId === websiteId).sort((a, b) => b.number - a.number);
   return toPage(mine, query);
-});
+}
 
 /** GET /projects/{projectId}/deploys/stats */
-export const getDeployStats = mockApi(async function getDeployStats(websiteId: string): Promise<DeployStats> {
+export async function getDeployStats(websiteId: string): Promise<DeployStats> {
   await delay(100);
   ensureFirstDeploy(websiteId);
   const mine = deploys.filter((d) => d.websiteId === websiteId);
   const succeeded = mine.filter((d) => d.status === "SUCCEEDED").length;
   return { total: mine.length, succeeded, failed: mine.length - succeeded };
-});
+}
 
 const BILLING_PERIOD_MS = 30 * 24 * 3_600_000;
 
@@ -133,7 +132,7 @@ function onlineWebsiteIds(ownerId: string): string[] {
  * uses. Everything is counted from real data: products on the website, websites online for the owner,
  * and the deploys of this website in the current period (the trial, or the 30 days of the paid plan).
  */
-export const getPlanUsage = mockApi(async function getPlanUsage(websiteId: string): Promise<PlanUsage | null> {
+export async function getPlanUsage(websiteId: string): Promise<PlanUsage | null> {
   await delay(150);
   const ownerId = ownerOf(websiteId);
   const subscription = ownerId ? await getSubscription(ownerId).catch(() => null) : null;
@@ -156,10 +155,10 @@ export const getPlanUsage = mockApi(async function getPlanUsage(websiteId: strin
     resetsAt: subscription.renewsAt ?? subscription.trialEndsAt,
     metrics: subscription.usage.map((m) => ({ ...m, used: live[m.key] ?? m.used })),
   };
-});
+}
 
 /** GET /projects/{projectId}/activity?page=&size= — newest first. Pro and Ultra plans only (403 otherwise). */
-export const listActivity = mockApi(async function listActivity(
+export async function listActivity(
   websiteId: string,
   query: Pick<TableQuery, "page" | "size">,
 ): Promise<Page<ActivityEvent>> {
@@ -177,4 +176,4 @@ export const listActivity = mockApi(async function listActivity(
     activity.filter((a) => a.websiteId === websiteId),
     query,
   );
-});
+}

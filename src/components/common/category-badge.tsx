@@ -7,10 +7,10 @@ import type { TemplateCategory } from "@/features/templates";
 type CategoryMeta = { icon: ReactNode; className: string };
 
 const categoryMeta = {
-  CLOTHES: { icon: <Shop />, className: "bg-category-clothes-soft text-category-clothes" },
-  FOOD_BEVERAGES: { icon: <Cup />, className: "bg-category-food-soft text-category-food" },
-  TECHNOLOGY: { icon: <Cpu />, className: "bg-category-tech-soft text-category-tech" },
-  HANDMADE: { icon: <Scissor />, className: "bg-category-handmade-soft text-category-handmade" },
+  CLOTHES: { icon: <Shop variant="Outline" />, className: "bg-category-clothes-soft text-category-clothes" },
+  FOOD_BEVERAGES: { icon: <Cup variant="Outline" />, className: "bg-category-food-soft text-category-food" },
+  TECHNOLOGY: { icon: <Cpu variant="Outline" />, className: "bg-category-tech-soft text-category-tech" },
+  HANDMADE: { icon: <Scissor variant="Outline" />, className: "bg-category-handmade-soft text-category-handmade" },
 } satisfies Record<TemplateCategory, CategoryMeta>;
 
 /** Template / website category pill. */

@@ -53,7 +53,7 @@ export const warmBoldPage: PageData = {
       props: {
         id: "warm-bold-hero",
         eyebrow: "EST. 2019 — STREET 308, PHNOM PENH",
-        heading: "Roasted this week,\nbrewed for you.",
+        heading: "Roasted fresh,\nbrewed for you.",
         description: "Small-batch beans roasted in our shop on Street 308, and a bar that pours them properly.",
         primaryLabel: "See the menu",
         primaryAction: "shop",

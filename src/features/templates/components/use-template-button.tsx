@@ -34,7 +34,7 @@ export function UseTemplateButton({
     <form action={action} className={cn("flex", className)}>
       <input type="hidden" name="templateId" value={templateId} />
       <Button type="submit" size={size} loading={pending} className="w-full">
-        {!pending && <Add />} Use template
+        {!pending && <Add variant="Outline" />} Use template
       </Button>
     </form>
   );

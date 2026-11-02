@@ -32,7 +32,7 @@ import type {
 } from "../types";
 import { STEP_TONE } from "./stage";
 
-const STEP_ICON: Record<number, ComponentType<{ className?: string }>> = {
+const STEP_ICON: Record<number, ComponentType<{ className?: string; variant?: "Outline" }>> = {
   1: DirectInbox,
   2: MagicStar,
   3: Hierarchy,
@@ -97,14 +97,14 @@ export function PublishFlowSheet({
           />
         </div>
         <a
-          href={`https://${run.domain}`}
+          href={`/sites/${run.websiteId}`}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-1 inline-flex items-center gap-1.5 text-sm text-brand hover:underline"
         >
-          <Global aria-hidden className="size-4" />
+          <Global variant="Outline" aria-hidden className="size-4" />
           {run.domain}
-          <ExportSquare aria-hidden className="size-3.5" />
+          <ExportSquare variant="Outline" aria-hidden className="size-3.5" />
         </a>
       </header>
 
@@ -249,7 +249,7 @@ function StepCard({ step }: { step: PipelineStep }) {
             step.status === "RUNNING" && "motion-safe:animate-pulse",
           )}
         >
-          <Icon />
+          <Icon variant="Outline" />
         </span>
         <span className="pt-0.5 text-[13px] font-medium text-muted-foreground tabular-nums">
           {String(step.number).padStart(2, "0")}
@@ -555,13 +555,13 @@ function StepChecks({
           >
             {check.status === "PASSED" ? (
               <TickCircle
-                variant="Bold"
+                variant="Outline"
                 aria-label="Passed"
                 className="size-6 shrink-0 text-success"
               />
             ) : check.status === "FAILED" ? (
               <Danger
-                variant="Bold"
+                variant="Outline"
                 aria-label="Failed"
                 className="size-6 shrink-0 text-danger"
               />

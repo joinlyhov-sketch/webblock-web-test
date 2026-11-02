@@ -72,7 +72,7 @@ export function TemplatePreviewer({
         }
         action={
           <Button size="sm" onClick={() => setUsing(true)}>
-            <Add aria-hidden /> Use template
+            <Add variant="Outline" aria-hidden /> Use template
           </Button>
         }
         badge="Template preview"

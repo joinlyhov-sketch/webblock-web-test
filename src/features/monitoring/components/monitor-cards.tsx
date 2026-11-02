@@ -8,7 +8,7 @@ import type { Deploy, DeployStats } from "../types";
 
 export function MonitorCard({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <section className={cn("flex flex-col rounded-[20px] border border-border bg-background p-5 shadow-surface", className)}>
+    <section className={cn("flex flex-col rounded-[20px] border border-border bg-background p-4 shadow-surface sm:p-5", className)}>
       {children}
     </section>
   );
@@ -30,11 +30,11 @@ export function MonitorCardTitle({ children, hint, action }: { children: ReactNo
 export function StatCard({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
   return (
     <MonitorCard className="justify-center gap-1">
-      <span aria-hidden className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary-soft text-primary [&_svg]:size-[22px]">
+      <span aria-hidden className="mb-2 flex size-9 items-center justify-center rounded-xl bg-primary-soft text-primary sm:mb-4 sm:size-11 [&_svg]:size-[18px] sm:[&_svg]:size-[22px]">
         {icon}
       </span>
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="font-heading text-[34px] leading-10 font-semibold tracking-[-0.5px] text-foreground">{value}</p>
+      <p className="text-[13px] text-muted-foreground sm:text-sm">{label}</p>
+      <p className="font-heading text-[28px] leading-9 font-semibold tracking-[-0.5px] text-foreground sm:text-[34px] sm:leading-10">{value}</p>
     </MonitorCard>
   );
 }
@@ -47,7 +47,7 @@ export function LiveBadge({ online }: { online: boolean }) {
         online ? "bg-success-soft text-success" : "bg-danger-soft text-danger",
       )}
     >
-      <Global aria-hidden />
+      <Global variant="Outline" aria-hidden />
       {online ? "Live" : "Offline"}
     </span>
   );
@@ -116,12 +116,12 @@ export function UsageRing({ metric }: { metric: UsageMetric }) {
   const note = tone === "full" ? "Limit reached" : tone === "near" ? `${left} left · near limit` : `${left} left`;
 
   return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <p className="text-[13px] font-medium text-foreground">{metric.cardLabel}</p>
+    <div className="flex min-w-0 flex-col items-center gap-2 text-center sm:gap-3">
+      <p className="text-xs font-medium text-foreground sm:text-[13px]">{metric.cardLabel}</p>
       <div
         role="img"
         aria-label={`${metric.cardLabel}: ${metric.used} of ${metric.limit} used, ${note.toLowerCase()}`}
-        className="relative size-[116px]"
+        className="relative size-[84px] sm:size-[116px]"
       >
         <svg viewBox="0 0 116 116" aria-hidden className="size-full -rotate-90">
           <circle cx="58" cy="58" r={radius} fill="none" strokeWidth="11" stroke="var(--color-track)" />
@@ -138,11 +138,11 @@ export function UsageRing({ metric }: { metric: UsageMetric }) {
           />
         </svg>
         <span aria-hidden className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={cn("font-heading text-[22px] leading-7 font-semibold", TONE[tone].text)}>{metric.used}</span>
-          <span className="text-xs text-muted-foreground">of {metric.limit}</span>
+          <span className={cn("font-heading text-lg leading-6 font-semibold sm:text-[22px] sm:leading-7", TONE[tone].text)}>{metric.used}</span>
+          <span className="text-[11px] text-muted-foreground sm:text-xs">of {metric.limit}</span>
         </span>
       </div>
-      <p className={cn("text-xs", TONE[tone].note)}>{note}</p>
+      <p className={cn("text-[11px] sm:text-xs", TONE[tone].note)}>{note}</p>
     </div>
   );
 }

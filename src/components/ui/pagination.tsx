@@ -71,7 +71,7 @@ const navBase = "h-9 gap-1.5 bg-primary-soft [&_svg]:size-4";
 export function PaginationPrevious({ href, onClick }: { href?: string; onClick?: () => void }) {
   const content = (
     <>
-      <ArrowLeft2 aria-hidden />
+      <ArrowLeft2 variant="Outline" aria-hidden />
       Previous
     </>
   );
@@ -98,7 +98,7 @@ export function PaginationNext({ href, onClick }: { href?: string; onClick?: () 
   const content = (
     <>
       Next
-      <ArrowRight2 aria-hidden />
+      <ArrowRight2 variant="Outline" aria-hidden />
     </>
   );
   if (onClick) {

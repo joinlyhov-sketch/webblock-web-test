@@ -21,7 +21,7 @@ export function BillingTopBar({
     <header className="relative z-10 flex h-[72px] shrink-0 items-center gap-4 border-b border-border bg-background px-8">
       <Button asChild variant="ghost" size="sm" className="shadow-button">
         <Link href={backHref}>
-          <ArrowLeft aria-hidden /> {backLabel}
+          <ArrowLeft variant="Outline" aria-hidden /> {backLabel}
         </Link>
       </Button>
       {chip && (
@@ -120,12 +120,12 @@ function ChangeBackdrop() {
     <div className="absolute inset-y-0 left-1/2 w-[1728px] -translate-x-1/2">
       <div className="absolute top-[50px] left-0 h-[908px] w-[1728px] bg-[url('/images/billing/dot-grid.svg')] bg-no-repeat" />
       <div className="absolute top-[70px] left-[1540px] flex size-20 items-center justify-center rounded-[40px] bg-linear-[135deg] from-bubble-from to-bubble-to to-71% text-primary-foreground shadow-bubble">
-        <Tag className="size-8" />
+        <Tag variant="Outline" className="size-8" />
       </div>
       <div className="absolute top-[106px] left-[1616px] h-[88px] w-[133px] bg-[url('/images/billing/dashed-path-right.svg')] bg-no-repeat" />
       <div className="absolute top-[510px] left-28 flex size-[84px] items-center justify-center rounded-[42px] bg-background drop-shadow-[0_10px_15px_rgb(60_120_207/0.1)]">
         <span className="flex size-[60px] items-center justify-center rounded-[30px] bg-brand-soft text-brand">
-          <ShieldTick className="size-7" />
+          <ShieldTick variant="Outline" className="size-7" />
         </span>
         <span className="absolute top-[59px] left-[59px] size-[22px] bg-[url('/images/billing/online-dot.svg')] bg-no-repeat" />
       </div>

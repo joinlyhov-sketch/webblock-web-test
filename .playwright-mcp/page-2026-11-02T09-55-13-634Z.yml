@@ -1,0 +1,55 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "WebBlock home" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "WebBlock" [ref=e5]
+      - main [ref=e6]:
+        - generic [ref=e7]:
+          - generic [ref=e8]:
+            - heading "Welcome back" [level=1] [ref=e9]
+            - paragraph [ref=e10]: Sign in to manage your websites.
+          - button "Continue with Google" [ref=e11] [cursor=pointer]
+          - generic [ref=e12]: or
+          - generic [ref=e15]:
+            - generic [ref=e16]:
+              - generic [ref=e17]: Email
+              - textbox "Email" [ref=e19]:
+                - /placeholder: you@example.com
+            - generic [ref=e20]:
+              - generic [ref=e21]:
+                - generic [ref=e22] [cursor=pointer]: Password
+                - link "Forgot password?" [ref=e23] [cursor=pointer]:
+                  - /url: /forgot-password
+              - generic [ref=e24]:
+                - textbox "Password" [ref=e25]:
+                  - /placeholder: Your password
+                - button "Show password" [ref=e27] [cursor=pointer]
+            - button "Sign in" [ref=e31] [cursor=pointer]
+          - paragraph [ref=e32]:
+            - text: New to WebBlock?
+            - link "Create an account" [ref=e33] [cursor=pointer]:
+              - /url: /register?next=%2Fwebsites
+          - generic [ref=e34]:
+            - paragraph [ref=e35]: Temporary access while login isn't connected yet
+            - generic [ref=e36]:
+              - button "Enter as User" [ref=e37] [cursor=pointer]
+              - button "Enter as Admin" [ref=e38] [cursor=pointer]
+    - complementary [ref=e39]:
+      - paragraph [ref=e40]: Pick up rightwhere you left off.
+      - generic [ref=e42]:
+        - generic [ref=e43]: petalandstem.webblock.com
+        - generic [ref=e54]: 9:41
+      - list [ref=e58]:
+        - listitem [ref=e59]:
+          - generic [ref=e60]: "1"
+          - generic [ref=e61]: Pick a template
+        - listitem [ref=e63]:
+          - generic [ref=e65]: "2"
+          - generic [ref=e66]: Add your details
+        - listitem [ref=e68]:
+          - generic [ref=e70]: "3"
+          - generic [ref=e71]: Deploy
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=e73]

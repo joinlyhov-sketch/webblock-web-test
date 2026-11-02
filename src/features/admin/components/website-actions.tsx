@@ -38,10 +38,15 @@ type WebsiteRef = Pick<
   | "redeploysLeft"
 >;
 
+/** Disabled reason for a live site: the button keeps its normal label. */
+const LIVE_BLOCKED = "Site is live";
+
 /** Why redeploy is unavailable, or null when it can run. The backend re-checks all of this. */
 function redeployBlocked(website: WebsiteRef): string | null {
-  if (website.siteStatus === "SUSPENDED") return "Resume hosting first";
   if (website.releaseStatus === "GOING_LIVE") return "Deploying…";
+  // A suspended site can be redeployed; a healthy live one has nothing to redeploy.
+  if (website.siteStatus !== "SUSPENDED" && website.releaseStatus === "LIVE")
+    return LIVE_BLOCKED;
   if (website.redeploysLeft <= 0) return "No redeploys left";
   return null;
 }
@@ -64,22 +69,22 @@ export function WebsiteRowMenu({
   const suspended = website.siteStatus === "SUSPENDED";
 
   const items: ActionMenuItem[] = [
-    { label: "View details", icon: <Eye />, href: detailHref },
+    { label: "View details", icon: <Eye variant="Outline" />, href: detailHref },
     ...(website.liveRelease && !suspended
       ? [
           {
             label: "Open live site",
-            icon: <Global />,
-            externalHref: `https://${website.domain}`,
+            icon: <Global variant="Outline" />,
+            externalHref: `/sites/${website.id}`,
           },
         ]
       : []),
-    // A live site needs no redeploy: it is only offered after a failed release.
-    ...(website.releaseStatus === "FAILED"
+    // A live site needs no redeploy: it is only offered after a failed release or while suspended.
+    ...(website.releaseStatus === "FAILED" || suspended
       ? [
           {
             label: "Redeploy",
-            icon: <Refresh2 />,
+            icon: <Refresh2 variant="Outline" />,
             disabled: redeployBlocked(website) !== null || pending,
             onSelect: () =>
               run(redeploy(website), `Redeploying ${website.name}`),
@@ -88,13 +93,13 @@ export function WebsiteRowMenu({
       : []),
     {
       label: "Contact owner",
-      icon: <Sms />,
+      icon: <Sms variant="Outline" />,
       onSelect: () => setContact(true),
     },
     suspended
       ? {
           label: "Resume hosting",
-          icon: <PlayCircle />,
+          icon: <PlayCircle variant="Outline" />,
           onSelect: () =>
             run(
               () => resumeWebsiteAction(website.id),
@@ -103,7 +108,7 @@ export function WebsiteRowMenu({
         }
       : {
           label: "Suspend website",
-          icon: <Forbidden2 />,
+          icon: <Forbidden2 variant="Outline" />,
           danger: true,
           onSelect: () => setConfirm(true),
         },
@@ -117,7 +122,7 @@ export function WebsiteRowMenu({
         open={confirm}
         onOpenChange={setConfirm}
         pending={pending}
-        icon={<Forbidden2 />}
+        icon={<Forbidden2 variant="Outline" />}
         title="Suspend this website?"
         description="It will be taken offline and visitors won't be able to see it. Its pages and content are kept, so you can resume hosting any time."
         confirmLabel="Suspend website"
@@ -143,7 +148,7 @@ export function WebsiteDetailActions({ website }: { website: WebsiteRef }) {
   return (
     <>
       <Button variant="secondary" size="sm" className="flex-1" onClick={() => setContact(true)}>
-        <Profile />
+        <Profile variant="Outline" />
         Contact owner
       </Button>
       <ContactOwnerDialog website={website} open={contact} onOpenChange={setContact} />
@@ -154,8 +159,8 @@ export function WebsiteDetailActions({ website }: { website: WebsiteRef }) {
         disabled={blocked !== null}
         onClick={() => run(redeploy(website), `Redeploying ${website.name}`)}
       >
-        {!pending && <Refresh2 />}
-        {blocked ?? "Redeploy website"}
+        {!pending && <Refresh2 variant="Outline" />}
+        {blocked && blocked !== LIVE_BLOCKED ? blocked : "Redeploy website"}
       </Button>
     </>
   );

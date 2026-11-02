@@ -85,10 +85,10 @@ export function StructurePanel({
       {!open && (
         <PanelRail
           label="Page"
-          show={{ label: "Show page panel", icon: <SidebarLeft />, onClick: () => onOpenChange(true) }}
+          show={{ label: "Show page panel", icon: <SidebarLeft variant="Outline" />, onClick: () => onOpenChange(true) }}
           items={[
-            { label: "Page structure", icon: <Layer />, onClick: () => openAt("page-structure") },
-            { label: "Add a block", icon: <AddSquare />, onClick: () => openAt("add-block-list") },
+            { label: "Page structure", icon: <Layer variant="Outline" />, onClick: () => openAt("page-structure") },
+            { label: "Add a block", icon: <AddSquare variant="Outline" />, onClick: () => openAt("add-block-list") },
           ]}
         />
       )}
@@ -111,7 +111,7 @@ export function StructurePanel({
               className="size-7 [&_svg]:size-4"
               onClick={() => onOpenChange(false)}
             >
-              <SidebarLeft />
+              <SidebarLeft variant="Outline" />
             </Button>
           </div>
 
@@ -168,7 +168,7 @@ export function StructurePanel({
                         selected ? "font-semibold text-brand-deep" : "font-medium text-foreground",
                       )}
                     >
-                      <Icon aria-hidden className="size-[15px] shrink-0" />
+                      <Icon variant="Outline" aria-hidden className="size-[15px] shrink-0" />
                       <span className="truncate">{meta.label}</span>
                     </button>
                     {selected && (
@@ -183,7 +183,7 @@ export function StructurePanel({
                             select(index + 1);
                           }}
                         >
-                          <Copy />
+                          <Copy variant="Outline" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -195,11 +195,11 @@ export function StructurePanel({
                             select(null);
                           }}
                         >
-                          <Trash />
+                          <Trash variant="Outline" />
                         </Button>
                       </span>
                     )}
-                    <Menu aria-hidden className="size-[15px] shrink-0 cursor-grab text-placeholder" />
+                    <Menu variant="Outline" aria-hidden className="size-[15px] shrink-0 cursor-grab text-placeholder" />
                   </li>
                 );
               })}
@@ -220,7 +220,7 @@ export function StructurePanel({
                     {() => (
                       <div className="flex h-[56px] cursor-grab items-center gap-2.5 rounded-[14px] border border-border bg-background pr-3 pl-2.5 shadow-card transition-[border-color,box-shadow] hover:border-primary/40 hover:shadow-button-hover">
                         <span className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-brand-soft text-brand">
-                          <Icon aria-hidden className="size-4" />
+                          <Icon variant="Outline" aria-hidden className="size-4" />
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-[13px] font-semibold text-foreground">{meta.label}</span>
@@ -233,7 +233,7 @@ export function StructurePanel({
                           onPointerDown={(e) => e.stopPropagation()}
                           onClick={() => insert(name)}
                         >
-                          <Add className="text-brand" />
+                          <Add variant="Outline" className="text-brand" />
                         </Button>
                       </div>
                     )}

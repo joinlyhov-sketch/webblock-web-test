@@ -10,19 +10,19 @@ export function SettingsArt() {
     <div aria-hidden className="pointer-events-none absolute top-0 right-[25px] hidden h-[152px] w-[680px] lg:block">
       <Image src="/images/settings/header-art.svg" alt="" width={680} height={152} unoptimized priority />
       <span className="absolute top-12 left-[560px] flex size-14 items-center justify-center rounded-[28px] bg-brand text-primary-foreground shadow-badge [&_svg]:size-[26px]">
-        <Setting2 />
+        <Setting2 variant="Outline" />
       </span>
       <span className={`${satellite} top-[26px] left-[483px]`}>
-        <User />
+        <User variant="Outline" />
       </span>
       <span className={`${satellite} top-[89px] left-[441px]`}>
-        <Lock1 />
+        <Lock1 variant="Outline" />
       </span>
       <span className={`${satellite} top-[21px] left-[401px]`}>
-        <Link21 />
+        <Link21 variant="Outline" />
       </span>
       <span className={`${satellite} top-[87px] left-[359px]`}>
-        <Card />
+        <Card variant="Outline" />
       </span>
     </div>
   );

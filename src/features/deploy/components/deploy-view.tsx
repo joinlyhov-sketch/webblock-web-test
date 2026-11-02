@@ -1,8 +1,4 @@
 import type { DeployView as DeployData } from "../service";
-import Link from "next/link";
-import { Clock } from "iconsax-reactjs";
-import { EmptyState } from "@/components/common/empty-state";
-import { Button } from "@/components/ui/button";
 import { ChooseDomainView } from "./choose-domain-view";
 import { DeployProgress } from "./deploy-progress";
 import { DeployShell } from "./deploy-shell";
@@ -17,14 +13,7 @@ export function DeployView({ view }: { view: DeployData }) {
   const editorHref = `/websites/${website.id}/edit`;
   return (
     <DeployShell siteName={website.name}>
-      {view.kind === "unavailable" ? (
-        <EmptyState
-          icon={<Clock aria-hidden />}
-          title="Deployment details unavailable"
-          description="We couldn't find this deployment. Return to the editor to check your website and start a new deploy."
-          action={<Button asChild><Link href={editorHref}>Back to editor</Link></Button>}
-        />
-      ) : view.kind === "start" ? (
+      {view.kind === "start" ? (
         <StartDeploy
           websiteId={website.id}
           idempotencyKey={view.idempotencyKey}

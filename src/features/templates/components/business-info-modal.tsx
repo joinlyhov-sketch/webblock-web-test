@@ -185,7 +185,7 @@ function BusinessInfoForm({
           className="pointer-events-none absolute right-0 bottom-0"
         />
         <span className="relative inline-flex h-6 w-fit shrink-0 items-center gap-1.5 rounded-full bg-background px-2.5 text-xs leading-[18px] font-semibold text-primary shadow-[0_4px_5px_rgb(60_120_207/0.12)]">
-          <Layer aria-hidden className="size-[13px]" />
+          <Layer variant="Outline" aria-hidden className="size-[13px]" />
           {template.name} template
         </span>
         <div className="relative h-[336px] w-full shrink-0">
@@ -193,6 +193,7 @@ function BusinessInfoForm({
             <div className="h-[336px] w-[244px] rotate-3 overflow-clip rounded-2xl border-[6px] border-background bg-background shadow-[0_24px_48px_rgb(60_120_207/0.2),0_6px_14px_rgb(60_120_207/0.1)]">
               <Image
                 src={desktop.url}
+                sizes="(max-width: 639px) 100vw, 440px"
                 alt={`${template.name} template preview`}
                 width={desktop.width}
                 height={desktop.height}
@@ -224,7 +225,7 @@ function BusinessInfoForm({
             </p>
           </div>
           <Button variant="ghost" size="icon-lg" aria-label="Close" className="size-9 [&_svg]:size-[18px]" onClick={onClose}>
-            <CloseCircle />
+            <CloseCircle variant="Outline" />
           </Button>
         </div>
 
@@ -309,7 +310,7 @@ function BusinessInfoForm({
                     {/* eslint-disable-next-line @next/next/no-img-element -- local blob preview of the chosen file */}
                     <img src={logoUrl} alt="" className="size-16 rounded-full bg-danger-soft object-cover" />
                     <span className="absolute -right-0.5 -bottom-0.5 flex size-5 items-center justify-center rounded-full border-2 border-background bg-success text-primary-foreground">
-                      <TickCircle variant="Bold" aria-hidden className="size-4" />
+                      <TickCircle variant="Outline" aria-hidden className="size-4" />
                     </span>
                   </span>
                   <div className="min-w-0 flex-1">
@@ -334,7 +335,7 @@ function BusinessInfoForm({
                     aria-hidden
                     className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-background text-primary shadow-[0_3px_4px_rgb(60_120_207/0.12)]"
                   >
-                    <Export className="size-[19px]" />
+                    <Export variant="Outline" className="size-[19px]" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[13px] leading-[19.5px] font-semibold text-foreground">Upload your logo</p>
@@ -377,7 +378,7 @@ function BusinessInfoForm({
                 <Input
                   id="phone"
                   type="tel"
-                  icon={<Call />}
+                  icon={<Call variant="Outline" />}
                   iconClassName={fieldIconClass}
                   className={cn(fieldClass, iconFieldClass)}
                   value={values.phone}
@@ -396,7 +397,7 @@ function BusinessInfoForm({
                 <Input
                   id="email"
                   type="email"
-                  icon={<Sms />}
+                  icon={<Sms variant="Outline" />}
                   iconClassName={fieldIconClass}
                   className={cn(fieldClass, iconFieldClass)}
                   value={values.email}
@@ -416,7 +417,7 @@ function BusinessInfoForm({
             >
               <Input
                 id="address"
-                icon={<Location />}
+                icon={<Location variant="Outline" />}
                 iconClassName={fieldIconClass}
                 className={cn(fieldClass, iconFieldClass)}
                 value={values.address}
@@ -489,16 +490,16 @@ function BusinessInfoForm({
                 Cancel
               </Button>
               <Button onClick={next}>
-                Next <ArrowRight />
+                Next <ArrowRight variant="Outline" />
               </Button>
             </>
           ) : (
             <>
               <Button variant="ghost" onClick={() => setStep(1)} disabled={pending}>
-                <ArrowLeft /> Back
+                <ArrowLeft variant="Outline" /> Back
               </Button>
               <Button onClick={submit} loading={pending}>
-                Continue to editor <ArrowRight />
+                Continue to editor <ArrowRight variant="Outline" />
               </Button>
             </>
           )}
@@ -521,7 +522,7 @@ function Step({ number, label, state }: { number: number; label: string; state: 
           state === "todo" && "border-violet-border bg-primary-soft text-primary",
         )}
       >
-        {state === "done" ? <TickCircle variant="Bold" className="size-[13px]" /> : number}
+        {state === "done" ? <TickCircle variant="Outline" className="size-[13px]" /> : number}
       </span>
       <span className={cn("text-[13px] font-semibold", state === "todo" ? "text-muted-foreground" : "text-foreground")}>
         {label}

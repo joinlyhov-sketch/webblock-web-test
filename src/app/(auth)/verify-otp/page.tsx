@@ -17,7 +17,7 @@ export default async function VerifyOtpPage({ searchParams }: { searchParams: Pr
       <AuthHeader
         step={2}
         backHref="/register"
-        icon={<Sms />}
+        icon={<Sms variant="Outline" />}
         title="Check your email"
         description={
           <>

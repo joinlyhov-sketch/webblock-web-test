@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { DocumentDownload, Filter, Receipt2 } from "iconsax-reactjs";
-import { DataTable } from "@/components/common/data-table";
+import { DataTable, SortChevrons } from "@/components/common/data-table";
 import { EmptyState } from "@/components/common/empty-state";
 import { PillSelect } from "@/components/common/filter-select";
 import { RowsSelect } from "@/components/common/rows-select";
@@ -98,7 +98,7 @@ export function BillingHistory({
         rowKey={(order) => order.id}
         heading={
           <h2 className="flex items-center gap-3 text-lg font-semibold">
-            <Receipt2 aria-hidden className="size-[22px] text-brand" /> Billing history
+            <Receipt2 variant="Outline" aria-hidden className="size-[22px] text-brand" /> Billing history
           </h2>
         }
         toolbar={
@@ -179,7 +179,7 @@ export function BillingHistory({
           {
             key: "status",
             header: "Status",
-            headerIcon: <Filter aria-hidden className="size-3.5" />,
+            headerIcon: <SortChevrons />,
             className: "w-[190px] px-0",
             cell: (order) => <StatusBadge status={order.status} />,
           },
@@ -195,7 +195,7 @@ export function BillingHistory({
                   aria-label={`Download receipt for ${order.planName}, ${formatDayMonthYear(order.createdAt)}`}
                   className="inline-flex items-center gap-1.5 rounded-full text-sm font-medium text-primary outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/40"
                 >
-                  <DocumentDownload aria-hidden className="size-3.5" /> Receipt
+                  <DocumentDownload variant="Outline" aria-hidden className="size-3.5" /> Receipt
                 </a>
               ) : (
                 <span className="text-sm text-placeholder">QR code expired</span>
@@ -206,7 +206,7 @@ export function BillingHistory({
           orders.length > 0 ? (
             // Orders exist, the filters just hide them all.
             <EmptyState
-              icon={<Filter />}
+              icon={<Filter variant="Outline" />}
               title="No orders match these filters"
               description="Try another status or plan, or show every order."
               action={
@@ -225,7 +225,7 @@ export function BillingHistory({
             />
           ) : (
           <EmptyState
-            icon={<Receipt2 />}
+            icon={<Receipt2 variant="Outline" />}
             title="No billing history yet"
             description="You’re on the free trial, so there’s nothing to pay yet. Your plan orders and receipts will show up here after you choose a plan."
             action={

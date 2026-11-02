@@ -56,7 +56,7 @@ export function ActivityView({
         minWidth="min-w-[1000px]"
         toolbar={
           <div className="w-full space-y-3">
-            <CardHeader title="Recent activity" icon={<Activity />} />
+            <CardHeader title="Recent activity" icon={<Activity variant="Outline" />} />
             <div className="flex flex-wrap items-center gap-3">
               <div className="max-w-full overflow-x-auto">
                 <SegmentedTabs
@@ -115,7 +115,7 @@ export function ActivityView({
         }
         empty={
           <EmptyState
-            icon={action || by ? <SearchNormal1 /> : <Activity />}
+            icon={action || by ? <SearchNormal1 variant="Outline" /> : <Activity variant="Outline" />}
             title={
               action || by ? "No actions found" : "No actions yet"
             }
@@ -178,7 +178,6 @@ export function ActivityView({
           {
             key: "result",
             header: "Result",
-            sortField: "result",
             cell: (a) => <StatusBadge status={a.result} />,
           },
         ]}

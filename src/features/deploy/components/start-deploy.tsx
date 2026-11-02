@@ -47,7 +47,7 @@ export function StartDeploy({
     return (
       <div role="alert" className="flex flex-col items-center gap-3 text-center">
         <span className="flex size-12 items-center justify-center rounded-full bg-danger-soft text-danger [&_svg]:size-6">
-          <Danger aria-hidden />
+          <Danger variant="Outline" aria-hidden />
         </span>
         <PageHeader align="center" tone="danger" className="mb-0" title="Couldn’t start the deploy" description={error} />
         <div className="flex gap-2.5 pt-2">

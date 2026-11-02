@@ -90,12 +90,12 @@ export function WebsiteCardMenu({
   const editor =
     status === "SUSPENDED" ? (
       <DropdownMenuItem disabled>
-        <Edit aria-hidden /> <span className="flex-1">Open editor</span>
+        <Edit variant="Outline" aria-hidden /> <span className="flex-1">Open editor</span>
       </DropdownMenuItem>
     ) : (
       <DropdownMenuItem asChild>
         <Link href={`/websites/${websiteId}/edit`}>
-          <Edit aria-hidden /> <span className="flex-1">Open editor</span>
+          <Edit variant="Outline" aria-hidden /> <span className="flex-1">Open editor</span>
         </Link>
       </DropdownMenuItem>
     );
@@ -103,13 +103,13 @@ export function WebsiteCardMenu({
   const portal = (
     <DropdownMenuItem asChild>
       <Link href={`/portal/${websiteId}`} target="_blank" rel="noopener noreferrer">
-        <ExportSquare aria-hidden /> <span className="flex-1">Portal</span>
+        <ExportSquare variant="Outline" aria-hidden /> <span className="flex-1">Portal</span>
       </Link>
     </DropdownMenuItem>
   );
   const history = domain && (
     <DropdownMenuItem onSelect={() => setHistoryOpen(true)}>
-      <Clock aria-hidden /> <span className="flex-1">Version history</span>
+      <Clock variant="Outline" aria-hidden /> <span className="flex-1">Version history</span>
     </DropdownMenuItem>
   );
 
@@ -120,7 +120,7 @@ export function WebsiteCardMenu({
           aria-label={`More actions for ${websiteName}`}
           className="flex size-9 shrink-0 items-center justify-center rounded-[10px] text-foreground-soft outline-none transition-colors hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 data-[state=open]:bg-primary-soft"
         >
-          <More aria-hidden className="size-[17px]" />
+          <More variant="Outline" aria-hidden className="size-[17px]" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[216px]">
           {status === "DRAFT" && (
@@ -128,7 +128,7 @@ export function WebsiteCardMenu({
               {editor}
               <DropdownMenuSeparator className="mx-1 my-[3px]" />
               <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
-                <Trash aria-hidden /> <span className="flex-1">Delete website</span>
+                <Trash variant="Outline" aria-hidden /> <span className="flex-1">Delete website</span>
               </DropdownMenuItem>
             </>
           )}
@@ -139,7 +139,7 @@ export function WebsiteCardMenu({
               {history}
               <DropdownMenuSeparator className="mx-1 my-[3px]" />
               <DropdownMenuItem variant="destructive" onSelect={() => setConfirmOpen(true)}>
-                <PauseCircle aria-hidden /> <span className="flex-1">Suspend website</span>
+                <PauseCircle variant="Outline" aria-hidden /> <span className="flex-1">Suspend website</span>
               </DropdownMenuItem>
             </>
           )}
@@ -150,7 +150,7 @@ export function WebsiteCardMenu({
               {history}
               <DropdownMenuSeparator className="mx-1 my-[3px]" />
               <DropdownMenuItem disabled={pending} onSelect={reactivate}>
-                <PlayCircle aria-hidden /> <span className="flex-1">Reactivate website</span>
+                <PlayCircle variant="Outline" aria-hidden /> <span className="flex-1">Reactivate website</span>
               </DropdownMenuItem>
             </>
           )}
@@ -168,7 +168,7 @@ export function WebsiteCardMenu({
         onClose={() => setConfirmOpen(false)}
         onConfirm={suspend}
         loading={pending}
-        icon={<PauseCircle />}
+        icon={<PauseCircle variant="Outline" />}
         title="Suspend this website?"
         description="It will be taken offline and visitors won’t be able to see it. Your pages and content are kept, so you can reactivate it any time."
         confirmLabel="Suspend website"
@@ -179,7 +179,7 @@ export function WebsiteCardMenu({
         onClose={() => setDeleteOpen(false)}
         onConfirm={remove}
         loading={pending}
-        icon={<Trash />}
+        icon={<Trash variant="Outline" />}
         title={`Delete ${websiteName}?`}
         description="This draft and everything in it will be removed for good. This can’t be undone."
         confirmLabel="Delete website"

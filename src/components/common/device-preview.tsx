@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 export type PreviewDevice = "desktop" | "tablet" | "mobile";
 
 const devices: { id: PreviewDevice; label: string; icon: ReactNode }[] = [
-  { id: "desktop", label: "Desktop", icon: <Monitor /> },
-  { id: "tablet", label: "Tablet", icon: <Devices /> },
-  { id: "mobile", label: "Mobile", icon: <Mobile /> },
+  { id: "desktop", label: "Desktop", icon: <Monitor variant="Outline" /> },
+  { id: "tablet", label: "Tablet", icon: <Devices variant="Outline" /> },
+  { id: "mobile", label: "Mobile", icon: <Mobile variant="Outline" /> },
 ];
 
 /** Decorative dots on the desktop canvas (Figma "Preview decor"). */
@@ -302,7 +302,7 @@ export function DevicePreview({
             href={backHref}
             className="inline-flex h-8 shrink-0 items-center justify-center gap-2 rounded-full px-3 text-[13px] leading-[19.5px] font-semibold whitespace-nowrap text-foreground-soft shadow-button outline-none transition-colors hover:bg-primary-soft hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
           >
-            <ArrowLeft aria-hidden className="size-[15px]" /> {backLabel}
+            <ArrowLeft variant="Outline" aria-hidden className="size-[15px]" /> {backLabel}
           </Link>
           <span aria-hidden className="h-5 w-px shrink-0 bg-border" />
           <div className="flex min-w-0 items-center gap-2.5 whitespace-nowrap">
@@ -373,7 +373,7 @@ export function DevicePreview({
             style={{ ["--pv-name" as string]: "pv-float-9" }}
           >
             <p className={cn(chip, "inline-flex")}>
-              <Lock1 aria-hidden className="size-[14px]" />
+              <Lock1 variant="Outline" aria-hidden className="size-[14px]" />
               {address}
             </p>
           </div>

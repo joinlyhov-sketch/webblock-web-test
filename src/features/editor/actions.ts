@@ -16,11 +16,17 @@ function invalid(error: z.ZodError, data: unknown): ActionResult<never> {
   return { ok: false, message: describeIssue(error.issues[0], data) };
 }
 
-function revalidateWebsite(websiteId: string) {
-  revalidatePath(`/websites/${websiteId}/edit`);
+// Pages other than the editor. The editor keeps its own state, so a save or upload must not
+// re-render it (that was the "Rendering..." flash on every Save draft).
+function revalidateWebsiteViews(websiteId: string) {
   revalidatePath(`/websites/${websiteId}/preview`);
   revalidatePath(`/sites/${websiteId}`);
   revalidatePath("/websites");
+}
+
+function revalidateWebsite(websiteId: string) {
+  revalidatePath(`/websites/${websiteId}/edit`);
+  revalidateWebsiteViews(websiteId);
 }
 
 /** "Save draft": stores the editor's page document. The live site does not change. */
@@ -33,7 +39,7 @@ export async function savePageAction(
   if (!parsed.success) return invalid(parsed.error, data);
   try {
     const page = await savePageData(websiteId, parsed.data as PageData);
-    revalidateWebsite(websiteId);
+    revalidateWebsiteViews(websiteId);
     return { ok: true, data: { savedAt: page.updatedAt }, message: "Draft saved" };
   } catch (e) {
     if (e instanceof ApiError) return { ok: false, message: e.message };
@@ -50,7 +56,7 @@ export async function uploadMediaAction(websiteId: string, formData: FormData): 
   if (problem) return { ok: false, message: problem };
   try {
     const asset = await uploadMedia(websiteId, file);
-    revalidatePath(`/websites/${websiteId}/edit`);
+    // No revalidate: the asset goes back to the media library in the editor's own state.
     return { ok: true, data: asset, message: "Image uploaded" };
   } catch (e) {
     if (e instanceof ApiError) return { ok: false, message: e.message };

@@ -64,7 +64,7 @@ export const icedCoffeePage: PageData = {
       props: {
         id: "iced-coffee-hero",
         eyebrow: "Open today · 9:00 AM – 6:00 PM",
-        heading: "Iced coffee for *everyday* life.",
+        heading: "Iced coffee for *everyday*.",
         description: "Slow-poured lattes and mochas, made fresh over ice. Browse the menu, then come see us in store.",
         primaryLabel: "View products",
         primaryAction: "shop",

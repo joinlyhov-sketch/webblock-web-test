@@ -18,7 +18,7 @@ const inputClass =
 
 const OPTION_ICON: Record<
   string,
-  ComponentType<{ className?: string; "aria-hidden"?: boolean }>
+  ComponentType<{ className?: string; "aria-hidden"?: boolean; variant?: "Outline" }>
 > = {
   left: TextalignLeft,
   center: TextalignCenter,
@@ -67,7 +67,7 @@ export function OptionGroup({
                 : "font-medium text-muted-foreground hover:text-foreground",
             )}
           >
-            {Icon && <Icon aria-hidden className="size-4" />}
+            {Icon && <Icon variant="Outline" aria-hidden className="size-4" />}
             {option.label}
           </button>
         );
@@ -154,7 +154,7 @@ export function FieldControl({
           id={`${id}-locked`}
           className="flex items-center gap-1.5 text-xs text-muted-foreground"
         >
-          <Lock1 aria-hidden className="size-3.5" /> From your business details
+          <Lock1 variant="Outline" aria-hidden className="size-3.5" /> From your business details
         </p>
       </div>
     );

@@ -90,7 +90,7 @@ export function Thumbnail({
         <Image src={src} alt="" width={px} height={size === "lg" ? 90 : px} className="size-full object-cover" />
       ) : (
         <span className="flex size-full flex-col items-center justify-center gap-1 bg-primary-soft text-primary/70">
-          <Global
+          <Global variant="Outline"
             aria-hidden
             className={cn(size === "sm" ? "size-3.5" : size === "md" ? "size-[18px]" : "size-7")}
           />

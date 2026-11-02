@@ -91,7 +91,7 @@ export function WebsiteCard({
               {website.name}
             </h3>
             <p className="flex h-[19.5px] items-center gap-1.5 text-[13px] text-muted-foreground">
-              <Global aria-hidden className="size-3.5 shrink-0" />
+              <Global variant="Outline" aria-hidden className="size-3.5 shrink-0" />
               <span className="truncate">{website.status === "DRAFT" ? "Not deployed yet" : (website.domain ?? "Not deployed yet")}</span>
             </p>
           </div>
@@ -149,7 +149,7 @@ function EditButton({ websiteId, primary, disabled }: { websiteId: string; prima
   if (disabled) {
     return (
       <Button size="sm" variant="secondary" disabled title="Reactivate this website to edit it" className="flex-1">
-        <Edit2 aria-hidden /> Edit
+        <Edit2 variant="Outline" aria-hidden /> Edit
       </Button>
     );
   }
@@ -161,7 +161,7 @@ function EditButton({ websiteId, primary, disabled }: { websiteId: string; prima
       className={cn("flex-1", primary && "bg-primary hover:bg-brand")}
     >
       <Link href={`/websites/${websiteId}/edit`}>
-        <Edit2 aria-hidden /> Edit
+        <Edit2 variant="Outline" aria-hidden /> Edit
       </Link>
     </Button>
   );

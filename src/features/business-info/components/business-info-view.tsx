@@ -44,12 +44,14 @@ export function BusinessInfoView({ data }: { data: BusinessInfoData }) {
 
       <InfoCard className="p-2.5">
         <SiteBanner website={website} preview={data.preview} logoUrl={info.logoUrl} />
-        <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-3">
-          <BusinessMark name={website.name} logoUrl={info.logoUrl} />
-          <div className="min-w-0 flex-1">
-            <BusinessIdentity website={website} />
+        <div className="flex flex-col gap-4 px-4 pt-4 pb-3 sm:flex-row sm:items-center">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <BusinessMark name={website.name} logoUrl={info.logoUrl} />
+            <div className="min-w-0 flex-1">
+              <BusinessIdentity website={website} />
+            </div>
           </div>
-          <Button asChild>
+          <Button asChild className="max-sm:w-full">
             <Link href="?edit=1" scroll={false}>
               Edit details
             </Link>

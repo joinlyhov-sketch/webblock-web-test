@@ -68,7 +68,7 @@ const themes = {
   },
 } satisfies Record<PlanCode, PlanTheme>;
 
-type Feature = { icon: ComponentType<{ className?: string }>; label: string };
+type Feature = { icon: ComponentType<{ className?: string; variant?: "Outline" }>; label: string };
 
 const plural = (n: number, word: string) => `${n.toLocaleString("en-US")} ${word}${n === 1 ? "" : "s"}`;
 
@@ -175,7 +175,7 @@ export function PlanCard({
           {planFeatures(plan, lower).map(({ icon: Icon, label }) => (
             <li key={label}>
               <RevealItem y={8} className="flex items-center gap-2.5 text-[15px] text-foreground">
-                <Icon aria-hidden className={cn("size-[18px] shrink-0", theme.icon)} />
+                <Icon variant="Outline" aria-hidden className={cn("size-[18px] shrink-0", theme.icon)} />
                 {label}
               </RevealItem>
             </li>

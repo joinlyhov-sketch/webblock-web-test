@@ -12,7 +12,7 @@ export function PaymentView({ view }: { view: PaymentData }) {
       <BillingTopBar backHref={view.backHref} backLabel={view.backLabel} />
       <BillingBackdrop variant="payment" />
       <BillingContent>
-        <BillingTitle eyebrow="Secure payment" icon={<Lock1 aria-hidden />} title="Payment" subtitle={view.subtitle} />
+        <BillingTitle eyebrow="Secure payment" icon={<Lock1 variant="Outline" aria-hidden />} title="Payment" subtitle={view.subtitle} />
         <div className="mt-2 w-[960px] max-w-full overflow-hidden rounded-[24px] border border-border bg-background shadow-payment-card motion-safe:animate-fade-up sm:mt-3 sm:rounded-[32px]">
           {order.status === "PENDING" ? (
             <PendingPayment order={order} remainingMs={view.remainingMs} totalMs={view.totalMs}>
@@ -39,7 +39,7 @@ export function PaymentView({ view }: { view: PaymentData }) {
           )}
         </div>
         <p className="flex items-center justify-center gap-1.5 px-4 pt-5 text-center text-[15px] leading-[21.5px] text-muted-foreground">
-          <Lock1 aria-hidden className="size-3.5" /> Payments are confirmed by your bank. We never see your banking details.
+          <Lock1 variant="Outline" aria-hidden className="size-3.5" /> Payments are confirmed by your bank. We never see your banking details.
         </p>
       </BillingContent>
     </BillingScreen>

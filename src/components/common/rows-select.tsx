@@ -165,7 +165,7 @@ function RowsCombo({
           onClick={() => setOpen((current) => !current)}
           className="flex h-full shrink-0 cursor-pointer items-center rounded-r-full pr-2.5 pl-1 text-foreground-soft outline-none hover:text-foreground"
         >
-          <ArrowDown2 aria-hidden className={cn("size-3.5 transition-transform", open && "rotate-180")} />
+          <ArrowDown2 variant="Outline" aria-hidden className={cn("size-3.5 transition-transform", open && "rotate-180")} />
         </button>
       </div>
       {open && (

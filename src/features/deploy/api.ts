@@ -1,4 +1,3 @@
-import { mockApi, mockCollection } from "@/lib/mock-state";
 // Data access for deployments and web addresses. Mock now, Spring later: only these function bodies change.
 // The backend owns the deploy pipeline (steps, retries, SSL, going live). The frontend starts a deploy and
 // then only reads its status; it never decides that a step finished.
@@ -49,12 +48,10 @@ type StoredDeployment = {
   settled: boolean;
 };
 
-const store: StoredDeployment[] = mockCollection("deployments", []);
-
-/** Deployments are shared server records, independent of the owner's browser session. */
-async function entriesFor(websiteId: string): Promise<StoredDeployment[]> {
-  return store.filter((entry) => entry.deployment.websiteId === websiteId);
-}
+const globalForStore = globalThis as typeof globalThis & {
+  __wbDeployments?: StoredDeployment[];
+};
+const store: StoredDeployment[] = (globalForStore.__wbDeployments ??= []);
 
 function ownerOf(websiteId: string): string {
   const ownerId = websiteOwners.find((o) => o.websiteId === websiteId)?.ownerId;
@@ -68,7 +65,7 @@ function ownerOf(websiteId: string): string {
 }
 
 /** GET /domains/check?name= - is this address valid and free for this website? */
-export const checkDomain = mockApi(async function checkDomain(
+export async function checkDomain(
   websiteId: string,
   name: string,
 ): Promise<DomainCheck> {
@@ -92,7 +89,7 @@ export const checkDomain = mockApi(async function checkDomain(
     };
   }
   return { name: clean, host, available: true, problem: null };
-});
+}
 
 function stepsAt(elapsed: number, failAtStep: number | null): DeploymentStep[] {
   let start = 0;
@@ -135,7 +132,7 @@ async function settle(entry: StoredDeployment): Promise<void> {
   const { deployment } = entry;
   if (deployment.status !== "RUNNING") return;
   const startedAt = new Date(deployment.startedAt).getTime();
-  const elapsed = Math.max(0, Date.now() - startedAt);
+  const elapsed = Date.now() - startedAt;
 
   if (entry.failAtStep !== null) {
     const failTime = STEPS.slice(0, entry.failAtStep).reduce(
@@ -207,34 +204,30 @@ function stable(value: unknown): string {
  * Does the saved draft differ from what visitors see? A website that was never deployed always has
  * something to deploy. Spring answers this inside the deployments endpoint (409 when nothing changed).
  */
-export const hasUndeployedChanges = mockApi(async function hasUndeployedChanges(websiteId: string): Promise<boolean> {
+export async function hasUndeployedChanges(websiteId: string): Promise<boolean> {
   const page = await getPageData(websiteId);
   return !page.published || stable(page.draft) !== stable(page.published);
-});
+}
 
 /**
  * POST /projects/{projectId}/deployments - starts a deploy of the saved draft. Answers 402 when the
  * owner's plan does not allow it, 409 when one is already running or the address is unusable.
  * `idempotencyKey` goes in the `Idempotency-Key` header: a repeated request returns the same deployment.
  */
-export const startDeployment = mockApi(async function startDeployment(
+export async function startDeployment(
   websiteId: string,
   body: StartDeploymentBody,
   currentDomain: string | null,
 ): Promise<Deployment> {
   await delay(300);
-  const entries = await entriesFor(websiteId);
-  const repeat = entries.find(
+  const repeat = store.find(
     (e) =>
       e.deployment.websiteId === websiteId &&
       e.idempotencyKey === body.idempotencyKey,
   );
-  if (repeat) {
-    await settle(repeat);
-    return structuredClone(repeat.deployment);
-  }
+  if (repeat) return structuredClone(repeat.deployment);
 
-  const running = entries.find(
+  const running = store.find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.status === "RUNNING",
   );
@@ -290,15 +283,15 @@ export const startDeployment = mockApi(async function startDeployment(
     settled: false,
   });
   return structuredClone(deployment);
-});
+}
 
 /** GET /projects/{projectId}/deployments/{id} - the deploy's current progress. */
-export const getDeployment = mockApi(async function getDeployment(
+export async function getDeployment(
   websiteId: string,
   deploymentId: string,
 ): Promise<Deployment> {
   await delay(120);
-  const entry = (await entriesFor(websiteId)).find(
+  const entry = store.find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.id === deploymentId,
   );
@@ -310,14 +303,14 @@ export const getDeployment = mockApi(async function getDeployment(
     });
   await settle(entry);
   return structuredClone(entry.deployment);
-});
+}
 
 /** GET /projects/{projectId}/deployments?status=RUNNING&size=1 - the deploy in progress, if any. */
-export const getRunningDeployment = mockApi(async function getRunningDeployment(
+export async function getRunningDeployment(
   websiteId: string,
 ): Promise<Deployment | null> {
   await delay(120);
-  const entry = (await entriesFor(websiteId)).find(
+  const entry = store.find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.status === "RUNNING",
   );
@@ -326,23 +319,16 @@ export const getRunningDeployment = mockApi(async function getRunningDeployment(
   return entry.deployment.status === "RUNNING"
     ? structuredClone(entry.deployment)
     : null;
-});
-
-/** A visitor or dashboard request can finish a demo deployment after its owner closed progress. */
-export const settleDeployments = mockApi(async function settleDeployments(websiteId?: string): Promise<void> {
-  for (const entry of store.filter((item) => !websiteId || item.deployment.websiteId === websiteId)) {
-    await settle(entry);
-  }
-});
+}
 
 /** MOCK ONLY (no Spring equivalent): `?mock=fail` makes the running deploy fail at "Launching your website". */
-export const mockFailDeployment = mockApi(async function mockFailDeployment(
+export async function mockFailDeployment(
   websiteId: string,
   deploymentId: string,
 ): Promise<void> {
-  const entry = (await entriesFor(websiteId)).find(
+  const entry = store.find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.id === deploymentId,
   );
   if (entry && entry.deployment.status === "RUNNING") entry.failAtStep = 3;
-});
+}

@@ -15,7 +15,7 @@ export default async function AdminLayout({
     <div className="flex h-dvh overflow-hidden">
       <AdminSidebar user={profile} />
       {/* Flex column so a `DataTable fill` can stretch to the bottom of the screen. */}
-      <main className="page-motion flex min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain px-page pt-7 pb-page">
+      <main className="flex min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain px-page pt-7 pb-page">
         {children}
       </main>
     </div>

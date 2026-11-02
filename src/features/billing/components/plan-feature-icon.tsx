@@ -4,13 +4,13 @@ import { cn } from "@/lib/utils";
 import type { PlanFeatureIcon } from "../types";
 
 const ICONS: Record<PlanFeatureIcon, ReactNode> = {
-  check: <Check />,
-  clock: <Clock />,
-  globe: <Global />,
-  rocket: <Flash />,
-  box: <Box />,
-  pulse: <Activity />,
-  file: <DocumentText />,
+  check: <Check variant="Outline" />,
+  clock: <Clock variant="Outline" />,
+  globe: <Global variant="Outline" />,
+  rocket: <Flash variant="Outline" />,
+  box: <Box variant="Outline" />,
+  pulse: <Activity variant="Outline" />,
+  file: <DocumentText variant="Outline" />,
 };
 
 /** Feature icon, 18px by default (20px on the dashboard plans); colour follows the text colour. */

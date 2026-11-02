@@ -24,7 +24,7 @@ export function TemplatesGrid({
     return (
       <div className="flex flex-1 items-center justify-center pb-6">
         <EmptyState
-          icon={<Layer />}
+          icon={<Layer variant="Outline" />}
           title={searching ? "No results found" : "No templates found"}
           description={
             searching ? "Try a different keyword." : "Try another category, or choose All to see every template."
@@ -36,7 +36,7 @@ export function TemplatesGrid({
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {templates.map((template) => (
           <TemplateCard key={template.id} template={template} onUse={setSelected} />
         ))}

@@ -66,8 +66,8 @@ Only `components/` may import `sonner`, `recharts`, `@radix-ui/*`. Puck only in 
 - New primitives: `pnpm dlx shadcn@latest add <name>` (config in `components.json`) → lands in `components/ui/`.
   Then replace its `lucide-react` imports with `iconsax-reactjs` and remove lucide if it was added,
   and swap any colours that don't exist in our tokens.
-- Icons: `iconsax-reactjs` only (NOT `iconsax-react`, which breaks on React 19), Linear variant
-  (the default). Size icons with classes (`size-4`) or the Button size; colour follows `currentColor`.
+- Icons: `iconsax-reactjs` only (NOT `iconsax-react`, which breaks on React 19), Outline variant (`variant="Outline"` on every icon)
+  Size icons with classes (`size-4`) or the Button size; colour follows `currentColor`.
 
 ## Accessibility
 Every interactive element is keyboard reachable; icon-only buttons have `aria-label`;

@@ -140,7 +140,7 @@ export function ProductDialogsProvider({
         onClose={close}
         onConfirm={() => product && remove(product)}
         loading={deleting}
-        icon={<Trash />}
+        icon={<Trash variant="Outline" />}
         title={`Delete “${product?.name ?? ""}”?`}
         description="It will be removed from your website the next time you deploy. This can’t be undone."
         confirmLabel="Delete product"
@@ -180,14 +180,14 @@ function ProductDetails({
 
       <div className="flex items-center justify-between gap-2 pt-4">
         <Button variant="ghost" size="sm" className="text-danger hover:bg-danger-soft hover:text-danger active:bg-danger-soft" onClick={onDelete}>
-          <Trash aria-hidden /> Delete
+          <Trash variant="Outline" aria-hidden /> Delete
         </Button>
         <div className="flex items-center gap-2">
           <Button variant="secondary" size="sm" onClick={onClose}>
             Close
           </Button>
           <Button size="sm" onClick={onEdit}>
-            <Edit2 aria-hidden /> Edit product
+            <Edit2 variant="Outline" aria-hidden /> Edit product
           </Button>
         </div>
       </div>

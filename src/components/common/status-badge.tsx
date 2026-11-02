@@ -70,7 +70,7 @@ type Tone = PillTone;
 type StatusMeta = {
   label: string;
   tone: Tone;
-  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean; variant?: "Outline" }>;
 };
 
 const STATUS = {
@@ -163,7 +163,7 @@ export function StatusBadge({
   const meta: StatusMeta = STATUS[status];
   const Icon = meta.icon;
   return (
-    <Pill tone={meta.tone} icon={<Icon aria-hidden />} className={cn("px-2", className)}>
+    <Pill tone={meta.tone} icon={<Icon variant="Outline" aria-hidden />} className={cn("px-2", className)}>
       {meta.label}
       {detail && <> · {detail}</>}
     </Pill>

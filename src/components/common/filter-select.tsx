@@ -45,7 +45,7 @@ export function PillSelect({
           className,
         )}
       >
-        <ArrowDown2 aria-hidden className="size-3.5" />
+        <ArrowDown2 variant="Outline" aria-hidden className="size-3.5" />
         <span>{label}</span>
         <SelectValue />
       </SelectTrigger>

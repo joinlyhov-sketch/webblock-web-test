@@ -1,22 +1,22 @@
-import { mockApi, mockCollection } from "@/lib/mock-state";
 import { delay } from "@/lib/api/delay";
 import type { Page } from "@/lib/api/types";
 import { plans } from "@/mocks/plans";
 import type { ContactMessage, Plan } from "./types";
 
 /** Public plan list for the pricing section, cheapest first. Spring: `GET /plans`. */
-export const listPublicPlans = mockApi(async function listPublicPlans(): Promise<Page<Plan>> {
+export async function listPublicPlans(): Promise<Page<Plan>> {
   await delay(250);
   return { items: plans, page: 0, size: plans.length, totalItems: plans.length };
-});
+}
 
-const received: ContactMessage[] = mockCollection("contact", []);
+const globalForStore = globalThis as typeof globalThis & { __wbContact?: ContactMessage[] };
+const received: ContactMessage[] = (globalForStore.__wbContact ??= []);
 
 /**
  * Sends a contact-form message. Spring: `POST /contact` (public). The backend stores it and emails
- * support; the demo persists it without sending email.
+ * support; the mock only keeps it in memory.
  */
-export const sendContactMessage = mockApi(async function sendContactMessage(
+export async function sendContactMessage(
   body: Pick<ContactMessage, "name" | "email" | "message">,
 ): Promise<ContactMessage> {
   await delay(400);
@@ -27,4 +27,4 @@ export const sendContactMessage = mockApi(async function sendContactMessage(
   };
   received.push(message);
   return message;
-});
+}

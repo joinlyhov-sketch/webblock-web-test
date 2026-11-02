@@ -9,12 +9,12 @@ import type {
 } from "../types";
 
 const STEP_ICON: Record<DeployStepKey, ReactNode> = {
-  BUILD: <Layer aria-hidden />,
-  PRODUCTS: <Box aria-hidden />,
-  PACKAGE: <Box aria-hidden />,
-  LAUNCH: <Data aria-hidden />,
-  SSL: <ShieldTick aria-hidden />,
-  LIVE: <Global aria-hidden />,
+  BUILD: <Layer variant="Outline" aria-hidden />,
+  PRODUCTS: <Box variant="Outline" aria-hidden />,
+  PACKAGE: <Box variant="Outline" aria-hidden />,
+  LAUNCH: <Data variant="Outline" aria-hidden />,
+  SSL: <ShieldTick variant="Outline" aria-hidden />,
+  LIVE: <Global variant="Outline" aria-hidden />,
 };
 
 const STEP_COPY: Record<
@@ -103,7 +103,7 @@ function StepBadge({ step }: { step: DeploymentStep }) {
         />
       )}
       {done ? (
-        <Check aria-hidden className="motion-safe:animate-check-pop" />
+        <Check variant="Outline" aria-hidden className="motion-safe:animate-check-pop" />
       ) : (
         STEP_ICON[step.key]
       )}

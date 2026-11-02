@@ -17,6 +17,7 @@ export {
   listWebsites,
 } from "./api";
 // Shared with features/admin/monitoring: every admin page uses the same title row.
+export { AutoRefresh } from "./components/auto-refresh";
 export { AdminPageHeader } from "./components/admin-page-header";
 export { NotificationsView } from "./components/notifications-view";
 export { OverviewView } from "./components/overview-view";

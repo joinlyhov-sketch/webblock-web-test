@@ -50,8 +50,8 @@ export function MonitorView({ data, websiteId }: { data: MonitorData; websiteId:
         description={domain ? `Here’s how ${domain} is doing today.` : "Here’s how your website is doing today."}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)]">
-        <MonitorCard className="lg:col-span-2 xl:col-span-1">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)]">
+        <MonitorCard className="col-span-2 xl:col-span-1">
           <div className="flex items-start gap-3 border-b border-border pb-4">
             <span
               aria-hidden
@@ -94,8 +94,8 @@ export function MonitorView({ data, websiteId }: { data: MonitorData; websiteId:
           )}
         </MonitorCard>
 
-        <StatCard icon={<Activity />} label="Uptime" value={status ? `${status.uptimePercent}%` : "—"} />
-        <StatCard icon={<TickCircle />} label="Deploy success" value={successRate} />
+        <StatCard icon={<Activity variant="Outline" />} label="Uptime" value={status ? `${status.uptimePercent}%` : "—"} />
+        <StatCard icon={<TickCircle variant="Outline" />} label="Deploy success" value={successRate} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
@@ -108,7 +108,7 @@ export function MonitorView({ data, websiteId }: { data: MonitorData; websiteId:
               >
                 Plan usage
               </MonitorCardTitle>
-              <div className="grid flex-1 grid-cols-1 items-center gap-6 pt-5 sm:grid-cols-3">
+              <div className="grid flex-1 grid-cols-3 items-start gap-2 pt-4 sm:items-center sm:gap-6 sm:pt-5">
                 {usage.metrics.map((metric) => (
                   <UsageRing key={metric.key} metric={metric} />
                 ))}
@@ -140,7 +140,7 @@ export function MonitorView({ data, websiteId }: { data: MonitorData; websiteId:
 function TableCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="overflow-hidden rounded-[20px] border border-border bg-background shadow-surface">
-      <h2 className="border-b border-border px-5 py-4 font-sans text-[17px] leading-6 font-semibold text-foreground">
+      <h2 className="border-b border-border px-4 py-3.5 font-sans sm:px-5 sm:py-4 text-[17px] leading-6 font-semibold text-foreground">
         {title}
       </h2>
       {children}
@@ -151,14 +151,33 @@ function TableCard({ title, children }: { title: string; children: ReactNode }) 
 function RecentDeploys({ rows, compact, websiteId }: { rows: DeployRow[]; compact: boolean; websiteId: string }) {
   return (
     <TableCard title="Recent deploys">
-      <div className="px-5 pt-3 pb-2">
+      <ul className="divide-y divide-border sm:hidden">
+        {rows.length === 0 ? (
+          <li className="px-4 py-6 text-center text-sm text-muted-foreground">
+            No deploys yet. Deploy from the editor to put your website online.
+          </li>
+        ) : (
+          rows.map((row) => (
+            <li key={row.id} className="flex items-center justify-between gap-3 px-4 py-3">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-foreground">Deploy {row.number}</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {dateTime(row.finishedAt)} · {formatDuration(row.durationSeconds)}
+                </p>
+              </div>
+              <StatusBadge status={row.status} />
+            </li>
+          ))
+        )}
+      </ul>
+      <div className="hidden px-5 pt-3 pb-2 sm:block">
         <CompactTable
           label="Recent deploys"
           rows={rows}
           rowKey={(row) => row.id}
           empty={
             <EmptyState
-              icon={<Send2 />}
+              icon={<Send2 variant="Outline" />}
               title="No deploys yet"
               description="When you deploy your website, each deploy and its result shows here."
               action={
@@ -210,12 +229,12 @@ const ACTIVITY_TYPE = {
 function ActivityIcon({ event }: { event: ActivityEvent }) {
   const [icon, className] =
     event.outcome === "FAILED"
-      ? [<CloseCircle key="i" />, "bg-danger-soft text-danger"]
+      ? [<CloseCircle variant="Outline" key="i" />, "bg-danger-soft text-danger"]
       : event.type === "DEPLOY"
-        ? [<TickCircle key="i" />, "bg-success-soft text-success"]
+        ? [<TickCircle variant="Outline" key="i" />, "bg-success-soft text-success"]
         : event.type === "PRODUCT"
-          ? [<Box key="i" />, "bg-brand-soft text-brand"]
-          : [<Edit2 key="i" />, "bg-tier-ultra-soft text-tier-ultra"];
+          ? [<Box variant="Outline" key="i" />, "bg-brand-soft text-brand"]
+          : [<Edit2 variant="Outline" key="i" />, "bg-tier-ultra-soft text-tier-ultra"];
   return (
     <span aria-hidden className={cn("flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5", className)}>
       {icon}
@@ -226,7 +245,25 @@ function ActivityIcon({ event }: { event: ActivityEvent }) {
 function ActivityLog({ events }: { events: ActivityEvent[] }) {
   return (
     <TableCard title="Recent activity log">
-      <div className="px-5 pt-3 pb-2">
+      <ul className="divide-y divide-border sm:hidden">
+        {events.length === 0 ? (
+          <li className="px-4 py-6 text-center text-sm text-muted-foreground">No activity yet.</li>
+        ) : (
+          events.map((event) => (
+            <li key={event.id} className="flex items-start gap-3 px-4 py-3">
+              <ActivityIcon event={event} />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm leading-5 text-foreground">{event.title}</p>
+                {event.detail && <p className="text-xs text-danger">{event.detail}</p>}
+                <p className="pt-0.5 text-xs text-muted-foreground">
+                  {ACTIVITY_TYPE[event.type].label} · {formatDayMonthYear(event.occurredAt)}, {formatTime(event.occurredAt)}
+                </p>
+              </div>
+            </li>
+          ))
+        )}
+      </ul>
+      <div className="hidden px-5 pt-3 pb-2 sm:block">
         <CompactTable
           label="Recent activity"
           className="min-w-0"
@@ -234,7 +271,7 @@ function ActivityLog({ events }: { events: ActivityEvent[] }) {
           rowKey={(event) => event.id}
           empty={
             <EmptyState
-              icon={<Activity />}
+              icon={<Activity variant="Outline" />}
               title="No activity yet"
               description="Deploys and changes to your products and business details show here."
             />

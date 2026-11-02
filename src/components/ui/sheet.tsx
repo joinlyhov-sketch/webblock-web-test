@@ -47,7 +47,7 @@ export function SheetContent({
           aria-label="Close"
           className="absolute top-4 right-4 rounded-md text-muted-foreground outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
         >
-          <CloseSquare aria-hidden className="size-5" />
+          <CloseSquare variant="Outline" aria-hidden className="size-5" />
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPrimitive.Portal>

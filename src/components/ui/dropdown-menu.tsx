@@ -108,7 +108,7 @@ function DropdownMenuCheckboxItem({
     >
       <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <TickCircle className="size-4" />
+          <TickCircle variant="Outline" className="size-4" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -143,7 +143,7 @@ function DropdownMenuRadioItem({
     >
       <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <Record className="size-2 fill-current" />
+          <Record variant="Outline" className="size-2 fill-current" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -225,7 +225,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ArrowRight2 className="ml-auto size-4" />
+      <ArrowRight2 variant="Outline" className="ml-auto size-4" />
     </DropdownMenuPrimitive.SubTrigger>
   )
 }

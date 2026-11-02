@@ -18,7 +18,7 @@ export type SegmentedTab = {
 const VARIANT = {
   /** White pill on a grey track (app screens). */
   track: {
-    nav: "w-fit max-w-full items-center self-start bg-segment-track",
+    nav: "w-fit max-w-full items-center self-start overflow-x-auto bg-segment-track [scrollbar-width:none]",
     active: "bg-background font-semibold text-brand-deep shadow-tab",
     idle: "font-medium text-muted-foreground hover:text-foreground",
   },

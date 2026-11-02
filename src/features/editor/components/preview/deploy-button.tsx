@@ -16,7 +16,7 @@ export function DeployButton({ websiteId }: { websiteId: string }) {
       loading={pending}
       onClick={() => startTransition(async () => void (await deploy()))}
     >
-      {!pending && <Rocket />} Deploy
+      {!pending && <Rocket variant="Outline" />} Deploy
     </Button>
   );
 }

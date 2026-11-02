@@ -17,11 +17,11 @@ import type { SupportView } from "../service";
 import { SentArt } from "./envelope-art";
 
 const topicIcons: Record<string, React.ReactNode> = {
-  editing: <Edit2 className="size-[14px]" />,
-  publishing: <Cloud className="size-4" />,
-  domain: <Global className="size-4" />,
-  billing: <Card className="size-4" />,
-  other: <More className="size-4" />,
+  editing: <Edit2 variant="Outline" className="size-[14px]" />,
+  publishing: <Cloud variant="Outline" className="size-4" />,
+  domain: <Global variant="Outline" className="size-4" />,
+  billing: <Card variant="Outline" className="size-4" />,
+  other: <More variant="Outline" className="size-4" />,
 };
 
 const labelClass = "text-[13px] leading-[19.5px]";
@@ -63,7 +63,7 @@ export function SupportForm({ view }: { view: Pick<SupportView, "email" | "websi
             <Input
               id="from"
               value={view.email}
-              icon={<Lock1 />}
+              icon={<Lock1 variant="Outline" />}
               iconClassName={fieldIconClass}
               className={cn(fieldClass, "disabled:bg-field-disabled disabled:text-muted-foreground")}
               disabled
@@ -74,7 +74,7 @@ export function SupportForm({ view }: { view: Pick<SupportView, "email" | "websi
             <SelectField
               id="site"
               name="site"
-              icon={<Global />}
+              icon={<Global variant="Outline" />}
               iconClassName={fieldIconClass}
               className={fieldClass}
               defaultValue={kept("site") ?? view.websites[0]?.id ?? ""}
@@ -124,7 +124,7 @@ export function SupportForm({ view }: { view: Pick<SupportView, "email" | "websi
             id="subject"
             name="subject"
             maxLength={LIMITS.subject}
-            icon={<Tag />}
+            icon={<Tag variant="Outline" />}
             iconClassName={fieldIconClass}
             className={fieldClass}
             defaultValue={kept("subject")}
@@ -149,7 +149,7 @@ export function SupportForm({ view }: { view: Pick<SupportView, "email" | "websi
 
         <div className="flex justify-end">
           <Button type="submit" size="lg" loading={pending}>
-            <Send2 /> Send email
+            <Send2 variant="Outline" /> Send email
           </Button>
         </div>
       </form>
@@ -195,7 +195,7 @@ export function SupportForm({ view }: { view: Pick<SupportView, "email" | "websi
               onClick={() => setDismissed(state)}
               className="absolute top-[15px] right-[15px] flex size-9 items-center justify-center rounded-[18px] bg-background/90 text-foreground shadow-[0_2px_6px_rgb(60_120_207/0.1)] outline-none transition-colors hover:bg-background focus-visible:ring-3 focus-visible:ring-ring/40"
             >
-              <CloseCircle aria-hidden className="size-4" />
+              <CloseCircle variant="Outline" aria-hidden className="size-4" />
             </button>
           </div>
         )}

@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 
 const TITLE_SIZE = {
   compact: "text-2xl leading-8 tracking-[-0.4px]",
-  default: "text-[30px] leading-[34.5px] tracking-[-0.6px]",
-  hero: "text-[44px] leading-[48px] tracking-[-1px]",
+  default: "text-2xl leading-tight tracking-[-0.6px] lg:text-[30px] lg:leading-[34.5px]",
+  hero: "text-[clamp(1.75rem,5vw,2.75rem)] leading-tight tracking-[-1px] lg:text-[44px] lg:leading-[48px]",
 };
 
 const DESCRIPTION_SIZE = {
@@ -65,7 +65,7 @@ export function PageHeader({
         className,
       )}
     >
-      <div className={cn("flex flex-col", centered && "items-center")}>
+      <div className={cn("flex flex-col max-lg:min-w-0 max-lg:max-w-full", centered && "items-center")}>
         {eyebrow && (
           <div className="pb-3">{typeof eyebrow === "string" ? <Pill outline>{eyebrow}</Pill> : eyebrow}</div>
         )}

@@ -1,0 +1,138 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner "Mobile header" [ref=e3]:
+      - link "WebBlock home" [ref=e4] [cursor=pointer]:
+        - /url: /admin
+        - img "WebBlock" [ref=e5]
+      - generic [ref=e6]:
+        - button "Notifications, 4 unread" [ref=e7] [cursor=pointer]
+        - button "Open account menu" [ref=e11] [cursor=pointer]:
+          - generic [ref=e12]: Uy Chakriya
+    - navigation "Bottom navigation" [ref=e14]:
+      - link "Overview" [ref=e15] [cursor=pointer]:
+        - /url: /admin
+      - link "User Accounts" [ref=e20] [cursor=pointer]:
+        - /url: /admin/users
+      - link "User Websites" [ref=e24] [cursor=pointer]:
+        - /url: /admin/websites
+      - link "Subscriptions" [ref=e30] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - button "Monitoring" [ref=e35] [cursor=pointer]
+    - main [ref=e41]:
+      - generic [ref=e43]:
+        - heading "Overview" [level=1] [ref=e44]
+        - paragraph [ref=e45]: How WebBlock is doing this month.
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e55]: New accounts
+          - generic [ref=e60]: "7"
+        - generic [ref=e61]:
+          - generic [ref=e66]: Websites deployed
+          - generic [ref=e73]: "9"
+        - generic [ref=e74]:
+          - generic [ref=e79]: Monthly revenue
+          - generic [ref=e86]: $109.96
+        - generic [ref=e87]:
+          - generic [ref=e92]: Failed deploys
+          - generic [ref=e98]: "2"
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "Revenue" [level=2] [ref=e103]
+            - generic [ref=e104]: Last 12 months
+          - img "Monthly revenue for the last 12 months" [ref=e105]:
+            - generic [ref=e107]:
+              - generic:
+                - generic:
+                  - paragraph: $109.96
+                  - paragraph: Oct
+              - application [ref=e108]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: Nov
+                  - generic [ref=e130]: Dec
+                  - generic [ref=e132]: Jan
+                  - generic [ref=e134]: Feb
+                  - generic [ref=e136]: Mar
+                  - generic [ref=e138]: Apr
+                  - generic [ref=e140]: May
+                  - generic [ref=e142]: Jun
+                  - generic [ref=e144]: Jul
+                  - generic [ref=e146]: Aug
+                  - generic [ref=e148]: Sep
+                  - generic [ref=e150]: Oct
+        - generic [ref=e152]:
+          - heading "Needs attention" [level=2] [ref=e159]
+          - generic [ref=e160]:
+            - list [ref=e162]:
+              - listitem [ref=e163]:
+                - link "Failed deploys 2" [ref=e164] [cursor=pointer]:
+                  - /url: /admin/websites?release=FAILED
+                  - generic [ref=e166]: Failed deploys
+                  - generic [ref=e167]: "2"
+              - listitem [ref=e168]:
+                - link "Plan expired · site offline 1" [ref=e169] [cursor=pointer]:
+                  - /url: /admin/subscriptions?status=EXPIRED
+                  - generic [ref=e171]: Plan expired · site offline
+                  - generic [ref=e172]: "1"
+              - listitem [ref=e173]:
+                - link "Payments past due 1" [ref=e174] [cursor=pointer]:
+                  - /url: /admin/subscriptions?status=PENDING
+                  - generic [ref=e176]: Payments past due
+                  - generic [ref=e177]: "1"
+              - listitem [ref=e178]:
+                - link "Trials end in 3 days 2" [ref=e179] [cursor=pointer]:
+                  - /url: /admin/subscriptions?plan=FREE_TRIAL&sort=endAt,asc
+                  - generic [ref=e181]: Trials end in 3 days
+                  - generic [ref=e182]: "2"
+            - img "Failed deploys 2, Plan expired · site offline 1, Payments past due 1, Trials end in 3 days 2" [ref=e183]:
+              - generic:
+                - generic: Total
+                - generic: "6"
+      - generic [ref=e190]:
+        - generic [ref=e191]:
+          - heading "Recent deploys" [level=2] [ref=e193]
+          - link "View all" [ref=e195] [cursor=pointer]:
+            - /url: /admin/websites?sort=lastDeployAt,desc
+        - table "Recent deploys" [ref=e198]:
+          - rowgroup [ref=e199]:
+            - row [ref=e200] [cursor=pointer]:
+              - cell "No. 1" [ref=e201]
+              - cell [ref=e202]:
+                - text: Website
+                - link "Mekong Brew Bar" [ref=e203]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0220
+                  - generic [ref=e205]: ◉
+                  - text: Mekong Brew Bar
+              - cell "Owner Lina Tha" [ref=e206]
+              - cell [ref=e207]:
+                - text: Release
+                - generic [ref=e208]: Live
+              - cell "When 29m ago" [ref=e213]
+            - row [ref=e214] [cursor=pointer]:
+              - cell "No. 2" [ref=e215]
+              - cell [ref=e216]:
+                - text: Website
+                - link "Bloom Bakery" [ref=e217]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0221
+                  - generic [ref=e219]: ▲
+                  - text: Bloom Bakery
+              - cell "Owner Vanda Ros" [ref=e220]
+              - cell [ref=e221]:
+                - text: Release
+                - generic [ref=e222]: Live
+              - cell "When 33m ago" [ref=e227]
+            - row [ref=e228] [cursor=pointer]:
+              - cell "No. 3" [ref=e229]
+              - cell [ref=e230]:
+                - text: Website
+                - link "Corner Chair" [ref=e231]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0204
+              - cell "Owner Endy Ong" [ref=e235]
+              - cell [ref=e236]:
+                - text: Release
+                - generic [ref=e237]: Live
+              - cell "When 41m ago" [ref=e242]
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=e243]
+  - generic [aria-hidden] [ref=e244]: Oct

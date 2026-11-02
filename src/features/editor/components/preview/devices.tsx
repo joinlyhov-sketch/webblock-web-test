@@ -50,7 +50,7 @@ export function DeviceSwitcher({ value, onChange }: { value: Device; onChange: (
               active ? "bg-background text-brand-deep shadow-button" : "text-foreground-soft hover:bg-background/60 hover:text-foreground",
             )}
           >
-            <d.icon aria-hidden className={d.iconClass} />
+            <d.icon variant="Outline" aria-hidden className={d.iconClass} />
           </button>
         );
       })}

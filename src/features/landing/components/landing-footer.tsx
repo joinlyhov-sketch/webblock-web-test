@@ -19,7 +19,7 @@ export function LandingFooter() {
             </p>
             <Button asChild size="lp-md" className="h-[42px] px-[18px] text-[15px]">
               <Link href="/register">
-                Start free · 14 days <ArrowRight aria-hidden className="size-[15px]!" />
+                Start free · 14 days <ArrowRight variant="Outline" aria-hidden className="size-[15px]!" />
               </Link>
             </Button>
           </div>
@@ -33,9 +33,9 @@ export function LandingFooter() {
                 <ul className="flex flex-col gap-3.5">
                   {column.links.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-[15px] leading-6 text-muted-foreground hover:text-foreground">
+                      <Link href={link.href} className="text-[15px] leading-6 text-muted-foreground hover:text-foreground">
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

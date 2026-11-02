@@ -41,25 +41,25 @@ export function PlansView({ view }: { view: PlansData }) {
   const title = `Choose a plan for ${view.websiteName}`;
   const blocked = view.reason ? DEPLOY_BLOCKED[view.reason]?.(view) : undefined;
   const copy = blocked
-    ? { eyebrow: "Keep deploying", icon: <Flash aria-hidden />, title, subtitle: blocked }
+    ? { eyebrow: "Keep deploying", icon: <Flash variant="Outline" aria-hidden />, title, subtitle: blocked }
     : paid
     ? {
         eyebrow: "Change your plan",
-        icon: <Refresh2 aria-hidden />,
+        icon: <Refresh2 variant="Outline" aria-hidden />,
         title,
         subtitle: `You’re on ${view.currentPlanName} (${formatPrice(view.currentPrice ?? "0", "USD")} / month). Switch any time or add more time — your website stays online.`,
       }
     : view.variant === "deploy"
       ? {
           eyebrow: "Keep deploying",
-          icon: <Flash aria-hidden />,
+          icon: <Flash variant="Outline" aria-hidden />,
           title,
           subtitle:
             "Your free trial covered your first deploy. Subscribe to deploy your changes and keep your website online.",
         }
       : {
           eyebrow: "Upgrade your plan",
-          icon: <Crown aria-hidden />,
+          icon: <Crown variant="Outline" aria-hidden />,
           title,
           subtitle: `Your free trial ends in ${daysLabel(view.daysLeft)}. Choose a plan to keep your website online and keep deploying changes.`,
         };

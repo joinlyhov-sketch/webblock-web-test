@@ -258,7 +258,7 @@ function ProductCards(props: BlockRenderProps<ProductCardsProps>) {
           {props.viewAllLabel && (
             <a href={`#${SECTION_ID.shop}`} className={cn(TEXT_LINK, "text-[13px]", ALIGN_CLASS[props.align])}>
               {props.viewAllLabel}
-              <ArrowRight aria-hidden className="size-3.5" />
+              <ArrowRight variant="Outline" aria-hidden className="size-3.5" />
             </a>
           )}
         </div>
@@ -322,7 +322,7 @@ function Pagination({
       </p>
       <nav aria-label="Products pages" className="flex items-center gap-1">
         <button type="button" aria-label="Previous page" disabled={page === 0} onClick={() => onChange(page - 1)} className={stepClass}>
-          <ArrowLeft2 aria-hidden className="size-3.5" />
+          <ArrowLeft2 variant="Outline" aria-hidden className="size-3.5" />
           <span className="hidden @3xl:inline">Previous</span>
         </button>
         {pageList(page, totalPages).map((p, i) =>
@@ -355,7 +355,7 @@ function Pagination({
           className={stepClass}
         >
           <span className="hidden @3xl:inline">Next</span>
-          <ArrowRight2 aria-hidden className="size-3.5" />
+          <ArrowRight2 variant="Outline" aria-hidden className="size-3.5" />
         </button>
       </nav>
     </div>
@@ -378,7 +378,7 @@ function AllProducts(props: BlockRenderProps<AllProductsProps>) {
             <label htmlFor={searchId} className="sr-only">
               Search products
             </label>
-            <SearchNormal1 aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-site-muted" />
+            <SearchNormal1 variant="Outline" aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-site-muted" />
             <input
               id={searchId}
               type="search"
@@ -493,24 +493,24 @@ function InfoCard({ className }: { className?: string }) {
       <hr className="my-4 border-site-border" />
       <ul className="flex flex-col gap-4">
         {site.address && (
-          <InfoRow icon={<Location aria-hidden className="size-3.5" />} label="Address">
+          <InfoRow icon={<Location variant="Outline" aria-hidden className="size-3.5" />} label="Address">
             {site.address}
           </InfoRow>
         )}
         {(site.hours || site.hoursDetail) && (
-          <InfoRow icon={<Clock aria-hidden className="size-3.5" />} label="Opening hours">
+          <InfoRow icon={<Clock variant="Outline" aria-hidden className="size-3.5" />} label="Opening hours">
             {site.hoursDetail || site.hours}
           </InfoRow>
         )}
         {phone && (
-          <InfoRow icon={<Call aria-hidden className="size-3.5" />} label="Call us">
+          <InfoRow icon={<Call variant="Outline" aria-hidden className="size-3.5" />} label="Call us">
             <a href={telHref(phone)} className={cn("hover:text-site-accent", FOCUS)}>
               {phone}
             </a>
           </InfoRow>
         )}
         {site.email && (
-          <InfoRow icon={<Sms aria-hidden className="size-3.5" />} label="Email">
+          <InfoRow icon={<Sms variant="Outline" aria-hidden className="size-3.5" />} label="Email">
             <a href={mailtoHref(site.email)} className={cn("break-all hover:text-site-accent", FOCUS)}>
               {site.email}
             </a>
@@ -524,7 +524,7 @@ function InfoCard({ className }: { className?: string }) {
           className={cn(PRIMARY_BUTTON, "mt-5 w-full")}
         >
           Get directions
-          <ExportSquare aria-hidden className="size-4" />
+          <ExportSquare variant="Outline" aria-hidden className="size-4" />
         </a>
       )}
     </div>
@@ -559,14 +559,14 @@ function ReachUsPanel() {
                 FOCUS,
               )}
             >
-              <action.icon aria-hidden className="size-5 shrink-0" />
+              <action.icon variant="Outline" aria-hidden className="size-5 shrink-0" />
               <span className="min-w-0 flex-1">
                 <span className="block text-[14px] font-semibold">{action.label}</span>
                 <span className={cn("block truncate text-[12px]", i === 0 ? "opacity-80" : "text-site-muted")}>
                   {action.value}
                 </span>
               </span>
-              <ArrowRight aria-hidden className="size-4 shrink-0" />
+              <ArrowRight variant="Outline" aria-hidden className="size-4 shrink-0" />
             </a>
           </li>
         ))}
@@ -638,7 +638,7 @@ function Footer(props: BlockRenderProps<FooterProps>) {
                     className={cn("inline-flex items-center gap-1 text-[13px] font-medium text-site-ink hover:text-site-accent", FOCUS)}
                   >
                     {link.label}
-                    <ExportSquare aria-hidden className="size-3" />
+                    <ExportSquare variant="Outline" aria-hidden className="size-3" />
                   </a>
                 </li>
               ))}

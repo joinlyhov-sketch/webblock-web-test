@@ -54,7 +54,7 @@ function Welcome({ onPick }: { onPick: (prompt: string) => void }) {
                   className="flex w-full items-center gap-3 rounded-[14px] border border-border bg-background px-3 py-2.5 text-left text-[13px] leading-5 text-foreground outline-none transition-[background-color,border-color,scale] duration-150 hover:border-brand-border hover:bg-primary-soft focus-visible:ring-3 focus-visible:ring-ring/40 motion-safe:active:scale-[0.99]"
                 >
                   <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
-                    <Icon className="size-3.5" />
+                    <Icon variant="Outline" className="size-3.5" />
                   </span>
                   {suggestion.prompt}
                 </button>
@@ -196,7 +196,7 @@ export function AiChat() {
             disabled={!prompt.trim() || pending}
             className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-strong text-primary-foreground outline-none transition-colors hover:bg-brand-deep focus-visible:ring-3 focus-visible:ring-ring/40 disabled:opacity-50"
           >
-            <ArrowUp aria-hidden className="size-3.5" />
+            <ArrowUp variant="Outline" aria-hidden className="size-3.5" />
           </button>
         </div>
       </form>

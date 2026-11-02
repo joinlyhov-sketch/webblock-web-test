@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Box, Element4, RowVertical, SearchStatus } from "iconsax-reactjs";
 import { DataTable } from "@/components/common/data-table";
 import { EmptyState } from "@/components/common/empty-state";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { PageHeader } from "@/components/common/page-header";
 import { RowsSelect } from "@/components/common/rows-select";
 import { SearchInput } from "@/components/common/search-input";
@@ -39,7 +40,7 @@ function sortProducts(items: Product[], sort: Sort): Product[] {
 }
 
 /**
- * Owner Portal → Products, rendered in the browser. The product list, search, category tabs, sort,
+ * Owner Portal â†’ Products, rendered in the browser. The product list, search, category tabs, sort,
  * page, rows per page and grid/list switch all live in state, so none of them reloads the page, and
  * add / edit / delete update the list from the saved product. The URL is kept in sync with
  * `history.replaceState` (no navigation) so a refresh or a shared link opens on the same view.
@@ -48,6 +49,7 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
   const [products, setProducts] = useState(data.products);
   const [categories, setCategories] = useState(data.categories);
   const [q, setQ] = useState(initialFilter.q);
+  const debouncedQ = useDebouncedValue(q);
   const [category, setCategory] = useState(
     initialFilter.category && categories.includes(initialFilter.category) ? initialFilter.category : null,
   );
@@ -58,7 +60,7 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (q.trim()) params.set("q", q.trim());
+    if (debouncedQ.trim()) params.set("q", debouncedQ.trim());
     if (category) params.set("category", category);
     if (layout === "list") params.set("view", "list");
     if (size !== DEFAULT_PRODUCT_PAGE_SIZE) params.set("size", String(size));
@@ -66,9 +68,9 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
     if (sort) params.set("sort", `${sort.field},${sort.direction}`);
     const search = params.toString();
     window.history.replaceState(window.history.state, "", search ? `?${search}` : window.location.pathname);
-  }, [q, category, layout, size, pageIndex, sort]);
+  }, [debouncedQ, category, layout, size, pageIndex, sort]);
 
-  const needle = q.trim().toLowerCase();
+  const needle = debouncedQ.trim().toLowerCase();
   const matches = useMemo(
     () =>
       sortProducts(
@@ -115,7 +117,7 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
 
   const heading = (
     <h2 className="flex items-center gap-3 text-lg font-semibold">
-      <Box aria-hidden className="size-[22px] text-brand" /> All products
+      <Box variant="Outline" aria-hidden className="size-[22px] text-brand" /> All products
     </h2>
   );
 
@@ -156,29 +158,32 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
       <NewCategoryButton />
       <div className="ml-auto flex items-center gap-2.5">
         <LayoutToggle layout={layout} onChange={setLayout} />
-        <RowsSelect
-          value={size}
-          options={PRODUCT_PAGE_SIZES}
-          editable
-          defaultSize={DEFAULT_PRODUCT_PAGE_SIZE}
-          onChange={(next) => {
-            setSize(next);
-            setPageIndex(0);
-          }}
-        />
+        {/* Page size is a laptop detail: phones keep the default so the toolbar stays on two rows. */}
+        <div className="max-sm:hidden">
+          <RowsSelect
+            value={size}
+            options={PRODUCT_PAGE_SIZES}
+            editable
+            defaultSize={DEFAULT_PRODUCT_PAGE_SIZE}
+            onChange={(next) => {
+              setSize(next);
+              setPageIndex(0);
+            }}
+          />
+        </div>
       </div>
     </>
   );
 
   const empty = noProducts ? (
     <EmptyState
-      icon={<Box />}
+      icon={<Box variant="Outline" />}
       title="No products yet"
       action={<AddProductButton label="Add your first product" />}
     />
   ) : (
     <EmptyState
-      icon={<SearchStatus />}
+      icon={<SearchStatus variant="Outline" />}
       title="No results found"
       description={
         filtered
@@ -265,9 +270,9 @@ export function ProductsView({ data, initialFilter }: { data: ProductsData; init
           {page.items.length === 0 ? (
             <div className="flex min-h-[300px] flex-1 items-center justify-center">{empty}</div>
           ) : (
-            <ul className="grid flex-1 content-start gap-6 p-6 [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))]">
-              {page.items.map((product, i) => (
-                <li key={product.id} className="motion-safe:animate-row-in" style={{ animationDelay: `${i * 30}ms` }}>
+            <ul className="grid flex-1 grid-cols-2 content-start gap-3 p-3 sm:gap-6 sm:p-6 sm:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
+              {page.items.map((product) => (
+                <li key={product.id}>
                   <ProductCard product={product} />
                 </li>
               ))}
@@ -310,8 +315,8 @@ function ProductGridFrame({
 /** Grid / list switch. */
 function LayoutToggle({ layout, onChange }: { layout: ProductsLayout; onChange: (layout: ProductsLayout) => void }) {
   const options = [
-    { value: "grid", label: "Grid view", icon: <Element4 /> },
-    { value: "list", label: "List view", icon: <RowVertical /> },
+    { value: "grid", label: "Grid view", icon: <Element4 variant="Outline" /> },
+    { value: "list", label: "List view", icon: <RowVertical variant="Outline" /> },
   ] as const;
 
   return (

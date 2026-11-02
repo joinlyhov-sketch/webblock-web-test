@@ -28,7 +28,7 @@ export function SiteImage({
         aria-label={alt || "No image"}
         className={cn("absolute inset-0 flex items-center justify-center bg-site-alt text-site-subtle", className)}
       >
-        <Gallery aria-hidden className="size-8" />
+        <Gallery variant="Outline" aria-hidden className="size-8" />
       </div>
     );
   }

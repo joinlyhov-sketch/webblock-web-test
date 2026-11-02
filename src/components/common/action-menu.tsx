@@ -46,7 +46,7 @@ export function ActionMenu({
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon-sm" aria-label={label}>
-          <More />
+          <More variant="Outline" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -59,7 +59,7 @@ export function ActionMenu({
               {item.icon}
               <span className="flex-1">{item.label}</span>
               {item.externalHref && (
-                <ArrowRight2
+                <ArrowRight2 variant="Outline"
                   aria-hidden
                   className="-rotate-45 text-placeholder"
                 />

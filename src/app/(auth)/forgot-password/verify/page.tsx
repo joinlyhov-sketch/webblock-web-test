@@ -14,7 +14,7 @@ export default async function ForgotPasswordVerifyPage({ searchParams }: { searc
       <AuthHeader
         step={2}
         backHref="/forgot-password"
-        icon={<Sms />}
+        icon={<Sms variant="Outline" />}
         title="Check your email"
         description={
           <>

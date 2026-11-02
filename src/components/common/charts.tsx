@@ -190,9 +190,22 @@ export function DonutChart({
   );
 }
 
+const RING_RADIUS = 44;
+const RING_WIDTH = 12;
+
+/** SVG arc along the ring from one angle to another, in degrees clockwise from 12 o'clock. */
+function arcPath(startDeg: number, endDeg: number) {
+  const point = (deg: number) => {
+    const rad = (deg * Math.PI) / 180;
+    return `${(50 + RING_RADIUS * Math.cos(rad)).toFixed(3)} ${(50 + RING_RADIUS * Math.sin(rad)).toFixed(3)}`;
+  };
+  const large = endDeg - startDeg > 180 ? 1 : 0;
+  return `M ${point(startDeg)} A ${RING_RADIUS} ${RING_RADIUS} 0 ${large} 1 ${point(endDeg)}`;
+}
+
 /**
- * Legend list (colour, name, count) on the left, ring on the right. The middle of the ring shows the share of one slice:
- * the biggest one, or the one under the pointer or keyboard focus in the list or on the ring.
+ * Legend list (colour, name, count) on the left, ring on the right. The thick ring has rounded, overlapping ends. The middle shows
+ * the total, or the count of the slice under the pointer or keyboard focus in the list or on the ring.
  */
 export function DonutBreakdown({
   segments,
@@ -204,11 +217,16 @@ export function DonutBreakdown({
   className?: string;
 }) {
   const total = segments.reduce((sum, s) => sum + s.value, 0);
-  const biggest = segments.reduce((best, s, i) => (s.value > segments[best].value ? i : best), 0);
   const [hovered, setHovered] = useState<number | null>(null);
-  const active = hovered ?? biggest;
-  const current = segments[active];
-  const percent = total ? Math.round((current.value / total) * 100) : 0;
+  const current = hovered === null ? null : segments[hovered];
+  // Each slice is a round-capped arc. Later slices are drawn over the end of the one before, so the pieces join with no gap.
+  const arcs = segments.flatMap((segment, index) => {
+    if (!total || segment.value <= 0) return [];
+    const before = segments.slice(0, index).reduce((sum, s) => sum + s.value, 0);
+    const from = (before / total) * 360;
+    const to = ((before + segment.value) / total) * 360;
+    return [{ segment, index, path: arcPath(from, Math.min(to, from + 359.99)) }];
+  });
 
   return (
     <div className={cn("flex flex-1 flex-col items-center gap-6 sm:flex-row", className)}>
@@ -224,7 +242,7 @@ export function DonutBreakdown({
             );
             const rowClass = cn(
               "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/40",
-              active === i ? "bg-muted" : "hover:bg-muted",
+              hovered === i ? "bg-muted" : "hover:bg-muted",
             );
             return (
               <li key={s.label} onMouseEnter={() => setHovered(i)}>
@@ -246,32 +264,26 @@ export function DonutBreakdown({
         className="relative shrink-0"
         style={{ width: size, height: size }}
       >
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={segments}
-              dataKey="value"
-              nameKey="label"
-              innerRadius="74%"
-              outerRadius="100%"
-              startAngle={90}
-              endAngle={-270}
-              paddingAngle={5}
-              cornerRadius={10}
-              stroke="none"
-              isAnimationActive={false}
-              onMouseEnter={(_, index) => setHovered(index)}
+        <svg viewBox="0 0 100 100" className="size-full -rotate-90" aria-hidden>
+          <circle cx={50} cy={50} r={RING_RADIUS} fill="none" strokeWidth={RING_WIDTH} className="stroke-muted" />
+          {arcs.map(({ segment, index, path }) => (
+            <path
+              key={segment.label}
+              d={path}
+              fill="none"
+              strokeWidth={hovered === index ? RING_WIDTH + 2 : RING_WIDTH}
+              strokeLinecap="round"
+              stroke={`var(--color-${segment.color})`}
+              onMouseEnter={() => setHovered(index)}
               onMouseLeave={() => setHovered(null)}
-            >
-              {segments.map((s, i) => (
-                <Cell key={s.label} fill={`var(--color-${s.color})`} opacity={active === i ? 1 : 0.55} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
+            />
+          ))}
+        </svg>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
-          <span className="font-heading text-[34px] leading-none font-bold text-foreground">{percent} %</span>
-          <span className="mt-1.5 max-w-full truncate text-sm text-muted-foreground">{current.label}</span>
+          <span className="max-w-full truncate text-sm text-muted-foreground">{current ? current.label : "Total"}</span>
+          <span className="mt-1 font-heading text-[34px] leading-none font-bold text-foreground">
+            {current ? current.value : total}
+          </span>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export function NotificationsView({
         title="Notifications"
         description="Deploys, trials and payments that need a look."
       />
-      <Card className="mx-auto max-w-3xl overflow-hidden">
+      <Card className="mx-auto max-w-3xl overflow-hidden max-lg:w-full">
         <NotificationPanel notifications={notifications.items} />
       </Card>
     </>

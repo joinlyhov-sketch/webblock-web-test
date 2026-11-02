@@ -15,7 +15,7 @@ export const DAY_LABEL = Object.fromEntries(WEEKDAYS.map((w) => [w.day, w.label]
 
 export function InfoCard({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <section className={cn("rounded-[20px] border border-border bg-background p-5 shadow-surface", className)}>
+    <section className={cn("rounded-[20px] border border-border bg-background p-4 shadow-surface sm:p-5", className)}>
       {children}
     </section>
   );
@@ -87,14 +87,14 @@ export function BusinessMark({ name, logoUrl, className }: { name: string; logoU
 export function BusinessIdentity({ website, children }: { website: BusinessInfoView["website"]; children?: ReactNode }) {
   return (
     <div className="min-w-0">
-      <p className="font-heading text-xl leading-7 font-semibold text-foreground">{website.name}</p>
+      <p className="font-heading text-lg leading-7 font-semibold break-words text-foreground sm:text-xl">{website.name}</p>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5 text-[13px] leading-5 text-muted-foreground">
-        <span className="inline-flex items-center gap-1.5 text-foreground-soft">
-          <Global aria-hidden className="size-3.5" />
+        <span className="inline-flex min-w-0 items-center gap-1.5 break-all text-foreground-soft">
+          <Global variant="Outline" aria-hidden className="size-3.5 shrink-0" />
           {website.domain ?? "Not deployed yet"}
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <Shop aria-hidden className="size-3.5" />
+          <Shop variant="Outline" aria-hidden className="size-3.5" />
           Business type: <span className="text-foreground-soft">{website.businessType}</span>
         </span>
       </div>

@@ -1,7 +1,6 @@
-import { mockApi } from "@/lib/mock-state";
 // Deploy logic: who may deploy what, and which screen comes next. The backend owns the plan limits and
 // the pipeline; this layer only asks and routes. It never imports mocks, so it stays the same with Spring.
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { ActionResult } from "@/lib/actions/result";
 import { getDeployAccess } from "@/features/account/api";
 import { getWebsite } from "@/features/websites/api";
@@ -27,7 +26,6 @@ export type DeployView =
       check: DomainCheck;
     }
   | { kind: "progress"; website: Website; deployment: Deployment }
-  | { kind: "unavailable"; website: Website }
   /** Back from paying for this deploy: the website already has its address, so it deploys straight away. */
   | { kind: "start"; website: Website; idempotencyKey: string };
 
@@ -42,7 +40,7 @@ function first(value: string | string[] | undefined): string {
  * deploy) starts it at once when the website already has its address; the payment id is the
  * idempotency key, so opening that link again never deploys twice.
  */
-export const getDeployView = mockApi(async function getDeployView(
+export async function getDeployView(
   userId: string,
   websiteId: string,
   searchParams: Record<string, string | string[] | undefined>,
@@ -62,11 +60,11 @@ export const getDeployView = mockApi(async function getDeployView(
     }
     const deployment = await getDeployment(websiteId, deploymentId).catch(
       (e: unknown) => {
-        if (e instanceof ApiError && e.status === 404) return null;
+        if (e instanceof ApiError && e.status === 404) notFound();
         throw e;
       },
     );
-    return deployment ? { kind: "progress", website, deployment } : { kind: "unavailable", website };
+    return { kind: "progress", website, deployment };
   }
 
   const running = await getRunningDeployment(websiteId);
@@ -92,14 +90,14 @@ export const getDeployView = mockApi(async function getDeployView(
     name,
     check: await checkDomain(websiteId, name),
   };
-});
+}
 
 /**
  * Starts a deploy of the saved draft (the editor saves it first). The answer says where to go next:
  * the plans when the plan does not allow it, the address picker for a draft (a website that was never
  * published picks its address first, even right after paying), or the progress screen.
  */
-export const startDeploy = mockApi(async function startDeploy(
+export async function startDeploy(
   userId: string,
   websiteId: string,
   subdomain: string | null,
@@ -161,4 +159,4 @@ export const startDeploy = mockApi(async function startDeploy(
     if (e instanceof ApiError) return { ok: false, message: e.message };
     throw e;
   }
-});
+}

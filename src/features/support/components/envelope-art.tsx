@@ -24,11 +24,11 @@ export function EnvelopeArt({ className }: { className?: string }) {
         className="absolute top-[31px] left-[7px] max-w-none"
       />
       <span className="absolute top-3.5 left-[316px] flex size-[52px] items-center justify-center rounded-[26px] bg-linear-to-br from-plane-from from-[14.286%] to-plane-to to-[85.714%] text-primary-foreground shadow-[0_8px_18px_rgb(47_107_196/0.35)]">
-        <Send2 className="size-[22px]" />
+        <Send2 variant="Outline" className="size-[22px]" />
       </span>
       <span className="absolute top-[125.5px] left-[250px] flex rounded-3xl bg-background p-1.5 shadow-[0_8px_18px_rgb(60_120_207/0.16)]">
         <span className="flex size-9 items-center justify-center rounded-[18px] bg-brand-soft text-primary">
-          <Headphone className="size-5" />
+          <Headphone variant="Outline" className="size-5" />
         </span>
       </span>
       <Image

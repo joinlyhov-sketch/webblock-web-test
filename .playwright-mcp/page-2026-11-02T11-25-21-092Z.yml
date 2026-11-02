@@ -1,0 +1,149 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - complementary [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - link [ref=f1e5] [cursor=pointer]:
+          - /url: /admin
+          - img "WebBlock" [ref=f1e6]
+        - button "Collapse sidebar" [expanded] [ref=f1e7] [cursor=pointer]
+      - navigation "Main" [ref=f1e11]:
+        - link "Overview" [ref=f1e12] [cursor=pointer]:
+          - /url: /admin
+        - link "User Accounts" [ref=f1e17] [cursor=pointer]:
+          - /url: /admin/users
+        - link "User Websites" [ref=f1e21] [cursor=pointer]:
+          - /url: /admin/websites
+        - link "Subscriptions" [ref=f1e27] [cursor=pointer]:
+          - /url: /admin/subscriptions
+        - generic [ref=f1e32]:
+          - button "Monitoring" [ref=f1e33] [cursor=pointer]
+          - generic:
+            - generic:
+              - link:
+                - /url: /admin/monitoring/pipeline
+                - generic: Pipeline & Generation
+              - link:
+                - /url: /admin/monitoring/activity
+                - generic: Activity Log
+      - generic [ref=f1e42]:
+        - generic [ref=f1e43]: Uy Chakriya
+        - generic [ref=f1e45]:
+          - paragraph [ref=f1e46]: Uy Chakriya
+          - paragraph [ref=f1e47]: admin@webblock.com
+        - button "Log out" [ref=f1e48] [cursor=pointer]
+    - main [ref=f1e53]:
+      - generic [ref=f1e55]:
+        - heading "Overview" [level=1] [ref=f1e56]
+        - paragraph [ref=f1e57]: How WebBlock is doing this month.
+      - generic [ref=f1e61]:
+        - generic [ref=f1e62]:
+          - generic [ref=f1e67]: New accounts
+          - generic [ref=f1e72]: "7"
+        - generic [ref=f1e73]:
+          - generic [ref=f1e78]: Websites deployed
+          - generic [ref=f1e85]: "9"
+        - generic [ref=f1e86]:
+          - generic [ref=f1e91]: Monthly revenue
+          - generic [ref=f1e98]: $109.96
+        - generic [ref=f1e99]:
+          - generic [ref=f1e104]: Failed deploys
+          - generic [ref=f1e110]: "2"
+      - generic [ref=f1e111]:
+        - generic [ref=f1e112]:
+          - generic [ref=f1e113]:
+            - heading "Revenue" [level=2] [ref=f1e115]
+            - generic [ref=f1e116]: Last 12 months
+          - img "Monthly revenue for the last 12 months" [ref=f1e117]:
+            - generic [ref=f1e119]:
+              - generic:
+                - generic:
+                  - paragraph: $109.96
+                  - paragraph: Oct
+              - application [ref=f1e120]:
+                - generic [ref=f1e139]:
+                  - generic [ref=f1e140]: Nov
+                  - generic [ref=f1e142]: Dec
+                  - generic [ref=f1e144]: Jan
+                  - generic [ref=f1e146]: Feb
+                  - generic [ref=f1e148]: Mar
+                  - generic [ref=f1e150]: Apr
+                  - generic [ref=f1e152]: May
+                  - generic [ref=f1e154]: Jun
+                  - generic [ref=f1e156]: Jul
+                  - generic [ref=f1e158]: Aug
+                  - generic [ref=f1e160]: Sep
+                  - generic [ref=f1e162]: Oct
+        - generic [ref=f1e164]:
+          - heading "Needs attention" [level=2] [ref=f1e171]
+          - generic [ref=f1e172]:
+            - list [ref=f1e174]:
+              - listitem [ref=f1e175]:
+                - link "Failed deploys 2" [ref=f1e176] [cursor=pointer]:
+                  - /url: /admin/websites?release=FAILED
+                  - generic [ref=f1e178]: Failed deploys
+                  - generic [ref=f1e179]: "2"
+              - listitem [ref=f1e180]:
+                - link "Plan expired · site offline 1" [ref=f1e181] [cursor=pointer]:
+                  - /url: /admin/subscriptions?status=EXPIRED
+                  - generic [ref=f1e183]: Plan expired · site offline
+                  - generic [ref=f1e184]: "1"
+              - listitem [ref=f1e185]:
+                - link "Payments past due 1" [ref=f1e186] [cursor=pointer]:
+                  - /url: /admin/subscriptions?status=PENDING
+                  - generic [ref=f1e188]: Payments past due
+                  - generic [ref=f1e189]: "1"
+              - listitem [ref=f1e190]:
+                - link "Trials end in 3 days 2" [ref=f1e191] [cursor=pointer]:
+                  - /url: /admin/subscriptions?plan=FREE_TRIAL&sort=endAt,asc
+                  - generic [ref=f1e193]: Trials end in 3 days
+                  - generic [ref=f1e194]: "2"
+            - img "Failed deploys 2, Plan expired · site offline 1, Payments past due 1, Trials end in 3 days 2" [ref=f1e195]:
+              - generic:
+                - generic: Total
+                - generic: "6"
+      - generic [ref=f1e202]:
+        - generic [ref=f1e203]:
+          - heading "Recent deploys" [level=2] [ref=f1e205]
+          - link "View all" [ref=f1e207] [cursor=pointer]:
+            - /url: /admin/websites?sort=lastDeployAt,desc
+        - table "Recent deploys" [ref=f1e210]:
+          - rowgroup [ref=f1e211]:
+            - row [ref=f1e212]:
+              - columnheader "No." [ref=f1e213]
+              - columnheader "Website" [ref=f1e214]
+              - columnheader "Owner" [ref=f1e215]
+              - columnheader "Release" [ref=f1e216]
+              - columnheader "When" [ref=f1e217]
+          - rowgroup [ref=f1e218]:
+            - row [ref=f1e219] [cursor=pointer]:
+              - cell "1" [ref=f1e220]
+              - cell [ref=f1e221]:
+                - link "Mekong Brew Bar" [ref=f1e222]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0220
+                  - generic [ref=f1e224]: ◉
+                  - text: Mekong Brew Bar
+              - cell "Lina Tha" [ref=f1e225]
+              - cell "Live" [ref=f1e226]
+              - cell "32m ago" [ref=f1e232]
+            - row [ref=f1e233] [cursor=pointer]:
+              - cell "2" [ref=f1e234]
+              - cell [ref=f1e235]:
+                - link "Bloom Bakery" [ref=f1e236]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0221
+                  - generic [ref=f1e238]: ▲
+                  - text: Bloom Bakery
+              - cell "Vanda Ros" [ref=f1e239]
+              - cell "Live" [ref=f1e240]
+              - cell "36m ago" [ref=f1e246]
+            - row [ref=f1e247] [cursor=pointer]:
+              - cell "3" [ref=f1e248]
+              - cell [ref=f1e249]:
+                - link "Corner Chair" [ref=f1e250]:
+                  - /url: /admin?website=9b2d4f6a-1c3e-4a5b-8d7f-2e4c6a8b0204
+              - cell "Endy Ong" [ref=f1e254]
+              - cell "Live" [ref=f1e255]
+              - cell "44m ago" [ref=f1e261]
+  - generic:
+    - region "Notifications alt+T"
+  - alert [ref=f1e262]
+  - generic [aria-hidden] [ref=f1e263]: Oct

@@ -7,7 +7,7 @@ export function AuthLogo() {
     <Link
       href="/"
       aria-label={`${siteConfig.name} home`}
-      className="inline-flex self-start rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/40"
+      className="inline-flex self-start max-lg:self-center rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/40"
     >
       <Logo />
     </Link>

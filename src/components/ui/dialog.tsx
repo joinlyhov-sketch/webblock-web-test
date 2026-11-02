@@ -23,6 +23,7 @@ export function DialogContent({
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-scrim backdrop-blur-[7px] motion-safe:animate-fade-in motion-safe:data-[state=closed]:animate-fade-out" />
       <DialogPrimitive.Content
+        data-mobile-sheet
         className={cn(
           "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-32px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-popover outline-none motion-safe:animate-pop-in motion-safe:data-[state=closed]:animate-pop-out",
           className,
@@ -35,7 +36,7 @@ export function DialogContent({
             aria-label="Close"
             className="absolute top-4 right-4 z-10 grid size-8 place-items-center rounded-full border border-border bg-background text-foreground-soft shadow-button transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/40"
           >
-            <Add aria-hidden className="size-5 rotate-45" />
+            <Add variant="Outline" aria-hidden className="size-5 rotate-45" />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

@@ -23,7 +23,7 @@ export function ChooseTemplateScreen() {
             <div className="flex items-center justify-between px-6 py-[22px]">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-[10px] bg-hiw-chip text-brand">
-                  <Element4 className="size-[18px]" />
+                  <Element4 variant="Outline" className="size-[18px]" />
                 </span>
                 <div>
                   <p className="font-heading text-[17px] leading-[22px] font-semibold tracking-[-0.17px] text-foreground">
@@ -33,14 +33,14 @@ export function ChooseTemplateScreen() {
                 </div>
               </div>
               <span className="flex size-9 items-center justify-center text-muted-foreground">
-                <Add className="size-[18px] rotate-45" />
+                <Add variant="Outline" className="size-[18px] rotate-45" />
               </span>
             </div>
             <div className="mx-6 h-px bg-border" />
             <div className="flex flex-col gap-5 px-6 pt-6 pb-7">
               <div className="flex items-center justify-between">
                 <div className="flex h-11 w-[400px] items-center gap-2.5 rounded-full border border-border px-3.5">
-                  <SearchNormal1 className="size-[17px] text-placeholder" />
+                  <SearchNormal1 variant="Outline" className="size-[17px] text-placeholder" />
                   <span className="text-sm leading-[21px] text-placeholder">
                     Search templates, e.g. “minimal”
                   </span>
@@ -88,7 +88,7 @@ function TemplateCard({
         <div className="flex flex-col gap-[5px]">
           <p className="font-heading text-[17px] font-semibold text-foreground">{name}</p>
           <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
-            <Layer className="size-3.5" />
+            <Layer variant="Outline" className="size-3.5" />
             {tagline}
           </p>
         </div>
@@ -97,7 +97,7 @@ function TemplateCard({
             Preview
           </span>
           <span className="flex h-[31px] flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-3 text-[13px] font-semibold whitespace-nowrap text-primary-foreground">
-            <Add className="size-[15px]" />
+            <Add variant="Outline" className="size-[15px]" />
             Use template
           </span>
         </div>
