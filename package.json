@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test:billing": "node --test tests/payment-session.test.mjs"
+    "test:billing": "node --test tests/payment-session.test.mjs",
+    "test:deploy": "node --test tests/deployment-session.test.mjs"
   },
   "dependencies": {
     "@puckeditor/core": "^0.23.0",

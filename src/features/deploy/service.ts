@@ -1,6 +1,6 @@
 // Deploy logic: who may deploy what, and which screen comes next. The backend owns the plan limits and
 // the pipeline; this layer only asks and routes. It never imports mocks, so it stays the same with Spring.
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import type { ActionResult } from "@/lib/actions/result";
 import { getDeployAccess } from "@/features/account/api";
 import { getWebsite } from "@/features/websites/api";
@@ -26,6 +26,7 @@ export type DeployView =
       check: DomainCheck;
     }
   | { kind: "progress"; website: Website; deployment: Deployment }
+  | { kind: "unavailable"; website: Website }
   /** Back from paying for this deploy: the website already has its address, so it deploys straight away. */
   | { kind: "start"; website: Website; idempotencyKey: string };
 
@@ -60,11 +61,11 @@ export async function getDeployView(
     }
     const deployment = await getDeployment(websiteId, deploymentId).catch(
       (e: unknown) => {
-        if (e instanceof ApiError && e.status === 404) notFound();
+        if (e instanceof ApiError && e.status === 404) return null;
         throw e;
       },
     );
-    return { kind: "progress", website, deployment };
+    return deployment ? { kind: "progress", website, deployment } : { kind: "unavailable", website };
   }
 
   const running = await getRunningDeployment(websiteId);

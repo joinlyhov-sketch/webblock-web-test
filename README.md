@@ -59,6 +59,17 @@ environment variables are needed for the current demo.
 
 Run `pnpm test:billing` to test payment rendering and account recovery across isolated instances.
 
+### Mock deployments on Vercel
+
+The HTTP-only `wb_mock_deployments` cookie keeps up to six recent demo deployment snapshots
+for 30 days, within the browser cookie size limit. Progress and completion can be reconstructed
+after a server instance changes, and duplicate starts reuse the original deployment ID.
+Deployments created before this fix cannot be recovered after their server instance is gone;
+those links show a recovery screen with a link back to the editor. Start a new deployment
+after redeploying this fix. Real deployment records and published content must live in the backend.
+
+Run `pnpm test:deploy` to test deployment progress, completion and recovery across isolated instances.
+
 ## Scripts
 
 | Command | What it does |

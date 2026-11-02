@@ -10,6 +10,7 @@ import { delay } from "@/lib/api/delay";
 import { initials } from "@/lib/format";
 import { websiteOwners, sessionUsers } from "@/mocks/session";
 import { DOMAIN_SUFFIX, subdomainSchema } from "./schemas";
+import { readMockDeployments, saveMockDeployment } from "./mock-deployment-session";
 import type {
   DeployStepKey,
   DeployStepStatus,
@@ -52,6 +53,37 @@ const globalForStore = globalThis as typeof globalThis & {
   __wbDeployments?: StoredDeployment[];
 };
 const store: StoredDeployment[] = (globalForStore.__wbDeployments ??= []);
+
+/** Recover the browser's demo deployments on a new server instance. */
+async function entriesFor(websiteId: string): Promise<StoredDeployment[]> {
+  const entries: StoredDeployment[] = [];
+  for (const snapshot of await readMockDeployments(ownerOf(websiteId))) {
+    if (snapshot.websiteId !== websiteId) continue;
+    let entry = store.find((e) => e.deployment.id === snapshot.id && e.deployment.websiteId === websiteId);
+    if (!entry) {
+      entry = {
+        deployment: {
+          id: snapshot.id,
+          websiteId,
+          kind: snapshot.kind,
+          domain: snapshot.domain,
+          startedAt: snapshot.startedAt,
+          status: "RUNNING",
+          percent: 0,
+          secondsLeft: Math.ceil(TOTAL_MS / 1000),
+          steps: stepsAt(0, null),
+          finishedAt: null,
+        },
+        idempotencyKey: snapshot.idempotencyKey,
+        failAtStep: null,
+        settled: false,
+      };
+      store.unshift(entry);
+    }
+    entries.push(entry);
+  }
+  return entries;
+}
 
 function ownerOf(websiteId: string): string {
   const ownerId = websiteOwners.find((o) => o.websiteId === websiteId)?.ownerId;
@@ -132,7 +164,7 @@ async function settle(entry: StoredDeployment): Promise<void> {
   const { deployment } = entry;
   if (deployment.status !== "RUNNING") return;
   const startedAt = new Date(deployment.startedAt).getTime();
-  const elapsed = Date.now() - startedAt;
+  const elapsed = Math.max(0, Date.now() - startedAt);
 
   if (entry.failAtStep !== null) {
     const failTime = STEPS.slice(0, entry.failAtStep).reduce(
@@ -220,14 +252,18 @@ export async function startDeployment(
   currentDomain: string | null,
 ): Promise<Deployment> {
   await delay(300);
-  const repeat = store.find(
+  const entries = await entriesFor(websiteId);
+  const repeat = entries.find(
     (e) =>
       e.deployment.websiteId === websiteId &&
       e.idempotencyKey === body.idempotencyKey,
   );
-  if (repeat) return structuredClone(repeat.deployment);
+  if (repeat) {
+    await settle(repeat);
+    return structuredClone(repeat.deployment);
+  }
 
-  const running = store.find(
+  const running = entries.find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.status === "RUNNING",
   );
@@ -276,6 +312,15 @@ export async function startDeployment(
     startedAt: new Date().toISOString(),
     finishedAt: null,
   };
+  await saveMockDeployment({
+    id: deployment.id,
+    userId: ownerOf(websiteId),
+    websiteId,
+    kind: deployment.kind,
+    domain: deployment.domain,
+    startedAt: deployment.startedAt,
+    idempotencyKey: body.idempotencyKey,
+  });
   store.unshift({
     deployment,
     idempotencyKey: body.idempotencyKey,
@@ -291,7 +336,7 @@ export async function getDeployment(
   deploymentId: string,
 ): Promise<Deployment> {
   await delay(120);
-  const entry = store.find(
+  const entry = (await entriesFor(websiteId)).find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.id === deploymentId,
   );
@@ -310,7 +355,7 @@ export async function getRunningDeployment(
   websiteId: string,
 ): Promise<Deployment | null> {
   await delay(120);
-  const entry = store.find(
+  const entry = (await entriesFor(websiteId)).find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.status === "RUNNING",
   );
@@ -326,7 +371,7 @@ export async function mockFailDeployment(
   websiteId: string,
   deploymentId: string,
 ): Promise<void> {
-  const entry = store.find(
+  const entry = (await entriesFor(websiteId)).find(
     (e) =>
       e.deployment.websiteId === websiteId && e.deployment.id === deploymentId,
   );
